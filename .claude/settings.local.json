@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cat > \"C:/Users/tahir/Проекты/Хакатон/events-xakaton-next/src/shared/types/navigation.ts\" << 'EOF'\nexport type MainTab = \"home\" | \"create\" | \"notifications\" | \"points\" | \"account\";\nexport type HomeTab = \"events\" | \"clubs\";\nexport type CreateTab = \"event\" | \"club\";\nexport type NotificationsFilter = \"all\" | \"unread\";\nEOF)",
+      "Bash(find /c/Users/tahir/Проекты/Хакатон/events-xakaton-next/src/entities -type f | sort\nfind /c/Users/tahir/Проекты/Хакатон/events-xakaton-next/src/features -type f | sort\nfind /c/Users/tahir/Проекты/Хакатон/events-xakaton-next/src/widgets -type f | sort\nfind /c/Users/tahir/Проекты/Хакатон/events-xakaton-next/src/views -type f | sort)",
+      "Bash(find /c/Users/tahir/Проекты/Хакатон/events-xakaton-next/src/views/account -type f | sort 2>/dev/null\nfind /c/Users/tahir/Проекты/Хакатон/events-xakaton-next/src/views/event-details -type f | sort 2>/dev/null\nfind /c/Users/tahir/Проекты/Хакатон/events-xakaton-next/src/views/club-details -type f | sort 2>/dev/null\nfind /c/Users/tahir/Проекты/Хакатон/events-xakaton-next/src/views/shell -type f | sort 2>/dev/null)",
+      "Bash(cd \"/c/Users/tahir/Проекты/Хакатон/events-xakaton-next\" && npx tsc --noEmit 2>&1 | head -80)",
+      "Bash(cd \"/c/Users/tahir/Проекты/Хакатон/events-xakaton-next\" && npx tsc --noEmit 2>&1 | grep -v \"src/alternative\\\\|src/design-system\\\\|src/app/buttons\\\\|src/app/header\\\\|src/app/providers\" | head -60)",
+      "Bash(cd \"/c/Users/tahir/Проекты/Хакатон/events-xakaton-next\" && npx tsc --noEmit 2>&1 | grep -E \"^src/\\(views|widgets|shared/components|shared/lib|shared/store\\)\" | head -60)",
+      "Bash(cd \"/c/Users/tahir/Проекты/Хакатон/events-xakaton-next\" && npm install 2>&1 | tail -10)",
+      "Bash(cd \"/c/Users/tahir/Проекты/Хакатон/events-xakaton-next\" && npx tsc --noEmit 2>&1 | grep -E \"^src/\\(views|widgets|shared|entities|features\\)\" | grep -v \"src/alternative\\\\|src/design-system\" | head -60)",
+      "Bash(cd \"/c/Users/tahir/Проекты/Хакатон/events-xakaton-next\" && npx tsc --noEmit 2>&1 | grep -E \"^src/\\(views|widgets|shared/components|shared/lib/utils|entities|features\\)\" | grep -v \"alternative\\\\|design-system\" | head -50)",
+      "Bash(cd \"/c/Users/tahir/Проекты/Хакатон/events-xakaton-next\" && npx tsc --noEmit 2>&1 | grep -v \"src/alternative\\\\|src/design-system\\\\|src/app/buttons\\\\|src/app/header\\\\|src/app/providers\\\\|src/app/gemini\" | head -60)",
+      "Bash(cd \"/c/Users/tahir/Проекты/Хакатон/events-xakaton-next\" && npx tsc --noEmit 2>&1 | grep \"RefObject\\\\|HTMLTextAreaElement\" | head -20)",
+      "Bash(cd \"/c/Users/tahir/Проекты/Хакатон/events-xakaton-next\" && npx tsc --noEmit 2>&1 | grep \"^src/\" | grep -v \"src/alternative\\\\|src/design-system\\\\|src/app/buttons\\\\|src/app/header\\\\|src/app/providers\\\\|src/app/gemini\\\\|src/lib\" | wc -l)",
+      "Bash(cd \"/c/Users/tahir/Проекты/Хакатон/events-xakaton-next\" && npx tsc --noEmit 2>&1 | grep \"^src/\" | grep -v \"src/alternative\\\\|src/design-system\\\\|src/app/buttons\\\\|src/app/header\\\\|src/app/providers\\\\|src/app/gemini\\\\|src/lib/\" | head -20)",
+      "Bash(cd \"C:\\\\Users\\\\tahir\\\\Проекты\\\\Хакатон\\\\events-xakaton-next\" && npx tsc --noEmit 2>&1 | head -80)",
+      "Bash(cd \"C:\\\\Users\\\\tahir\\\\Проекты\\\\Хакатон\\\\events-xakaton-next\" && rm -rf src/alternative src/design-system src/lib src/app/buttons-preview src/app/header-preview src/app/gemini && find src -name \".gitkeep\" -delete && echo \"Done\")",
+      "Bash(cd \"C:\\\\Users\\\\tahir\\\\Проекты\\\\Хакатон\\\\events-xakaton-next\" && npx tsc --noEmit 2>&1)",
+      "Bash(cd \"C:\\\\Users\\\\tahir\\\\Проекты\\\\Хакатон\\\\events-xakaton-next\" && rm -f src/shared/api/auth-api.ts src/shared/api/feed-api.ts src/shared/store/slices/auth-slice.ts && echo \"Deleted\")"
+    ]
+  }
+}

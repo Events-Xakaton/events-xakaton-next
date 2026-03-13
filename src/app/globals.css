@@ -1,0 +1,209 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/**
+ * Design System - Global Styles
+ * Mobile-first, accessible, distinctive aesthetic
+ */
+
+:root {
+  /* Deep Purple + Electric Blue Theme */
+  --background: 0 0% 0%; /* pure black — matches home screen bg-black */
+  --foreground: 0 0% 100%; /* white */
+
+  --card: 240 10% 10%; /* neutral-900 */
+  --card-foreground: 0 0% 100%;
+
+  --muted: 240 8% 16%; /* neutral-800 */
+  --muted-foreground: 240 4% 46%; /* neutral-500 */
+
+  /* Primary: Deep Purple */
+  --primary: 260 55% 55%;
+  --primary-foreground: 0 0% 100%;
+
+  /* Accent: Electric Blue */
+  --accent: 200 85% 50%;
+  --accent-foreground: 0 0% 100%;
+
+  /* Semantic Colors */
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --success: 142 76% 45%;
+  --warning: 38 92% 50%;
+  --info: 200 85% 50%;
+
+  /* UI Elements */
+  --border: 240 6% 25%; /* neutral-700 */
+  --input: 240 6% 25%;
+  --ring: 260 55% 55%; /* primary */
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+}
+
+/* Base Resets */
+* {
+  @apply border-border;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Typography - System fonts for fast loading */
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+html,
+body {
+  @apply min-h-full bg-background text-foreground;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
+}
+
+body {
+  background: #f2f2f5;
+}
+
+/* Headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+/* Focus Visible - Accessibility */
+*:focus-visible {
+  @apply outline-none ring-2 ring-primary-500 ring-offset-2 ring-offset-background;
+}
+
+/* Remove default button styles */
+button {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* Hide scrollbars globally while preserving scroll behavior */
+* {
+  -ms-overflow-style: none; /* IE/Edge legacy */
+  scrollbar-width: none; /* Firefox */
+}
+
+*::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+/* Selection */
+::selection {
+  @apply bg-primary-500/30 text-white;
+}
+
+::-moz-selection {
+  @apply bg-primary-500/30 text-white;
+}
+
+/* Smooth Scrolling */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Mobile Viewport Fix */
+html {
+  height: -webkit-fill-available;
+}
+
+body {
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+}
+
+/* Utilities */
+@layer utilities {
+  /* Text Balance (better typography) */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Focus Ring Utilities */
+  .focus-ring {
+    @apply focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+
+  /* Touch Target Helper */
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px];
+  }
+
+  /* Skeleton Loading */
+  .skeleton {
+    @apply animate-pulse bg-neutral-200 rounded;
+  }
+
+  /* Skeleton for dark backgrounds */
+  .skeleton-dark {
+    @apply animate-pulse bg-neutral-800 rounded;
+  }
+
+  /* Gradient Text */
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-400 to-accent-400;
+  }
+
+  /* Glass Morphism */
+  .glass {
+    @apply bg-white/5 backdrop-blur-lg border border-white/10;
+  }
+}
+
+/* Component Overrides */
+@layer components {
+  /* Link Styles */
+  .link {
+    @apply text-accent-400 hover:text-accent-300 underline-offset-2 hover:underline transition-colors;
+  }
+
+  /* Container */
+  .container {
+    @apply mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl;
+  }
+
+  /* Section Spacing */
+  .section {
+    @apply py-12 sm:py-16 md:py-20;
+  }
+}
