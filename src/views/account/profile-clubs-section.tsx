@@ -129,7 +129,7 @@ export function ProfileClubsSection({
             action={
               <button
                 onClick={onNavigateToCreate}
-                className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-primary-700 transition-colors"
+                className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary-600 px-6! py-2.5 text-sm font-semibold text-white hover:bg-primary-700 transition-colors"
               >
                 <Plus className="h-4 w-4" />
                 Создать клуб

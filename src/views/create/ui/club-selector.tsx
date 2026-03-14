@@ -53,7 +53,7 @@ export const ClubSelector: FC<Props> = ({
           aria-checked={createFromClub}
           onClick={onToggle}
           className={cn(
-            'relative inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-colors mt-0.5',
+            'relative inline-flex h-7! w-12! shrink-0 items-center rounded-full transition-colors mt-0.5!',
             createFromClub ? 'bg-primary-500' : 'bg-neutral-300',
           )}
         >
@@ -103,7 +103,7 @@ export const ClubSelector: FC<Props> = ({
                             : `Выбрать клуб ${club.title}`
                         }
                         className={cn(
-                          'group relative w-full rounded-lg p-2.5 text-left transition-all duration-200',
+                          'group relative w-full rounded-lg p-2.5! text-left transition-all duration-200',
                           'flex items-center gap-3 min-h-[56px]',
                           'focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2',
                           isSelected
@@ -159,7 +159,7 @@ export const ClubSelector: FC<Props> = ({
                   <button
                     type="button"
                     onClick={onToggleShowAll}
-                    className="mt-2 w-full text-center text-sm font-medium text-neutral-600 hover:text-neutral-900 py-2 transition-colors"
+                    className="mt-2 w-full text-center text-sm font-medium text-neutral-600 hover:text-neutral-900 py-2! transition-colors"
                   >
                     {showAll ? (
                       <>Свернуть ▲</>

@@ -4,6 +4,7 @@ import {
   disableVerticalSwipes,
   expandViewport,
   init,
+  initDataRaw,
   miniAppReady,
   mountMiniAppSync,
   mountSwipeBehavior,
@@ -14,7 +15,7 @@ import {
   viewportStableHeight,
 } from '@telegram-apps/sdk';
 import { useSignal } from '@telegram-apps/sdk-react';
-import type { FC} from 'react';
+import type { FC } from 'react';
 import { useEffect } from 'react';
 import { Provider } from 'react-redux';
 
@@ -48,16 +49,32 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
     try {
       init();
 
+      const raw = initDataRaw();
+      console.group('[TG SDK init]');
+      console.log(
+        'initDataRaw после init():',
+        raw ? `${raw.slice(0, 80)}…` : null,
+      );
+      console.log('window.location.hash:', window.location.hash.slice(0, 120));
+      console.groupEnd();
+
       if (mountMiniAppSync.isAvailable()) mountMiniAppSync();
       if (miniAppReady.isAvailable()) miniAppReady();
 
-      // mountViewport возвращает Promise — не ждём, запускаем фоново
-      if (mountViewport.isAvailable()) void mountViewport();
+      // Сначала монтируем viewport, затем разворачиваем и запрашиваем fullscreen
+      const viewportReady = mountViewport.isAvailable()
+        ? mountViewport()
+        : Promise.resolve();
 
-      if (expandViewport.isAvailable()) expandViewport();
-
-      // requestFullscreen — Bot API 8.0+, на старых клиентах вернёт ошибку которую игнорируем
-      if (requestFullscreen.isAvailable()) void requestFullscreen();
+      void viewportReady.then(() => {
+        if (expandViewport.isAvailable()) expandViewport();
+        // requestFullscreen — Bot API 8.0+, на старых клиентах вернёт ошибку которую игнорируем
+        if (
+          requestFullscreen.isAvailable() &&
+          process.env['NEXT_PUBLIC_ENV'] !== 'development'
+        )
+          void requestFullscreen();
+      });
 
       if (mountSwipeBehavior.isAvailable()) mountSwipeBehavior();
       if (disableVerticalSwipes.isAvailable()) disableVerticalSwipes();

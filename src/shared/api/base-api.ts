@@ -11,14 +11,17 @@ import { sessionExpired } from '@/shared/store/actions';
 
 const rawBaseQuery = fetchBaseQuery({
   baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL || '/api',
-  prepareHeaders: (headers) => {
+  prepareHeaders: (headers, { endpoint }) => {
     headers.set('content-type', 'application/json');
     if (typeof window !== 'undefined') {
       const initData = getTelegramInitData();
       if (initData) {
         headers.set('x-telegram-init-data', initData);
+        console.log(`[API headers] endpoint="${endpoint}" → x-telegram-init-data присутствует (${initData.length} chars)`);
       } else {
-        headers.set('x-telegram-user-id', getTelegramUserIdFallback());
+        const fallbackId = getTelegramUserIdFallback();
+        headers.set('x-telegram-user-id', fallbackId);
+        console.warn(`[API headers] endpoint="${endpoint}" → initData отсутствует, fallback x-telegram-user-id="${fallbackId}"`);
       }
     }
     return headers;

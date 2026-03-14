@@ -155,7 +155,7 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
         </div>
 
         {/* Hero */}
-        <div className="px-4 mb-4">
+        <div className="px-4! mb-4!">
           <PreviewCard
             background={draft.coverBackground}
             title={event.title}

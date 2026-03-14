@@ -14,7 +14,16 @@ const DEMO_TELEGRAM_USER_ID = '900000001';
  * Используется в заголовке x-telegram-init-data для аутентификации на бэкенде.
  */
 export function getTelegramInitData(): string | null {
-  return initDataRaw() ?? null;
+  const raw = initDataRaw() ?? null;
+
+  if (typeof window !== 'undefined') {
+    console.group('[TG initData]');
+    console.log('initDataRaw():', raw ? `${raw.slice(0, 80)}…` : null);
+    console.log('window.location.hash:', window.location.hash.slice(0, 120));
+    console.groupEnd();
+  }
+
+  return raw;
 }
 
 /**

@@ -8,7 +8,7 @@ import {
   MapPin,
   Users,
 } from 'lucide-react';
-import type { FormEvent} from 'react';
+import type { FormEvent } from 'react';
 import { useEffect, useRef, useState } from 'react';
 
 import { AppHeader } from '@/widgets/app-header';
@@ -136,7 +136,7 @@ export function CreateScreen() {
                       setIsCreateTypeOpen(false);
                     }}
                     className={cn(
-                      'flex w-full items-start gap-3 px-4 py-4 text-left transition-colors',
+                      'flex w-full items-start gap-3 px-4! py-4! text-left transition-colors',
                       option.value === tab
                         ? 'bg-neutral-100'
                         : 'hover:bg-neutral-50',
@@ -172,7 +172,7 @@ export function CreateScreen() {
 
       {tab === 'event' ? (
         <form
-          className="space-y-4 px-4"
+          className="space-y-4 px-4!"
           style={{ paddingTop: `calc(${SAFE_AREA_TOP} + 88px)` }}
           onSubmit={handleSubmit}
         >
@@ -409,7 +409,7 @@ export function CreateScreen() {
         </form>
       ) : (
         <form
-          className="space-y-4 px-4"
+          className="space-y-4 px-4!"
           style={{ paddingTop: `calc(${SAFE_AREA_TOP} + 88px)` }}
           onSubmit={handleSubmit}
         >
