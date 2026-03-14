@@ -33,7 +33,7 @@ import { cn } from '@/shared/lib/utils';
 const SECTION_CARD = APP_SECTION_CARD_CLASS;
 const SECTION_TITLE_CLASS = 'text-lg font-semibold text-neutral-900';
 const SECONDARY_TOGGLE_CLASS =
-  'w-full rounded-2xl border border-neutral-200 bg-white px-4 py-3 text-left text-sm font-semibold text-neutral-900 shadow-sm transition hover:bg-neutral-50 active:bg-neutral-100';
+  'w-full rounded-2xl border border-neutral-200 bg-white px-4! py-3! text-left text-sm font-semibold text-neutral-900 shadow-sm transition hover:bg-neutral-50 active:bg-neutral-100';
 
 const POINTS_RULE_LABELS: Record<string, string> = {
   club_create: 'Создание клуба',
@@ -136,7 +136,7 @@ export function PointsScreen() {
         title="Очки"
       />
 
-      <div className="space-y-4 px-4">
+      <div className="space-y-4 px-4!">
         {primaryLoading ? (
           <div className="flex items-center justify-center py-8">
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-zinc-200 border-t-zinc-900" />
@@ -191,7 +191,7 @@ export function PointsScreen() {
                     type="button"
                     onClick={() => setPeriod('weekly')}
                     className={cn(
-                      'min-h-[34px] rounded-full px-3 text-xs font-semibold transition-colors',
+                      'min-h-[34px] rounded-full px-3! text-xs font-semibold transition-colors',
                       period === 'weekly'
                         ? 'bg-gradient-to-br from-primary-500 to-primary-600 text-white shadow-lg'
                         : 'text-neutral-700 hover:bg-neutral-100',
@@ -204,7 +204,7 @@ export function PointsScreen() {
                     type="button"
                     onClick={() => setPeriod('monthly')}
                     className={cn(
-                      'min-h-[34px] rounded-full px-3 text-xs font-semibold transition-colors',
+                      'min-h-[34px] rounded-full px-3! text-xs font-semibold transition-colors',
                       period === 'monthly'
                         ? 'bg-gradient-to-br from-primary-500 to-primary-600 text-white shadow-lg'
                         : 'text-neutral-700 hover:bg-neutral-100',
@@ -239,7 +239,7 @@ export function PointsScreen() {
                     <div
                       key={row.userId}
                       className={cn(
-                        'flex items-center justify-between rounded-xl border px-3 py-2.5',
+                        'flex items-center justify-between rounded-xl border px-3! py-2.5!',
                         rankRowClass(row.rank, isCurrentUser),
                       )}
                     >

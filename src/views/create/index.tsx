@@ -18,7 +18,6 @@ import { DescriptionSection } from '@/shared/components/description-section';
 import { InlineTitleEditor } from '@/shared/components/inline-title-editor';
 import { PreviewCard } from '@/shared/components/preview-card';
 import { formatDateTimeDisplay } from '@/shared/lib/date-format';
-import { useTelegramMainButton } from '@/shared/lib/telegram/useTelegramButtons';
 import { useViewportMode } from '@/shared/lib/telegram/useViewportMode';
 import {
   ADAPTIVE_VIEWPORT_HEIGHT,
@@ -52,18 +51,18 @@ export function CreateScreen() {
     CREATE_TYPE_OPTIONS.find((option) => option.value === tab) ??
     CREATE_TYPE_OPTIONS[0];
 
-  useTelegramMainButton({
-    text: tab === 'event' ? 'Создать мероприятие' : 'Создать клуб',
-    onClick: () => {
-      if (tab === 'event') {
-        void eventForm.submit();
-      } else {
-        void clubForm.submit();
-      }
-    },
-    enabled: tab === 'event' ? eventForm.canPublish : clubForm.canPublish,
-    visible: mode === 'compact',
-  });
+  // useTelegramMainButton({
+  //   text: tab === 'event' ? 'Создать мероприятие' : 'Создать клуб',
+  //   onClick: () => {
+  //     if (tab === 'event') {
+  //       void eventForm.submit();
+  //     } else {
+  //       void clubForm.submit();
+  //     }
+  //   },
+  //   enabled: tab === 'event' ? eventForm.canPublish : clubForm.canPublish,
+  //   visible: mode === 'compact',
+  // });
 
   // Закрытие дропдауна по клику вне
   useEffect(() => {
@@ -108,7 +107,7 @@ export function CreateScreen() {
               type="button"
               onClick={() => setIsCreateTypeOpen((prev) => !prev)}
               data-testid="create-type-toggle"
-              className="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-white/90 px-4 py-2 text-[13px] font-semibold text-neutral-800 shadow-sm"
+              className="inline-flex items-center gap-2! rounded-full border border-neutral-200 bg-white/90 px-4! py-2! text-[13px] font-semibold text-neutral-800 shadow-sm"
             >
               {selectedCreateType.title}
               <ChevronDown

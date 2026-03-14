@@ -236,7 +236,7 @@ export const EventEditSheet: FC<Props> = ({
                             key={club.id}
                             type="button"
                             className={cn(
-                              'w-full rounded-lg p-2.5 text-left transition-all duration-200',
+                              'w-full rounded-lg p-2.5! text-left transition-all duration-200',
                               'flex items-center gap-3 min-h-[56px]',
                               fields.selectedClubId === club.id
                                 ? 'bg-primary-500 text-white shadow-md'
