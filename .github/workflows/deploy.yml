@@ -23,7 +23,7 @@ jobs:
           port: ${{ secrets.SSH_PORT || 22 }}
           script: |
             set -e
-            cd ${{ secrets.DEPLOY_PATH }}
+            cd /opt/tribe-events-new/events-xakaton-next
 
             echo "→ Pulling latest code..."
             git pull origin main
