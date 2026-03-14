@@ -1,5 +1,6 @@
 'use client';
 
+import type { FC} from 'react';
 import { Suspense, lazy, useEffect, useState } from 'react';
 
 import { BottomNav } from '@/widgets/bottom-nav';
@@ -37,6 +38,13 @@ const ClubDetails = lazy(() =>
   import('@/views/club-details').then((m) => ({ default: m.ClubDetails })),
 );
 
+// Simple loading fallback for lazy-loaded components
+const LoadingFallback: FC = () => (
+  <div className="flex h-screen items-center justify-center">
+    <div className="h-8 w-8 animate-spin rounded-full border-4 border-zinc-200 border-t-zinc-900" />
+  </div>
+);
+
 export default function MiniAppShell() {
   const dispatch = useAppDispatch();
   const isVerified = useAppSelector((s) => s.auth.isVerified);
@@ -70,13 +78,6 @@ export default function MiniAppShell() {
   const accountNoDetail = !detail && tab === 'account';
   const inDetail = Boolean(detail);
   const shellBgClass = 'bg-[#f2f2f5]';
-
-  // Simple loading fallback for lazy-loaded components
-  const LoadingFallback = () => (
-    <div className="flex h-screen items-center justify-center">
-      <div className="h-8 w-8 animate-spin rounded-full border-4 border-zinc-200 border-t-zinc-900" />
-    </div>
-  );
 
   return (
     <main

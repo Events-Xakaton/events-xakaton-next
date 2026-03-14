@@ -1,7 +1,7 @@
 'use client';
 
 import { RefreshCw, ServerOff } from 'lucide-react';
-import { FC } from 'react';
+import type { FC } from 'react';
 
 import { Button, ButtonSize, ButtonVariant } from './button';
 import { Card, CardPadding, CardVariant } from './card';

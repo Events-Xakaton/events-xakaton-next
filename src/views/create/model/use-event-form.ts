@@ -17,7 +17,7 @@ export function useEventForm() {
   const [createEvent, { isLoading: isSubmitting }] = useCreateEventMutation();
   const eventAuthoringClubs = useEventAuthoringClubsQuery();
 
-  const defaultTimes = useMemo(createDefaultEventTimes, []);
+  const defaultTimes = createDefaultEventTimes();
 
   const { watch, setValue, handleSubmit, formState, reset } =
     useForm<EventFormValues>({

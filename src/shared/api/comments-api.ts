@@ -28,7 +28,7 @@ export const commentsApi = apiBase.injectEndpoints({
       query: (body) => ({
         url: '/comments',
         method: 'POST',
-        headers: { 'idempotency-key': `comment-create-${Date.now()}` },
+        headers: { 'idempotency-key': crypto.randomUUID() },
         body,
       }),
       invalidatesTags: [ApiTag.FEED],
@@ -40,9 +40,7 @@ export const commentsApi = apiBase.injectEndpoints({
       query: ({ commentId, text }) => ({
         url: `/comments/${commentId}/edit`,
         method: 'POST',
-        headers: {
-          'idempotency-key': `comment-edit-${commentId}-${Date.now()}`,
-        },
+        headers: { 'idempotency-key': crypto.randomUUID() },
         body: { text },
       }),
       invalidatesTags: [ApiTag.FEED],
@@ -51,9 +49,7 @@ export const commentsApi = apiBase.injectEndpoints({
       query: ({ commentId }) => ({
         url: `/comments/${commentId}`,
         method: 'DELETE',
-        headers: {
-          'idempotency-key': `comment-delete-${commentId}-${Date.now()}`,
-        },
+        headers: { 'idempotency-key': crypto.randomUUID() },
       }),
       invalidatesTags: [ApiTag.FEED],
     }),

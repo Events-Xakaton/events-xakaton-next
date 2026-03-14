@@ -37,7 +37,7 @@
     "@types/seedrandom": "^3.0.8",
     "autoprefixer": "^10.4.27",
     "babel-plugin-react-compiler": "1.0.0",
-    "eslint": "^10",
+    "eslint": "^9.39.4",
     "eslint-config-next": "16.1.6",
     "postcss-lightningcss": "^1.0.2",
     "postcss-nested": "^7.0.2",

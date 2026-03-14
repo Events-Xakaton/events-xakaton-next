@@ -1,6 +1,7 @@
 'use client';
 
-import { RefObject, useEffect, useMemo, useRef, useState } from 'react';
+import type { RefObject } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { type EventDetails } from '@/entities/event/api';
 

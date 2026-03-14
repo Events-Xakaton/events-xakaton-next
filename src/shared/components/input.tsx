@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, InputHTMLAttributes, TextareaHTMLAttributes } from 'react';
+import type { FC, InputHTMLAttributes, TextareaHTMLAttributes } from 'react';
 
 import { cn } from '@/shared/lib/utils';
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { Pencil, RefreshCw } from 'lucide-react';
-import { FC, ReactNode } from 'react';
+import type { FC, ReactNode } from 'react';
 
 import { APP_PREVIEW_SCRIM_CLASS } from '@/shared/lib/ui-styles';
 import { cn } from '@/shared/lib/utils';

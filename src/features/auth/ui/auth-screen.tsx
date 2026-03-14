@@ -1,7 +1,7 @@
 'use client';
 
 import { Trophy } from 'lucide-react';
-import { FC, FormEvent } from 'react';
+import type { FC, FormEvent } from 'react';
 
 import { Button, ButtonSize, ButtonVariant } from '@/shared/components/button';
 import {

@@ -7,7 +7,7 @@ import {
   MapPin,
   Users,
 } from 'lucide-react';
-import { CSSProperties, FC, RefObject } from 'react';
+import type { CSSProperties, FC, RefObject } from 'react';
 
 import { type ClubEventAuthoring } from '@/entities/club/api';
 

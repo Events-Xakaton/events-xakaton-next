@@ -1,6 +1,7 @@
 'use client';
 
-import { FC, useEffect, useRef, useState } from 'react';
+import type { FC} from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { cn } from '@/shared/lib/utils';
 

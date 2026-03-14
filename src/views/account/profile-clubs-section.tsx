@@ -1,7 +1,8 @@
 'use client';
 
 import { Plus } from 'lucide-react';
-import { ReactElement, useMemo, useState } from 'react';
+import type { ReactElement} from 'react';
+import { useMemo, useState } from 'react';
 
 import { type ClubCard, useClubsQuery } from '@/entities/club/api';
 

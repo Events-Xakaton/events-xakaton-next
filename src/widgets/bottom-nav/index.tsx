@@ -1,11 +1,11 @@
 'use client';
 
 import { Bell, Home, Plus, Star, User } from 'lucide-react';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 
 import { SAFE_AREA_BOTTOM } from '@/shared/lib/ui-styles';
 import { cn } from '@/shared/lib/utils';
-import { MainTab } from '@/shared/types/navigation';
+import type { MainTab } from '@/shared/types/navigation';
 
 import './styles/bottom-nav.css';
 

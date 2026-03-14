@@ -1,7 +1,7 @@
 'use client';
 
 import { BellOff } from 'lucide-react';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 
 import { AppHeader } from '@/widgets/app-header';
 

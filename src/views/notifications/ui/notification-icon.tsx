@@ -1,7 +1,7 @@
 'use client';
 
 import { CalendarClock, UserPlus } from 'lucide-react';
-import { FC } from 'react';
+import type { FC } from 'react';
 
 import { type NotificationItem } from '@/shared/api/notifications-api';
 import { cn } from '@/shared/lib/utils';

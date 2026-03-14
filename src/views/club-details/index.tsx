@@ -1,7 +1,8 @@
 'use client';
 
 import { CalendarDays, Plus, Users } from 'lucide-react';
-import { ReactElement, useMemo } from 'react';
+import type { ReactElement} from 'react';
+import { useMemo } from 'react';
 
 import { PeopleList } from '@/widgets/people-list';
 

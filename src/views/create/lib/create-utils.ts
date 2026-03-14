@@ -1,5 +1,5 @@
 import { toLocalDateTimeInputValue } from '@/shared/lib/date-format';
-import { CreateTab } from '@/shared/types/navigation';
+import type { CreateTab } from '@/shared/types/navigation';
 
 const COLOR_PALETTE = [
   '#7c3aed',

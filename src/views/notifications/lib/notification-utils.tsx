@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 
 import { type NotificationItem } from '@/shared/api/notifications-api';
 import { formatLocalDateTime } from '@/shared/lib/time';

@@ -1,6 +1,6 @@
 'use client';
 
-import { FC } from 'react';
+import type { FC } from 'react';
 
 import { Card, CardPadding, CardVariant } from './card';
 import './styles/list-skeleton.css';

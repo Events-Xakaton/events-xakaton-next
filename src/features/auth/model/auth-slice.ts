@@ -1,4 +1,5 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import type { PayloadAction} from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 import { loadAuthSession } from '@/shared/lib/auth-session';
 import { StateNameType } from '@/shared/redux';

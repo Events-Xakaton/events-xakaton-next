@@ -1,6 +1,7 @@
 'use client';
 
-import { FC, useEffect } from 'react';
+import type { FC} from 'react';
+import { useEffect } from 'react';
 
 import { Button, ButtonVariant } from './button';
 import {

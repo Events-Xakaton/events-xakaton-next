@@ -14,7 +14,8 @@ import {
   viewportStableHeight,
 } from '@telegram-apps/sdk';
 import { useSignal } from '@telegram-apps/sdk-react';
-import { FC, useEffect } from 'react';
+import type { FC} from 'react';
+import { useEffect } from 'react';
 import { Provider } from 'react-redux';
 
 import { initFrontendTelemetry } from '@/shared/observability/telemetry';

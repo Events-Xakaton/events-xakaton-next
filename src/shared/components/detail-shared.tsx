@@ -1,7 +1,8 @@
 'use client';
 
 import { Ellipsis } from 'lucide-react';
-import { FC, ReactNode, useState } from 'react';
+import type { FC, ReactNode} from 'react';
+import { useState } from 'react';
 
 import {
   APP_FLOAT_SHADOW_CLASS,

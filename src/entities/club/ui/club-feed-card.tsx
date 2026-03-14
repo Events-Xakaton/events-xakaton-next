@@ -1,7 +1,8 @@
 'use client';
 
 import { Bookmark, Check, ChevronRight, Plus } from 'lucide-react';
-import { ReactElement, useMemo } from 'react';
+import type { ReactElement} from 'react';
+import { useMemo } from 'react';
 
 import { Button, ButtonSize, ButtonVariant } from '@/shared/components/button';
 import { buildGradient } from '@/shared/lib/gradient';

@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, HTMLAttributes, ReactNode } from 'react';
+import type { FC, HTMLAttributes, ReactNode } from 'react';
 
 import { cn } from '@/shared/lib/utils';
 

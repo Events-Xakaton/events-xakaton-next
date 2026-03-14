@@ -1,7 +1,8 @@
 'use client';
 
 import { Check, ChevronDown } from 'lucide-react';
-import { FC, useEffect, useRef, useState } from 'react';
+import type { FC} from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { TOGGLE_BUTTON_INACTIVE_CLASS } from '@/shared/lib/ui-styles';
 import { cn } from '@/shared/lib/utils';

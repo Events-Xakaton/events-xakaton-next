@@ -1,7 +1,7 @@
 'use client';
 
 import { Check } from 'lucide-react';
-import { FC } from 'react';
+import type { FC } from 'react';
 
 import { type ClubEventAuthoring } from '@/entities/club/api';
 

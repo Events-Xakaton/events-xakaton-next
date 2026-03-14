@@ -8,7 +8,8 @@ import {
   MapPin,
   Users,
 } from 'lucide-react';
-import { FormEvent, useEffect, useRef, useState } from 'react';
+import type { FormEvent} from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { AppHeader } from '@/widgets/app-header';
 
@@ -27,7 +28,7 @@ import {
   getBottomPadding,
 } from '@/shared/lib/ui-styles';
 import { cn } from '@/shared/lib/utils';
-import { CreateTab } from '@/shared/types/navigation';
+import type { CreateTab } from '@/shared/types/navigation';
 
 import { CREATE_TYPE_OPTIONS } from './lib/create-utils';
 import { useClubForm } from './model/use-club-form';

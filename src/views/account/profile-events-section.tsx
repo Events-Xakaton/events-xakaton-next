@@ -1,7 +1,8 @@
 'use client';
 
 import { Plus } from 'lucide-react';
-import { ReactElement, useMemo, useState } from 'react';
+import type { ReactElement} from 'react';
+import { useMemo, useState } from 'react';
 
 import { type EventCard, useEventsQuery } from '@/entities/event/api';
 

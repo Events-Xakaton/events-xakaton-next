@@ -11,6 +11,7 @@ const eslintConfig = defineConfig([
       'react-hooks/exhaustive-deps': 'warn',
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/no-non-null-assertion': 'error',
+      'react-hooks/set-state-in-effect': 'warn',
       '@typescript-eslint/consistent-type-imports': [
         'warn',
         { prefer: 'type-imports' },

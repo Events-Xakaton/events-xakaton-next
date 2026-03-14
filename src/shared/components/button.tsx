@@ -1,6 +1,6 @@
 'use client';
 
-import { ButtonHTMLAttributes, FC, ReactNode } from 'react';
+import type { ButtonHTMLAttributes, FC, ReactNode } from 'react';
 
 import { cn } from '@/shared/lib/utils';
 
