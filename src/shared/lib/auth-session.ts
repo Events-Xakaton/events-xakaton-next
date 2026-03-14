@@ -1,4 +1,4 @@
-const AUTH_SESSION_KEY = "tribe_auth_session_v1";
+const AUTH_SESSION_KEY = 'tribe_auth_session_v1';
 const AUTH_TTL_MS = 6 * 60 * 60 * 1000;
 
 type StoredAuthSession = {
@@ -7,7 +7,7 @@ type StoredAuthSession = {
 };
 
 export function saveAuthSession(reddyUserKey: string): void {
-  if (typeof window === "undefined") {
+  if (typeof window === 'undefined') {
     return;
   }
   const payload: StoredAuthSession = {
@@ -18,7 +18,7 @@ export function saveAuthSession(reddyUserKey: string): void {
 }
 
 export function loadAuthSession(): StoredAuthSession | null {
-  if (typeof window === "undefined") {
+  if (typeof window === 'undefined') {
     return null;
   }
 
@@ -30,7 +30,8 @@ export function loadAuthSession(): StoredAuthSession | null {
   try {
     const parsed = JSON.parse(raw) as Partial<StoredAuthSession>;
     const verifiedAtMs = Number(parsed.verifiedAtMs);
-    const reddyUserKey = typeof parsed.reddyUserKey === "string" ? parsed.reddyUserKey : "";
+    const reddyUserKey =
+      typeof parsed.reddyUserKey === 'string' ? parsed.reddyUserKey : '';
 
     if (!Number.isFinite(verifiedAtMs) || !reddyUserKey) {
       clearAuthSession();
@@ -53,7 +54,7 @@ export function loadAuthSession(): StoredAuthSession | null {
 }
 
 export function clearAuthSession(): void {
-  if (typeof window === "undefined") {
+  if (typeof window === 'undefined') {
     return;
   }
   window.localStorage.removeItem(AUTH_SESSION_KEY);

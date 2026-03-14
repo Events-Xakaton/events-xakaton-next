@@ -1,27 +1,30 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
+
 import {
   useCommentsQuery,
   useCreateCommentMutation,
   useDeleteCommentMutation,
   useEditCommentMutation,
-} from "@/shared/api/comments-api";
-import { formatLocalDateTime } from "@/shared/lib/time";
-import { getTelegramUserIdFallback } from "@/shared/lib/telegram";
-import { appErrorText } from "@/shared/lib/utils";
-import { Button } from "@/shared/components/button";
-import { Card } from "@/shared/components/card";
-import { Textarea } from "@/shared/components/input";
-import { ConfirmDialog } from "@/shared/components/confirm-dialog";
-import { EmptyState } from "@/shared/components/empty-state";
-import { ErrorState } from "@/shared/components/error-state";
+} from '@/shared/api/comments-api';
+import { Button, ButtonSize, ButtonVariant } from '@/shared/components/button';
+import { Card } from '@/shared/components/card';
+import { ConfirmDialog } from '@/shared/components/confirm-dialog';
+import { EmptyState } from '@/shared/components/empty-state';
+import { ErrorState } from '@/shared/components/error-state';
+import { Textarea } from '@/shared/components/input';
+import { getTelegramUserIdFallback } from '@/shared/lib/telegram';
+import { formatLocalDateTime } from '@/shared/lib/time';
+import { appErrorText } from '@/shared/lib/utils';
+
+import './styles/comments-block.css';
 
 function validateComment(text: string): string {
   const value = text.trim();
-  if (!value) return "Комментарий не может быть пустым";
-  if (value.length > 500) return "Максимум 500 символов";
-  return "";
+  if (!value) return 'Комментарий не может быть пустым';
+  if (value.length > 500) return 'Максимум 500 символов';
+  return '';
 }
 
 export function CommentsBlock({
@@ -29,15 +32,15 @@ export function CommentsBlock({
   entityId,
   readOnly,
 }: {
-  entityType: "club" | "event";
+  entityType: 'club' | 'event';
   entityId: string;
   readOnly?: boolean;
 }) {
   const me = getTelegramUserIdFallback();
-  const [draft, setDraft] = useState("");
-  const [hint, setHint] = useState("");
+  const [draft, setDraft] = useState('');
+  const [hint, setHint] = useState('');
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [editingText, setEditingText] = useState("");
+  const [editingText, setEditingText] = useState('');
   const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
 
   const comments = useCommentsQuery({ entityType, entityId });
@@ -52,11 +55,15 @@ export function CommentsBlock({
       return;
     }
     try {
-      await createComment({ entityType, entityId, text: draft.trim() }).unwrap();
-      setDraft("");
-      setHint("");
+      await createComment({
+        entityType,
+        entityId,
+        text: draft.trim(),
+      }).unwrap();
+      setDraft('');
+      setHint('');
     } catch (error) {
-      setHint(appErrorText(error, "Не удалось сохранить комментарий"));
+      setHint(appErrorText(error, 'Не удалось сохранить комментарий'));
     }
   }
 
@@ -68,61 +75,103 @@ export function CommentsBlock({
       return;
     }
     try {
-      await editComment({ commentId: editingId, text: editingText.trim() }).unwrap();
+      await editComment({
+        commentId: editingId,
+        text: editingText.trim(),
+      }).unwrap();
       setEditingId(null);
-      setEditingText("");
-      setHint("");
+      setEditingText('');
+      setHint('');
     } catch (error) {
-      setHint(appErrorText(error, "Не удалось обновить комментарий"));
+      setHint(appErrorText(error, 'Не удалось обновить комментарий'));
     }
   }
 
   return (
-    <Card className="p-4">
-      <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-zinc-500">Комментарии</h3>
+    <Card className="comments-block">
+      <h3 className="comments-block__header">
+        Комментарии
+      </h3>
 
       {!readOnly ? (
-        <>
-          <Textarea rows={3} placeholder="Напишите комментарий" value={draft} maxLength={500} onChange={(e) => setDraft(e.target.value)} />
-          <Button className="mt-2" isLoading={createState.isLoading} onClick={() => void create()}>
-            Отправить
-          </Button>
-        </>
+        <div className="comments-block__form">
+          <Textarea
+            rows={3}
+            placeholder="Напишите комментарий"
+            value={draft}
+            maxLength={500}
+            onChange={(e) => setDraft(e.target.value)}
+          />
+          <div className="comments-block__form-submit">
+            <Button
+              isLoading={createState.isLoading}
+              onClick={() => void create()}
+            >
+              Отправить
+            </Button>
+          </div>
+        </div>
       ) : (
-        <p className="rounded-xl bg-zinc-50 px-3 py-2 text-sm text-zinc-500">Для отмененных ивентов новые комментарии недоступны.</p>
+        <p className="comments-block__readonly-notice">
+          Для отмененных ивентов новые комментарии недоступны.
+        </p>
       )}
-      {hint ? <p className="mt-2 text-sm text-red-500">{hint}</p> : null}
+      {hint ? <p className="comments-block__hint">{hint}</p> : null}
 
-      <div className="mt-4 space-y-3">
+      <div className="comments-block__list">
         {comments.isLoading ? (
-          <div className="flex items-center justify-center py-8">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-zinc-200 border-t-zinc-900" />
+          <div className="comments-block__loading">
+            <div className="comments-block__spinner" />
           </div>
         ) : null}
         {comments.isError ? (
-          <ErrorState title="Не удалось загрузить комментарии" onRetry={() => void comments.refetch()} />
+          <ErrorState
+            title="Не удалось загрузить комментарии"
+            onRetry={() => void comments.refetch()}
+          />
         ) : null}
-        {!comments.isLoading && !comments.isError && (comments.data?.length ?? 0) === 0 ? (
-          <EmptyState title="Комментариев пока нет" description="Оставьте первый комментарий." />
+        {!comments.isLoading &&
+        !comments.isError &&
+        (comments.data?.length ?? 0) === 0 ? (
+          <EmptyState
+            title="Комментариев пока нет"
+            description="Оставьте первый комментарий."
+          />
         ) : null}
         {(comments.data ?? []).map((item) => {
           const mine = item.authorTelegramUserId === me;
           const editing = editingId === item.id;
           return (
-            <div key={item.id} className="rounded-xl border border-zinc-200 p-3">
-              <div className="mb-2 flex items-center justify-between gap-2">
-                <span className="text-sm font-medium text-zinc-900">{item.authorName}</span>
-                <span className="text-xs text-zinc-500">{formatLocalDateTime(item.createdAt)}</span>
+            <div
+              key={item.id}
+              className="comments-block__item"
+            >
+              <div className="comments-block__item-meta">
+                <span className="comments-block__item-author">
+                  {item.authorName}
+                </span>
+                <span className="comments-block__item-date">
+                  {formatLocalDateTime(item.createdAt)}
+                </span>
               </div>
 
-              {!editing ? <p className="break-all text-sm text-zinc-700">{item.text}</p> : null}
-              {editing ? <Textarea rows={3} value={editingText} maxLength={500} onChange={(e) => setEditingText(e.target.value)} /> : null}
+              {!editing ? (
+                <p className="comments-block__item-text">{item.text}</p>
+              ) : null}
+              {editing ? (
+                <Textarea
+                  rows={3}
+                  value={editingText}
+                  maxLength={500}
+                  onChange={(e) => setEditingText(e.target.value)}
+                />
+              ) : null}
 
               {mine && !editing && !readOnly ? (
-                <div className="mt-2 flex gap-2">
+                <div className="comments-block__item-actions">
                   <Button
-                    variant="secondary"
-                    size="sm"
+                    variant={ButtonVariant.SECONDARY}
+                    size={ButtonSize.SM}
                     onClick={() => {
                       setEditingId(item.id);
                       setEditingText(item.text);
@@ -130,23 +179,31 @@ export function CommentsBlock({
                   >
                     Изменить
                   </Button>
-                  <Button variant="secondary" size="sm" onClick={() => setDeleteTargetId(item.id)}>
+                  <Button
+                    variant={ButtonVariant.SECONDARY}
+                    size={ButtonSize.SM}
+                    onClick={() => setDeleteTargetId(item.id)}
+                  >
                     Удалить
                   </Button>
                 </div>
               ) : null}
 
               {mine && editing && !readOnly ? (
-                <div className="mt-2 flex gap-2">
-                  <Button size="sm" isLoading={editState.isLoading} onClick={() => void saveEdit()}>
+                <div className="comments-block__item-actions">
+                  <Button
+                    size={ButtonSize.SM}
+                    isLoading={editState.isLoading}
+                    onClick={() => void saveEdit()}
+                  >
                     Сохранить
                   </Button>
                   <Button
-                    variant="secondary"
-                    size="sm"
+                    variant={ButtonVariant.SECONDARY}
+                    size={ButtonSize.SM}
                     onClick={() => {
                       setEditingId(null);
-                      setEditingText("");
+                      setEditingText('');
                     }}
                   >
                     Отмена
@@ -170,7 +227,9 @@ export function CommentsBlock({
           void deleteComment({ commentId: deleteTargetId })
             .unwrap()
             .then(() => setDeleteTargetId(null))
-            .catch((error) => setHint(appErrorText(error, "Не удалось удалить комментарий")));
+            .catch((error) =>
+              setHint(appErrorText(error, 'Не удалось удалить комментарий')),
+            );
         }}
       />
     </Card>

@@ -1,81 +1,71 @@
-"use client";
+'use client';
 
-import { useEffect, useRef, useState } from "react";
-import { cn } from "@/shared/lib/utils";
+import { FC, useEffect, useRef, useState } from 'react';
 
-/**
- * OverflowMenu - Dropdown menu for actions
- * Touch-friendly with proper accessibility
- */
-export function OverflowMenu({
-  items,
-}: {
-  items: Array<{ id: string; label: string; danger?: boolean; onClick: () => void }>;
-}) {
+import { cn } from '@/shared/lib/utils';
+
+import './styles/overflow-menu.css';
+
+type MenuItem = {
+  id: string;
+  label: string;
+  danger?: boolean;
+  onClick: () => void;
+};
+
+type Props = {
+  items: MenuItem[];
+};
+
+export const OverflowMenu: FC<Props> = ({ items }) => {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!open) return;
 
-    function onDocClick(event: MouseEvent) {
+    function onDocClick(event: MouseEvent): void {
       if (!rootRef.current?.contains(event.target as Node)) {
         setOpen(false);
       }
     }
 
-    function onEscape(event: KeyboardEvent) {
-      if (event.key === "Escape") {
+    function onEscape(event: KeyboardEvent): void {
+      if (event.key === 'Escape') {
         setOpen(false);
       }
     }
 
-    document.addEventListener("mousedown", onDocClick);
-    document.addEventListener("keydown", onEscape);
+    document.addEventListener('mousedown', onDocClick);
+    document.addEventListener('keydown', onEscape);
 
     return () => {
-      document.removeEventListener("mousedown", onDocClick);
-      document.removeEventListener("keydown", onEscape);
+      document.removeEventListener('mousedown', onDocClick);
+      document.removeEventListener('keydown', onEscape);
     };
   }, [open]);
 
   return (
-    <div ref={rootRef} className="relative">
+    <div ref={rootRef} className="overflow-menu">
       <button
         onClick={() => setOpen((v) => !v)}
         aria-label="Меню действий"
         aria-expanded={open}
         aria-haspopup="true"
-        className={cn(
-          "flex h-11 w-11 min-h-[44px] min-w-[44px] items-center justify-center",
-          "rounded-full",
-          "glass",
-          "text-lg text-white",
-          "transition-all duration-200",
-          "hover:bg-white/10",
-          "focus-visible:ring-2 focus-visible:ring-primary-500"
-        )}
+        className="overflow-menu__trigger"
       >
         •••
       </button>
       {open && (
-        <div
-          role="menu"
-          className="absolute right-0 z-dropdown mt-1 min-w-40 rounded-xl glass border border-neutral-700 p-1 shadow-xl"
-        >
+        <div role="menu" className="overflow-menu__dropdown">
           {items.map((item) => (
             <button
               key={item.id}
               type="button"
               role="menuitem"
               className={cn(
-                "block w-full min-h-[44px] cursor-pointer rounded-lg px-3 py-2",
-                "text-left text-sm",
-                "transition-colors duration-200",
-                "focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-inset",
-                item.danger
-                  ? "text-red-400 hover:bg-red-500/10"
-                  : "text-neutral-200 hover:bg-white/5"
+                'overflow-menu__item',
+                item.danger ? 'overflow-menu__item--danger' : 'overflow-menu__item--default',
               )}
               onClick={() => {
                 setOpen(false);
@@ -89,4 +79,4 @@ export function OverflowMenu({
       )}
     </div>
   );
-}
+};

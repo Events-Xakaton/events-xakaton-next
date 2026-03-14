@@ -1,0 +1,116 @@
+@import '../../shared/lib/styles/theme.css';
+
+.details-page {
+  @apply relative bg-neutral-950;
+
+  &__compact-header {
+    @apply pointer-events-none fixed inset-x-0 z-[30] transition-opacity duration-200;
+  }
+
+  &__compact-header--visible {
+    @apply opacity-100;
+  }
+
+  &__compact-header--hidden {
+    @apply opacity-0;
+  }
+
+  &__compact-header-inner {
+    @apply mx-auto relative flex w-full max-w-md items-center justify-between;
+    @apply border-b border-white/15 bg-black/75 px-3 py-2;
+    @apply shadow-[0_10px_28px_rgba(0,0,0,0.35)] backdrop-blur;
+  }
+
+  &__compact-title {
+    @apply pointer-events-none absolute left-1/2 w-[min(62vw,230px)] -translate-x-1/2;
+    @apply truncate text-center text-[15px] font-medium tracking-tight text-white;
+  }
+
+  &__hero {
+    @apply relative overflow-hidden;
+  }
+
+  &__hero-noise {
+    @apply absolute inset-0 bg-[radial-gradient(circle_at_62%_14%,rgba(255,255,255,0.22),transparent_46%)];
+  }
+
+  &__hero-scrim {
+    @apply absolute inset-0 bg-gradient-to-b from-black/15 via-black/35 to-black/65;
+  }
+
+  &__hero-controls {
+    @apply absolute inset-x-0 z-[10] flex items-center justify-between;
+  }
+
+  &__hero-content {
+    @apply relative z-10 flex flex-col items-center justify-end px-5 pb-10 text-center text-white;
+  }
+
+  &__avatar {
+    @apply mb-3 grid h-16 w-16 min-h-[64px] min-w-[64px] place-items-center overflow-hidden;
+    @apply rounded-full border-2 border-white/85 bg-primary-500;
+    @apply text-sm font-semibold text-white shadow-lg;
+  }
+
+  &__avatar-img {
+    @apply h-full w-full object-cover;
+  }
+
+  &__subtitle {
+    @apply text-[13px] font-normal text-white/80;
+  }
+
+  &__title {
+    @apply mt-1 text-[26px]/[1.06] font-display font-semibold tracking-tight drop-shadow-md;
+  }
+
+  &__meta-line {
+    @apply mt-2 text-[12px] font-normal text-white/80;
+  }
+
+  &__summary {
+    @apply relative z-20 mx-auto w-full max-w-md -translate-y-7 px-3;
+  }
+
+  &__sections {
+    @apply -mt-5;
+  }
+
+  &__sticky {
+    @apply fixed inset-x-0 z-[20];
+  }
+
+  &__sticky-inner {
+    @apply mx-auto w-full max-w-md px-3;
+  }
+}
+
+.details-section {
+  @apply bg-neutral-900/75 backdrop-blur-sm;
+
+  &__title {
+    @apply mb-4 text-[15px] font-display font-semibold tracking-tight text-neutral-100;
+  }
+}
+
+.details-info-row {
+  @apply grid grid-cols-[28px_1fr_auto] items-start gap-3 py-2;
+
+  &__icon {
+    @apply mt-0.5 text-neutral-100;
+  }
+
+  &__title {
+    @apply text-[17px] font-medium leading-tight tracking-tight text-neutral-100;
+  }
+
+  &__subtitle {
+    @apply mt-1 text-[13px] font-normal text-neutral-400;
+  }
+}
+
+.back-button {
+  @apply h-11 w-11 rounded-full border border-white/40 bg-black/72 p-0 text-white;
+  @apply shadow-[0_10px_24px_rgba(0,0,0,0.45)] backdrop-blur;
+  @apply hover:bg-black/82 active:scale-[0.98];
+}

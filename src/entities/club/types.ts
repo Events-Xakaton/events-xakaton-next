@@ -31,5 +31,5 @@ export type ClubDetails = {
 export type ClubEventAuthoring = {
   id: string;
   title: string;
-  role: "owner" | "admin" | "event_manager" | "member";
+  role: 'owner' | 'admin' | 'event_manager' | 'member';
 };

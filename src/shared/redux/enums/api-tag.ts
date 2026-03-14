@@ -1,0 +1,6 @@
+export enum ApiTag {
+  AUTH = 'AUTH',
+  FEED = 'FEED',
+  NOTIFICATIONS = 'NOTIFICATIONS',
+  PROFILE = 'PROFILE',
+}

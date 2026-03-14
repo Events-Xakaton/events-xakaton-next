@@ -1,0 +1,46 @@
+@import '../lib/styles/theme.css';
+
+.avatar {
+  @apply relative inline-flex items-center justify-center;
+  @apply rounded-full overflow-hidden shrink-0;
+  @apply bg-gradient-to-br from-primary-500 to-primary-700;
+  @apply text-white font-semibold;
+  @apply border-2 border-white/10;
+
+  &--xs {
+    @apply w-6 h-6 text-xs;
+  }
+
+  &--sm {
+    @apply w-8 h-8 text-sm;
+  }
+
+  &--md {
+    @apply w-10 h-10 text-base;
+  }
+
+  &--lg {
+    @apply w-12 h-12 text-lg;
+  }
+
+  &--xl {
+    @apply w-16 h-16 text-2xl;
+  }
+
+  &__image {
+    @apply w-full h-full object-cover;
+  }
+
+  &__fallback {
+    @apply flex items-center justify-center w-full h-full font-semibold;
+  }
+}
+
+.avatar-group {
+  @apply flex items-center -space-x-2;
+}
+
+.avatar-group__overflow {
+  @apply inline-flex items-center justify-center rounded-full;
+  @apply bg-neutral-800 border-2 border-neutral-700 text-neutral-300 font-medium ring-2 ring-neutral-900;
+}

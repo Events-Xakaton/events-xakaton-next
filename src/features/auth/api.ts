@@ -6,8 +6,8 @@
  * 2. verifyCode — подтверждение кода
  * 3. reverify — повторная верификация (если сессия устарела)
  */
-
-import { apiBase } from "@/shared/api/base-api";
+import { apiBase } from '@/shared/api/base-api';
+import { ApiTag } from '@/shared/redux';
 
 // Генерация криптографически безопасного ключа идемпотентности
 const generateIdempotencyKey = (prefix: string): string => {
@@ -16,37 +16,47 @@ const generateIdempotencyKey = (prefix: string): string => {
 
 export const authApi = apiBase.injectEndpoints({
   endpoints: (builder) => ({
-    requestCode: builder.mutation<{ status: string; ttlSec: number }, { reddyUserKey: string }>({
+    requestCode: builder.mutation<
+      { status: string; ttlSec: number },
+      { reddyUserKey: string }
+    >({
       query: ({ reddyUserKey }) => ({
-        url: "/auth/request-code",
-        method: "POST",
+        url: '/auth/request-code',
+        method: 'POST',
         headers: {
-          "idempotency-key": generateIdempotencyKey("otp"),
+          'idempotency-key': generateIdempotencyKey('otp'),
         },
         body: { reddyUserKey },
       }),
     }),
-    verifyCode: builder.mutation<{ status: string }, { reddyUserKey: string; code: string }>({
+    verifyCode: builder.mutation<
+      { status: string },
+      { reddyUserKey: string; code: string }
+    >({
       query: ({ reddyUserKey, code }) => ({
-        url: "/auth/verify-code",
-        method: "POST",
+        url: '/auth/verify-code',
+        method: 'POST',
         headers: {
-          "idempotency-key": generateIdempotencyKey("verify"),
+          'idempotency-key': generateIdempotencyKey('verify'),
         },
         body: { reddyUserKey, code },
       }),
-      invalidatesTags: ["Auth", "Feed", "Profile"],
+      invalidatesTags: [ApiTag.AUTH, ApiTag.FEED, ApiTag.PROFILE],
     }),
     reverify: builder.mutation<{ status: string; ttlSec: number }, void>({
       query: () => ({
-        url: "/auth/re-verify",
-        method: "POST",
+        url: '/auth/re-verify',
+        method: 'POST',
         headers: {
-          "idempotency-key": generateIdempotencyKey("reverify"),
+          'idempotency-key': generateIdempotencyKey('reverify'),
         },
       }),
     }),
   }),
 });
 
-export const { useRequestCodeMutation, useVerifyCodeMutation, useReverifyMutation } = authApi;
+export const {
+  useRequestCodeMutation,
+  useVerifyCodeMutation,
+  useReverifyMutation,
+} = authApi;

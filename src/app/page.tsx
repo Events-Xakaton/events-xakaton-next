@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import dynamic from "next/dynamic";
+import dynamic from 'next/dynamic';
 
-const MiniAppShell = dynamic(() => import("@/views/shell"), {
+const MiniAppShell = dynamic(() => import('@/views/shell'), {
   ssr: false,
 });
 

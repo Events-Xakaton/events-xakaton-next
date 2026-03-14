@@ -1,36 +1,41 @@
-"use client";
+'use client';
 
-import { useState, useRef, useEffect } from "react";
-import { ChevronDown, Check } from "lucide-react";
-import { cn } from "@/shared/lib/utils";
-import { TOGGLE_BUTTON_INACTIVE_CLASS, ACTIVE_GRADIENT_CLASS } from "@/shared/lib/ui-styles";
+import { Check, ChevronDown } from 'lucide-react';
+import { FC, useEffect, useRef, useState } from 'react';
+
+import {
+  TOGGLE_BUTTON_INACTIVE_CLASS,
+} from '@/shared/lib/ui-styles';
+import { cn } from '@/shared/lib/utils';
+
+import './styles/date-filter.css';
 
 const DAY_FILTERS = [
-  { id: "any", label: "В любой день" },
-  { id: "today", label: "Сегодня" },
-  { id: "tomorrow", label: "Завтра" },
-  { id: "week", label: "На этой неделе" },
-  { id: "weekend", label: "В эти выходные" },
-  { id: "next-week", label: "На следующей неделе" },
+  { id: 'any', label: 'В любой день' },
+  { id: 'today', label: 'Сегодня' },
+  { id: 'tomorrow', label: 'Завтра' },
+  { id: 'week', label: 'На этой неделе' },
+  { id: 'weekend', label: 'В эти выходные' },
+  { id: 'next-week', label: 'На следующей неделе' },
 ] as const;
 
-const DAY_FILTER_SHORT: Record<(typeof DAY_FILTERS)[number]["id"], string> = {
-  any: "Любой",
-  today: "Сегодня",
-  tomorrow: "Завтра",
-  week: "Неделя",
-  weekend: "Выходные",
-  "next-week": "След. нед.",
+const DAY_FILTER_SHORT: Record<(typeof DAY_FILTERS)[number]['id'], string> = {
+  any: 'Любой',
+  today: 'Сегодня',
+  tomorrow: 'Завтра',
+  week: 'Неделя',
+  weekend: 'Выходные',
+  'next-week': 'След. нед.',
 };
 
-type DayFilterValue = (typeof DAY_FILTERS)[number]["id"];
+type DayFilterValue = (typeof DAY_FILTERS)[number]['id'];
 
-interface DateFilterProps {
+type DateFilterProps = {
   value: DayFilterValue;
   onChange: (value: DayFilterValue) => void;
-  variant?: "native" | "popover" | "buttons";
+  variant?: 'native' | 'popover' | 'buttons';
   className?: string;
-}
+};
 
 /**
  * ВАРИАНТ 1: Native HTML Select
@@ -39,7 +44,11 @@ interface DateFilterProps {
  * - Родной мобильный UX (колесо выбора на iOS)
  * - Но стилизация ограничена
  */
-function NativeSelectVariant({ value, onChange, className }: Omit<DateFilterProps, "variant">) {
+const NativeSelectVariant: FC<Omit<DateFilterProps, 'variant'>> = ({
+  value,
+  onChange,
+  className,
+}) => {
   return (
     <select
       value={value}
@@ -47,7 +56,7 @@ function NativeSelectVariant({ value, onChange, className }: Omit<DateFilterProp
       className={cn(
         TOGGLE_BUTTON_INACTIVE_CLASS,
         "appearance-none bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIiIGhlaWdodD0iOCIgdmlld0JveD0iMCAwIDEyIDgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTEgMUw2IDZMMTEgMSIgc3Ryb2tlPSIjNTI1MjUyIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjwvc3ZnPg==')] bg-[length:12px] bg-[position:right_8px_center] bg-no-repeat",
-        "pr-7 cursor-pointer pl-3",
+        'pr-7 cursor-pointer pl-3',
         className,
       )}
       aria-label="Фильтр по дате"
@@ -68,7 +77,11 @@ function NativeSelectVariant({ value, onChange, className }: Omit<DateFilterProp
  * - Визуально ближе к дизайн-системе
  * - Но требует больше JavaScript и управления состоянием
  */
-function PopoverVariant({ value, onChange, className }: Omit<DateFilterProps, "variant">) {
+const PopoverVariant: FC<Omit<DateFilterProps, 'variant'>> = ({
+  value,
+  onChange,
+  className,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -77,25 +90,29 @@ function PopoverVariant({ value, onChange, className }: Omit<DateFilterProps, "v
     if (!isOpen) return;
 
     function handleClickOutside(event: MouseEvent) {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     }
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen]);
 
-  const selectedLabel = DAY_FILTERS.find((f) => f.id === value)?.label ?? "В любой день";
+  const selectedLabel =
+    DAY_FILTERS.find((f) => f.id === value)?.label ?? 'В любой день';
 
   return (
-    <div ref={containerRef} className="relative">
+    <div ref={containerRef} className="date-filter-popover">
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
           TOGGLE_BUTTON_INACTIVE_CLASS,
-          "gap-1.5 pl-3 pr-2",
+          'gap-1.5 pl-3 pr-2',
           className,
         )}
         aria-label="Фильтр по дате"
@@ -104,16 +121,16 @@ function PopoverVariant({ value, onChange, className }: Omit<DateFilterProps, "v
         <span className="truncate">{selectedLabel}</span>
         <ChevronDown
           className={cn(
-            "h-3.5 w-3.5 text-neutral-600 transition-transform duration-200",
-            isOpen && "rotate-180"
+            'date-filter-popover__chevron',
+            isOpen && 'date-filter-popover__chevron--open',
           )}
           aria-hidden="true"
         />
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-full z-popover mt-2 w-52 origin-top-right rounded-2xl border border-neutral-200 bg-white shadow-xl">
-          <div className="p-2" role="menu">
+        <div className="date-filter-popover__dropdown">
+          <div className="date-filter-popover__dropdown-inner" role="menu">
             {DAY_FILTERS.map((item) => {
               const isSelected = item.id === value;
               return (
@@ -125,10 +142,10 @@ function PopoverVariant({ value, onChange, className }: Omit<DateFilterProps, "v
                     setIsOpen(false);
                   }}
                   className={cn(
-                    "flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm transition-colors min-h-[44px]",
+                    'date-filter-popover__option',
                     isSelected
-                      ? cn(ACTIVE_GRADIENT_CLASS, "font-semibold")
-                      : "text-neutral-700 hover:bg-neutral-50 active:bg-neutral-100"
+                      ? 'date-filter-popover__option--active'
+                      : 'date-filter-popover__option--inactive',
                   )}
                   role="menuitemradio"
                   aria-checked={isSelected}
@@ -154,13 +171,14 @@ function PopoverVariant({ value, onChange, className }: Omit<DateFilterProps, "v
  * - Отлично для 2-4 опций
  * - Может быть слишком широким для 6 опций на маленьких экранах
  */
-function ButtonsVariant({ value, onChange, className }: Omit<DateFilterProps, "variant">) {
+const ButtonsVariant: FC<Omit<DateFilterProps, 'variant'>> = ({
+  value,
+  onChange,
+  className,
+}) => {
   return (
     <div
-      className={cn(
-        "inline-flex rounded-full border border-neutral-200 bg-white/90 shadow-sm p-1",
-        className,
-      )}
+      className={cn('date-filter-buttons', className)}
       role="group"
       aria-label="Фильтр по дате"
     >
@@ -174,10 +192,10 @@ function ButtonsVariant({ value, onChange, className }: Omit<DateFilterProps, "v
             type="button"
             onClick={() => onChange(item.id)}
             className={cn(
-              "px-2.5 py-1.5 text-[11px] font-semibold rounded-full transition-all duration-200 whitespace-nowrap min-h-[32px]",
+              'date-filter-buttons__option',
               isSelected
-                ? ACTIVE_GRADIENT_CLASS
-                : "text-neutral-700 hover:bg-neutral-50 active:bg-neutral-100"
+                ? 'date-filter-buttons__option--active'
+                : 'date-filter-buttons__option--inactive',
             )}
             aria-pressed={isSelected}
           >
@@ -197,12 +215,12 @@ function ButtonsVariant({ value, onChange, className }: Omit<DateFilterProps, "v
  * - popover: Кастомный dropdown с радио-кнопками (современный, кастомизируемый)
  * - buttons: Inline button group (компактный, быстрый выбор)
  */
-export function DateFilter({ variant = "native", ...props }: DateFilterProps) {
-  if (variant === "popover") {
+export const DateFilter: FC<DateFilterProps> = ({ variant = 'native', ...props }) => {
+  if (variant === 'popover') {
     return <PopoverVariant {...props} />;
   }
 
-  if (variant === "buttons") {
+  if (variant === 'buttons') {
     return <ButtonsVariant {...props} />;
   }
 

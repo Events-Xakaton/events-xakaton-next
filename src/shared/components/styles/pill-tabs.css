@@ -1,0 +1,32 @@
+@import '../lib/styles/theme.css';
+
+.pill-tabs {
+  @apply flex items-center gap-2 overflow-x-auto pb-1;
+
+  &__item {
+    @apply inline-flex items-center gap-1.5 px-4 py-2 rounded-full;
+    @apply text-sm font-medium whitespace-nowrap;
+    @apply transition-all duration-200;
+    @apply min-h-[36px];
+
+    &--active {
+      @apply bg-neutral-900 text-white shadow-sm;
+    }
+
+    &--inactive {
+      @apply bg-transparent text-neutral-600 hover:bg-neutral-100 active:bg-neutral-200;
+    }
+  }
+
+  &__count {
+    @apply text-xs font-semibold;
+
+    &--active {
+      @apply text-neutral-300;
+    }
+
+    &--inactive {
+      @apply text-neutral-500;
+    }
+  }
+}

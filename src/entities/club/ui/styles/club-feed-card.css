@@ -1,0 +1,41 @@
+@import '../../../../shared/lib/styles/theme.css';
+
+.club-feed-card {
+  @apply relative snap-start overflow-hidden rounded-[30px] border border-neutral-200;
+
+  &__scrim {
+    @apply absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-black/70;
+  }
+
+  &__body {
+    @apply relative flex h-full flex-col p-5 pb-7 pr-6;
+  }
+
+  &__meta {
+    @apply mt-auto;
+  }
+
+  &__members {
+    @apply mb-3 flex items-center gap-2;
+  }
+
+  &__members-count {
+    @apply text-sm text-white/90 drop-shadow;
+  }
+
+  &__title {
+    @apply font-display text-4xl leading-[0.98] tracking-tight text-white drop-shadow-lg line-clamp-2;
+  }
+
+  &__description {
+    @apply mt-2 max-w-[85%] text-sm text-white/90 drop-shadow line-clamp-2;
+  }
+
+  &__actions {
+    @apply mt-5 flex items-end justify-between gap-3;
+  }
+
+  &__join-group {
+    @apply flex items-center gap-2.5;
+  }
+}

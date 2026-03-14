@@ -1,7 +1,8 @@
-import { apiBase } from "./base-api";
+import { apiBase } from './base-api';
+import { ApiTag } from '@/shared/redux';
 
-export type NotificationType = "event_changed" | "member_joined";
-export type NotificationTargetType = "club" | "event";
+export type NotificationType = 'event_changed' | 'member_joined';
+export type NotificationTargetType = 'club' | 'event';
 
 export type NotificationItem = {
   id: string;
@@ -19,21 +20,23 @@ export const notificationsApi = apiBase.injectEndpoints({
   endpoints: (builder) => ({
     notifications: builder.query<
       { items: NotificationItem[]; nextCursor: string | null },
-      { filter: "all" | "unread"; cursor?: string | null }
+      { filter: 'all' | 'unread'; cursor?: string | null }
     >({
       query: ({ filter, cursor }) => {
-        const cursorQuery = cursor ? `&cursor=${encodeURIComponent(cursor)}` : "";
+        const cursorQuery = cursor
+          ? `&cursor=${encodeURIComponent(cursor)}`
+          : '';
         return `/notifications?filter=${filter}&limit=20${cursorQuery}`;
       },
-      providesTags: ["Notifications"],
+      providesTags: [ApiTag.NOTIFICATIONS],
     }),
-    markRead: builder.mutation<{ status: "ok" }, { id: string }>({
+    markRead: builder.mutation<{ status: 'ok' }, { id: string }>({
       query: ({ id }) => ({
         url: `/notifications/${id}/read`,
-        method: "POST",
-        headers: { "idempotency-key": `notification-read-${id}-${Date.now()}` },
+        method: 'POST',
+        headers: { 'idempotency-key': `notification-read-${id}-${Date.now()}` },
       }),
-      invalidatesTags: ["Notifications"],
+      invalidatesTags: [ApiTag.NOTIFICATIONS],
     }),
   }),
 });

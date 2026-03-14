@@ -1,50 +1,59 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Award, ChevronDown, ChevronUp, Medal, Star, Trophy } from "lucide-react";
+import {
+  Award,
+  ChevronDown,
+  ChevronUp,
+  Medal,
+  Star,
+  Trophy,
+} from 'lucide-react';
+import { useState } from 'react';
+
+import { AppHeader } from '@/widgets/app-header';
+
 import {
   useBalanceQuery,
   useLeaderboardQuery,
   usePointsHistoryQuery,
   usePointsRulesQuery,
-} from "@/shared/api/gamification-api";
-import { getTelegramProfileFallback } from "@/shared/lib/telegram";
-import { formatLocalDateTime } from "@/shared/lib/time";
-import { cn } from "@/shared/lib/utils";
-import { EmptyState } from "@/shared/components/empty-state";
-import { ErrorState } from "@/shared/components/error-state";
+} from '@/shared/api/gamification-api';
+import { EmptyState } from '@/shared/components/empty-state';
+import { ErrorState } from '@/shared/components/error-state';
+import { getTelegramProfileFallback } from '@/shared/lib/telegram';
+import { formatLocalDateTime } from '@/shared/lib/time';
 import {
   ADAPTIVE_VIEWPORT_HEIGHT,
   APP_SECTION_CARD_CLASS,
   SAFE_AREA_TOP,
   getBottomPadding,
-} from "@/shared/lib/ui-styles";
-import { AppHeader } from "@/widgets/app-header";
+} from '@/shared/lib/ui-styles';
+import { cn } from '@/shared/lib/utils';
 
 const SECTION_CARD = APP_SECTION_CARD_CLASS;
-const SECTION_TITLE_CLASS = "text-lg font-semibold text-neutral-900";
+const SECTION_TITLE_CLASS = 'text-lg font-semibold text-neutral-900';
 const SECONDARY_TOGGLE_CLASS =
-  "w-full rounded-2xl border border-neutral-200 bg-white px-4 py-3 text-left text-sm font-semibold text-neutral-900 shadow-sm transition hover:bg-neutral-50 active:bg-neutral-100";
+  'w-full rounded-2xl border border-neutral-200 bg-white px-4 py-3 text-left text-sm font-semibold text-neutral-900 shadow-sm transition hover:bg-neutral-50 active:bg-neutral-100';
 
 const POINTS_RULE_LABELS: Record<string, string> = {
-  club_create: "Создание клуба",
-  event_create: "Создание ивента",
-  club_join: "Вступление в клуб",
-  event_join: "Участие в ивенте",
-  attendance_feedback: "Отзыв после ивента",
-  club_new_member_bonus: "Бонус за нового участника клуба",
-  club_join_rollback: "Отмена вступления в клуб",
-  event_join_rollback: "Отмена участия в ивенте",
-  event_create_rollback: "Отмена созданного ивента",
-  club_create_rollback: "Отмена созданного клуба",
-  attendance_rollback: "Отмена начисления за отзыв",
-  admin_adjustment: "Ручная корректировка",
+  club_create: 'Создание клуба',
+  event_create: 'Создание ивента',
+  club_join: 'Вступление в клуб',
+  event_join: 'Участие в ивенте',
+  attendance_feedback: 'Отзыв после ивента',
+  club_new_member_bonus: 'Бонус за нового участника клуба',
+  club_join_rollback: 'Отмена вступления в клуб',
+  event_join_rollback: 'Отмена участия в ивенте',
+  event_create_rollback: 'Отмена созданного ивента',
+  club_create_rollback: 'Отмена созданного клуба',
+  attendance_rollback: 'Отмена начисления за отзыв',
+  admin_adjustment: 'Ручная корректировка',
 };
 
 function rankBadge(rank: number): string {
-  if (rank === 1) return "1";
-  if (rank === 2) return "2";
-  if (rank === 3) return "3";
+  if (rank === 1) return '1';
+  if (rank === 2) return '2';
+  if (rank === 3) return '3';
   return String(rank);
 }
 
@@ -53,43 +62,43 @@ function pointsRuleLabel(code: string): string {
   if (POINTS_RULE_LABELS[normalized]) {
     return POINTS_RULE_LABELS[normalized];
   }
-  return code.replaceAll("_", " ");
+  return code.replaceAll('_', ' ');
 }
 
 function rankRowClass(rank: number, isCurrentUser: boolean): string {
   if (rank === 1) {
-    return "border-amber-300 bg-gradient-to-r from-amber-50 via-amber-100 to-amber-50";
+    return 'border-amber-300 bg-gradient-to-r from-amber-50 via-amber-100 to-amber-50';
   }
   if (rank === 2) {
-    return "border-slate-300 bg-gradient-to-r from-slate-50 via-slate-100 to-slate-50";
+    return 'border-slate-300 bg-gradient-to-r from-slate-50 via-slate-100 to-slate-50';
   }
   if (rank === 3) {
-    return "border-orange-300 bg-gradient-to-r from-orange-50 via-orange-100 to-orange-50";
+    return 'border-orange-300 bg-gradient-to-r from-orange-50 via-orange-100 to-orange-50';
   }
   if (isCurrentUser) {
-    return "border-blue-300 bg-blue-50";
+    return 'border-blue-300 bg-blue-50';
   }
-  return "border-zinc-200 bg-white";
+  return 'border-zinc-200 bg-white';
 }
 
 function rankBadgeClass(rank: number, isCurrentUser: boolean): string {
   if (rank === 1) {
-    return "border-amber-300 bg-amber-100 text-amber-800";
+    return 'border-amber-300 bg-amber-100 text-amber-800';
   }
   if (rank === 2) {
-    return "border-slate-300 bg-slate-100 text-slate-700";
+    return 'border-slate-300 bg-slate-100 text-slate-700';
   }
   if (rank === 3) {
-    return "border-orange-300 bg-orange-100 text-orange-800";
+    return 'border-orange-300 bg-orange-100 text-orange-800';
   }
   if (isCurrentUser) {
-    return "border-blue-300 bg-blue-100 text-blue-700";
+    return 'border-blue-300 bg-blue-100 text-blue-700';
   }
-  return "border-zinc-200 bg-zinc-100 text-zinc-700";
+  return 'border-zinc-200 bg-zinc-100 text-zinc-700';
 }
 
 export function PointsScreen() {
-  const [period, setPeriod] = useState<"weekly" | "monthly">("weekly");
+  const [period, setPeriod] = useState<'weekly' | 'monthly'>('weekly');
   const [showRules, setShowRules] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
 
@@ -102,7 +111,9 @@ export function PointsScreen() {
   const top = leaderboard.data?.top ?? [];
   const current = leaderboard.data?.currentUser ?? null;
   const topTen = top.slice(0, 10);
-  const inTopTen = current ? topTen.some((row) => row.userId === current.userId) : false;
+  const inTopTen = current
+    ? topTen.some((row) => row.userId === current.userId)
+    : false;
 
   const primaryLoading = balance.isLoading || leaderboard.isLoading;
   const primaryError = balance.isError || leaderboard.isError;
@@ -113,7 +124,7 @@ export function PointsScreen() {
       style={{
         minHeight: ADAPTIVE_VIEWPORT_HEIGHT,
         paddingTop: `calc(${SAFE_AREA_TOP} + 88px)`,
-        paddingBottom: getBottomPadding("list"),
+        paddingBottom: getBottomPadding('list'),
       }}
     >
       <AppHeader
@@ -143,15 +154,29 @@ export function PointsScreen() {
         ) : (
           <>
             <section className="grid grid-cols-2 gap-3">
-              <article className={cn(SECTION_CARD, "space-y-2 bg-gradient-to-br from-amber-50 to-amber-100")}>
+              <article
+                className={cn(
+                  SECTION_CARD,
+                  'space-y-2 bg-gradient-to-br from-amber-50 to-amber-100',
+                )}
+              >
                 <Star className="h-5 w-5 text-amber-600" aria-hidden="true" />
                 <p className="text-xs text-amber-700">Очки за все время</p>
-                <p className="text-2xl font-semibold text-amber-900">{balance.data?.lifetime ?? "-"}</p>
+                <p className="text-2xl font-semibold text-amber-900">
+                  {balance.data?.lifetime ?? '-'}
+                </p>
               </article>
-              <article className={cn(SECTION_CARD, "space-y-2 bg-gradient-to-br from-blue-50 to-blue-100")}>
+              <article
+                className={cn(
+                  SECTION_CARD,
+                  'space-y-2 bg-gradient-to-br from-blue-50 to-blue-100',
+                )}
+              >
                 <Medal className="h-5 w-5 text-blue-600" aria-hidden="true" />
                 <p className="text-xs text-blue-700">Очки за неделю</p>
-                <p className="text-2xl font-semibold text-blue-900">{balance.data?.weekly ?? "-"}</p>
+                <p className="text-2xl font-semibold text-blue-900">
+                  {balance.data?.weekly ?? '-'}
+                </p>
               </article>
             </section>
 
@@ -164,27 +189,27 @@ export function PointsScreen() {
                 <div className="inline-flex min-h-[44px] items-center rounded-full border border-neutral-300 bg-white p-1 shadow-sm">
                   <button
                     type="button"
-                    onClick={() => setPeriod("weekly")}
+                    onClick={() => setPeriod('weekly')}
                     className={cn(
-                      "min-h-[34px] rounded-full px-3 text-xs font-semibold transition-colors",
-                      period === "weekly"
-                        ? "bg-gradient-to-br from-primary-500 to-primary-600 text-white shadow-lg"
-                        : "text-neutral-700 hover:bg-neutral-100",
+                      'min-h-[34px] rounded-full px-3 text-xs font-semibold transition-colors',
+                      period === 'weekly'
+                        ? 'bg-gradient-to-br from-primary-500 to-primary-600 text-white shadow-lg'
+                        : 'text-neutral-700 hover:bg-neutral-100',
                     )}
-                    aria-pressed={period === "weekly"}
+                    aria-pressed={period === 'weekly'}
                   >
                     Неделя
                   </button>
                   <button
                     type="button"
-                    onClick={() => setPeriod("monthly")}
+                    onClick={() => setPeriod('monthly')}
                     className={cn(
-                      "min-h-[34px] rounded-full px-3 text-xs font-semibold transition-colors",
-                      period === "monthly"
-                        ? "bg-gradient-to-br from-primary-500 to-primary-600 text-white shadow-lg"
-                        : "text-neutral-700 hover:bg-neutral-100",
+                      'min-h-[34px] rounded-full px-3 text-xs font-semibold transition-colors',
+                      period === 'monthly'
+                        ? 'bg-gradient-to-br from-primary-500 to-primary-600 text-white shadow-lg'
+                        : 'text-neutral-700 hover:bg-neutral-100',
                     )}
-                    aria-pressed={period === "monthly"}
+                    aria-pressed={period === 'monthly'}
                   >
                     Месяц
                   </button>
@@ -199,35 +224,59 @@ export function PointsScreen() {
                 ) : null}
 
                 {!leaderboard.isFetching && top.length === 0 ? (
-                  <EmptyState title="Лидерборд пуст" description="За этот период очков пока нет." />
+                  <EmptyState
+                    title="Лидерборд пуст"
+                    description="За этот период очков пока нет."
+                  />
                 ) : null}
 
                 {topTen.map((row) => {
                   const isCurrentUser = current?.userId === row.userId;
-                  const displayName = isCurrentUser ? profile.fullName : row.fullName;
+                  const displayName = isCurrentUser
+                    ? profile.fullName
+                    : row.fullName;
                   return (
                     <div
                       key={row.userId}
                       className={cn(
-                        "flex items-center justify-between rounded-xl border px-3 py-2.5",
+                        'flex items-center justify-between rounded-xl border px-3 py-2.5',
                         rankRowClass(row.rank, isCurrentUser),
                       )}
                     >
                       <div className="flex min-w-0 items-center gap-2.5">
                         <span
                           className={cn(
-                            "inline-flex h-6 min-w-6 items-center justify-center rounded-full border px-1.5 text-xs font-bold",
+                            'inline-flex h-6 min-w-6 items-center justify-center rounded-full border px-1.5 text-xs font-bold',
                             rankBadgeClass(row.rank, isCurrentUser),
                           )}
                         >
                           {rankBadge(row.rank)}
                         </span>
-                        <p className="truncate text-sm font-medium text-zinc-900">{displayName}</p>
-                        {row.rank === 1 ? <Trophy className="h-4 w-4 shrink-0 text-amber-600" aria-hidden="true" /> : null}
-                        {row.rank === 2 ? <Award className="h-4 w-4 shrink-0 text-slate-600" aria-hidden="true" /> : null}
-                        {row.rank === 3 ? <Medal className="h-4 w-4 shrink-0 text-orange-600" aria-hidden="true" /> : null}
+                        <p className="truncate text-sm font-medium text-zinc-900">
+                          {displayName}
+                        </p>
+                        {row.rank === 1 ? (
+                          <Trophy
+                            className="h-4 w-4 shrink-0 text-amber-600"
+                            aria-hidden="true"
+                          />
+                        ) : null}
+                        {row.rank === 2 ? (
+                          <Award
+                            className="h-4 w-4 shrink-0 text-slate-600"
+                            aria-hidden="true"
+                          />
+                        ) : null}
+                        {row.rank === 3 ? (
+                          <Medal
+                            className="h-4 w-4 shrink-0 text-orange-600"
+                            aria-hidden="true"
+                          />
+                        ) : null}
                       </div>
-                      <p className="text-sm font-bold text-zinc-900">{row.points}</p>
+                      <p className="text-sm font-bold text-zinc-900">
+                        {row.points}
+                      </p>
                     </div>
                   );
                 })}
@@ -239,15 +288,19 @@ export function PointsScreen() {
                       <div className="flex min-w-0 items-center gap-2.5">
                         <span
                           className={cn(
-                            "inline-flex h-6 min-w-6 items-center justify-center rounded-full border px-1.5 text-xs font-bold",
+                            'inline-flex h-6 min-w-6 items-center justify-center rounded-full border px-1.5 text-xs font-bold',
                             rankBadgeClass(current.rank, true),
                           )}
                         >
                           {rankBadge(current.rank)}
                         </span>
-                        <p className="truncate text-sm font-medium text-zinc-900">{profile.fullName}</p>
+                        <p className="truncate text-sm font-medium text-zinc-900">
+                          {profile.fullName}
+                        </p>
                       </div>
-                      <p className="text-sm font-bold text-zinc-900">{current.points}</p>
+                      <p className="text-sm font-bold text-zinc-900">
+                        {current.points}
+                      </p>
                     </div>
                   </>
                 ) : null}
@@ -263,7 +316,11 @@ export function PointsScreen() {
               >
                 <span className="flex items-center justify-between gap-3">
                   <span>Правила очков</span>
-                  {showRules ? <ChevronUp className="h-4 w-4" aria-hidden="true" /> : <ChevronDown className="h-4 w-4" aria-hidden="true" />}
+                  {showRules ? (
+                    <ChevronUp className="h-4 w-4" aria-hidden="true" />
+                  ) : (
+                    <ChevronDown className="h-4 w-4" aria-hidden="true" />
+                  )}
                 </span>
               </button>
 
@@ -284,16 +341,25 @@ export function PointsScreen() {
                     />
                   ) : null}
 
-                  {!rules.isLoading && !rules.isError && (rules.data?.length ?? 0) === 0 ? (
+                  {!rules.isLoading &&
+                  !rules.isError &&
+                  (rules.data?.length ?? 0) === 0 ? (
                     <EmptyState title="Правила пока недоступны" />
                   ) : null}
 
                   {!rules.isLoading && !rules.isError ? (
                     <div className="space-y-2">
                       {(rules.data ?? []).map((row) => (
-                        <div key={row.rule} className="flex items-center justify-between rounded-xl border border-zinc-200 bg-white px-3 py-2">
-                          <span className="text-sm text-zinc-700">{pointsRuleLabel(row.rule)}</span>
-                          <span className="text-sm font-semibold text-zinc-900">+{row.points}</span>
+                        <div
+                          key={row.rule}
+                          className="flex items-center justify-between rounded-xl border border-zinc-200 bg-white px-3 py-2"
+                        >
+                          <span className="text-sm text-zinc-700">
+                            {pointsRuleLabel(row.rule)}
+                          </span>
+                          <span className="text-sm font-semibold text-zinc-900">
+                            +{row.points}
+                          </span>
                         </div>
                       ))}
                     </div>
@@ -311,7 +377,11 @@ export function PointsScreen() {
               >
                 <span className="flex items-center justify-between gap-3">
                   <span>История очков</span>
-                  {showHistory ? <ChevronUp className="h-4 w-4" aria-hidden="true" /> : <ChevronDown className="h-4 w-4" aria-hidden="true" />}
+                  {showHistory ? (
+                    <ChevronUp className="h-4 w-4" aria-hidden="true" />
+                  ) : (
+                    <ChevronDown className="h-4 w-4" aria-hidden="true" />
+                  )}
                 </span>
               </button>
 
@@ -332,20 +402,36 @@ export function PointsScreen() {
                     />
                   ) : null}
 
-                  {!history.isLoading && !history.isError && (history.data?.length ?? 0) === 0 ? (
+                  {!history.isLoading &&
+                  !history.isError &&
+                  (history.data?.length ?? 0) === 0 ? (
                     <EmptyState title="История очков пуста" />
                   ) : null}
 
                   {!history.isLoading && !history.isError ? (
                     <div className="space-y-2">
                       {(history.data ?? []).slice(0, 20).map((item) => (
-                        <div key={item.id} className="flex items-center justify-between rounded-xl border border-zinc-200 bg-white px-3 py-2">
+                        <div
+                          key={item.id}
+                          className="flex items-center justify-between rounded-xl border border-zinc-200 bg-white px-3 py-2"
+                        >
                           <div className="min-w-0 pr-3">
-                            <p className="truncate text-sm text-zinc-800">{pointsRuleLabel(item.ruleCode)}</p>
-                            <p className="text-xs text-zinc-500">{formatLocalDateTime(item.createdAt)}</p>
+                            <p className="truncate text-sm text-zinc-800">
+                              {pointsRuleLabel(item.ruleCode)}
+                            </p>
+                            <p className="text-xs text-zinc-500">
+                              {formatLocalDateTime(item.createdAt)}
+                            </p>
                           </div>
-                          <p className={cn("shrink-0 text-sm font-semibold", item.deltaPoints >= 0 ? "text-emerald-700" : "text-red-600")}>
-                            {item.deltaPoints >= 0 ? "+" : ""}
+                          <p
+                            className={cn(
+                              'shrink-0 text-sm font-semibold',
+                              item.deltaPoints >= 0
+                                ? 'text-emerald-700'
+                                : 'text-red-600',
+                            )}
+                          >
+                            {item.deltaPoints >= 0 ? '+' : ''}
                             {item.deltaPoints}
                           </p>
                         </div>

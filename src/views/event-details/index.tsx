@@ -1,74 +1,85 @@
-"use client";
+'use client';
 
-import { FormEvent, ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import {
+  Calendar,
   CalendarArrowDown,
   CalendarArrowUp,
+  ChevronRight,
   MapPin,
-  Users,
-  Calendar,
   Pencil,
   Plus,
-  ChevronRight,
-} from "lucide-react";
+  Users,
+} from 'lucide-react';
 import {
+  FormEvent,
+  ReactNode,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+
+import { PeopleList } from '@/widgets/people-list';
+
+import { useEventAuthoringClubsQuery } from '@/entities/club/api';
+import {
+  useCancelEventMutation,
   useEventDetailsQuery,
   useEventParticipantsQuery,
-  useUpdateEventMutation,
   useJoinEventMutation,
   useUnjoinEventMutation,
-  useCancelEventMutation,
-} from "@/entities/event/api";
-import { useEventAuthoringClubsQuery } from "@/entities/club/api";
-import { buildGradient, newSeed } from "@/shared/lib/gradient";
-import { useTelegramBackButton } from "@/shared/lib/telegram/useTelegramButtons";
-import { appErrorText, toIsoFromLocal, cn } from "@/shared/lib/utils";
-import { Button } from "@/shared/components/button";
-import { ConfirmDialog } from "@/shared/components/confirm-dialog";
-import { ErrorState } from "@/shared/components/error-state";
-import { PreviewCard } from "@/shared/components/preview-card";
+  useUpdateEventMutation,
+} from '@/entities/event/api';
+
+import { Button, ButtonSize, ButtonVariant } from '@/shared/components/button';
+import { ConfirmDialog } from '@/shared/components/confirm-dialog';
 import {
   AboutSection,
   DetailRow,
   StickyActionsPanel,
-} from "@/shared/components/detail-shared";
-import { PeopleList } from "@/widgets/people-list";
+} from '@/shared/components/detail-shared';
+import { ErrorState } from '@/shared/components/error-state';
+import { PreviewCard } from '@/shared/components/preview-card';
+import { buildGradient, newSeed } from '@/shared/lib/gradient';
+import { useTelegramBackButton } from '@/shared/lib/telegram/useTelegramButtons';
 import {
   ADAPTIVE_VIEWPORT_HEIGHT,
-  SAFE_AREA_TOP,
-  getBottomPadding,
-  APP_SECTION_CARD_CLASS,
   APP_FLOAT_SHADOW_CLASS,
   APP_PANEL_SHADOW_CLASS,
-} from "@/shared/lib/ui-styles";
+  APP_SECTION_CARD_CLASS,
+  SAFE_AREA_TOP,
+  getBottomPadding,
+} from '@/shared/lib/ui-styles';
+import { appErrorText, cn, toIsoFromLocal } from '@/shared/lib/utils';
 
 const SECTION_CARD = APP_SECTION_CARD_CLASS;
-const SHEET_SECTION_CARD = "bg-white border border-neutral-200 shadow-sm rounded-2xl p-4 space-y-4";
-const DETAIL_LABEL_WIDTH = "w-[58%] min-w-[176px] pr-2";
-const SECTION_TITLE_CLASS = "text-lg font-semibold text-neutral-900";
+const SHEET_SECTION_CARD =
+  'bg-white border border-neutral-200 shadow-sm rounded-2xl p-4 space-y-4';
+const DETAIL_LABEL_WIDTH = 'w-[58%] min-w-[176px] pr-2';
+const SECTION_TITLE_CLASS = 'text-lg font-semibold text-neutral-900';
 const INPUT_BASE_CLASS =
-  "w-full resize-none rounded-xl border border-neutral-200 bg-white px-3 py-3 text-sm text-neutral-900 placeholder:text-neutral-500 outline-none focus:border-neutral-300 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0";
+  'w-full resize-none rounded-xl border border-neutral-200 bg-white px-3 py-3 text-sm text-neutral-900 placeholder:text-neutral-500 outline-none focus:border-neutral-300 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0';
 const SHEET_ANIMATION_MS = 220;
-const SHEET_TOP_LIMIT = "calc(env(safe-area-inset-top, 0px) + 74px)";
+const SHEET_TOP_LIMIT = 'calc(env(safe-area-inset-top, 0px) + 74px)';
 
 function toLocalDateTimeInputValue(isoUtc: string): string {
-  if (!isoUtc) return "";
+  if (!isoUtc) return '';
   const date = new Date(isoUtc);
-  if (Number.isNaN(date.getTime())) return "";
+  if (Number.isNaN(date.getTime())) return '';
   const local = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
   return local.toISOString().slice(0, 16);
 }
 
 function formatDateTimeDisplay(value: string): string {
-  if (!value) return "Выберите дату";
+  if (!value) return 'Выберите дату';
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return value;
-  return new Intl.DateTimeFormat("ru-RU", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
+  return new Intl.DateTimeFormat('ru-RU', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
     hour12: false,
   }).format(date);
 }
@@ -133,20 +144,20 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
   const [cancelEvent, cancelState] = useCancelEventMutation();
 
   // Draft states
-  const [titleDraft, setTitleDraft] = useState("");
-  const [descriptionDraft, setDescriptionDraft] = useState("");
-  const [locationDraft, setLocationDraft] = useState("");
-  const [startsAtDraft, setStartsAtDraft] = useState("");
-  const [endsAtDraft, setEndsAtDraft] = useState("");
-  const [maxParticipantsDraft, setMaxParticipantsDraft] = useState("");
-  const [coverSeedDraft, setCoverSeedDraft] = useState("");
-  const [selectedClubIdDraft, setSelectedClubIdDraft] = useState("");
+  const [titleDraft, setTitleDraft] = useState('');
+  const [descriptionDraft, setDescriptionDraft] = useState('');
+  const [locationDraft, setLocationDraft] = useState('');
+  const [startsAtDraft, setStartsAtDraft] = useState('');
+  const [endsAtDraft, setEndsAtDraft] = useState('');
+  const [maxParticipantsDraft, setMaxParticipantsDraft] = useState('');
+  const [coverSeedDraft, setCoverSeedDraft] = useState('');
+  const [selectedClubIdDraft, setSelectedClubIdDraft] = useState('');
 
   const [showTitleEditor, setShowTitleEditor] = useState(false);
   const eventTitleEditorRef = useRef<HTMLDivElement>(null);
   const eventDescriptionRef = useRef<HTMLTextAreaElement>(null);
 
-  const [hint, setHint] = useState("");
+  const [hint, setHint] = useState('');
   const [originalData, setOriginalData] = useState<{
     title: string;
     description: string;
@@ -165,7 +176,7 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
   const [showCompactHeader, setShowCompactHeader] = useState(false);
 
   const event = details.data;
-  const archived = event?.status === "past" || event?.status === "cancelled";
+  const archived = event?.status === 'past' || event?.status === 'cancelled';
 
   // Telegram BackButton
   useTelegramBackButton({
@@ -179,7 +190,9 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
 
     const startsAt = toLocalDateTimeInputValue(event.startsAtUtc);
     const endsAt = toLocalDateTimeInputValue(event.endsAtUtc);
-    const maxParticipants = event.maxParticipants ? String(event.maxParticipants) : "";
+    const maxParticipants = event.maxParticipants
+      ? String(event.maxParticipants)
+      : '';
     const coverSeed = event.coverSeed || event.id;
 
     setTitleDraft(event.title);
@@ -189,7 +202,7 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
     setEndsAtDraft(endsAt);
     setMaxParticipantsDraft(maxParticipants);
     setCoverSeedDraft(coverSeed);
-    setSelectedClubIdDraft(event.clubId ?? "");
+    setSelectedClubIdDraft(event.clubId ?? '');
 
     setOriginalData({
       title: event.title,
@@ -199,7 +212,7 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
       endsAt,
       maxParticipants,
       coverSeed,
-      clubId: event.clubId ?? "",
+      clubId: event.clubId ?? '',
     });
   }, [event]);
 
@@ -207,7 +220,8 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
   useEffect(() => {
     if (!originalData || !event) return;
 
-    const normalizeMaxParticipants = (val: string) => val.replace(/^0+/, "") || "";
+    const normalizeMaxParticipants = (val: string) =>
+      val.replace(/^0+/, '') || '';
 
     const changed =
       titleDraft.trim() !== originalData.title.trim() ||
@@ -215,12 +229,24 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
       locationDraft.trim() !== originalData.locationOrLink.trim() ||
       startsAtDraft !== originalData.startsAt ||
       endsAtDraft !== originalData.endsAt ||
-      normalizeMaxParticipants(maxParticipantsDraft) !== normalizeMaxParticipants(originalData.maxParticipants) ||
+      normalizeMaxParticipants(maxParticipantsDraft) !==
+        normalizeMaxParticipants(originalData.maxParticipants) ||
       coverSeedDraft !== originalData.coverSeed ||
       selectedClubIdDraft !== originalData.clubId;
 
     setHasChanges(changed);
-  }, [titleDraft, descriptionDraft, locationDraft, startsAtDraft, endsAtDraft, maxParticipantsDraft, coverSeedDraft, selectedClubIdDraft, originalData, event]);
+  }, [
+    titleDraft,
+    descriptionDraft,
+    locationDraft,
+    startsAtDraft,
+    endsAtDraft,
+    maxParticipantsDraft,
+    coverSeedDraft,
+    selectedClubIdDraft,
+    originalData,
+    event,
+  ]);
 
   // Inline title editing focus
   useEffect(() => {
@@ -234,8 +260,8 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
   useEffect(() => {
     const onScroll = () => setShowCompactHeader(window.scrollY > 170);
     onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   function openEditSheet() {
@@ -255,14 +281,14 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
 
   // Prevent background page scroll while bottom sheet is open.
   useEffect(() => {
-    if (!editSheetMounted || typeof document === "undefined") return;
+    if (!editSheetMounted || typeof document === 'undefined') return;
 
     const { body, documentElement } = document;
     const prevBodyOverflow = body.style.overflow;
     const prevHtmlOverscroll = documentElement.style.overscrollBehavior;
 
-    body.style.overflow = "hidden";
-    documentElement.style.overscrollBehavior = "none";
+    body.style.overflow = 'hidden';
+    documentElement.style.overscrollBehavior = 'none';
 
     return () => {
       body.style.overflow = prevBodyOverflow;
@@ -271,16 +297,23 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
   }, [editSheetMounted]);
 
   const eventTimeError = useMemo(() => {
-    if (!startsAtDraft || !endsAtDraft) return "";
+    if (!startsAtDraft || !endsAtDraft) return '';
     const startsAtUtc = toIsoFromLocal(startsAtDraft);
     const endsAtUtc = toIsoFromLocal(endsAtDraft);
-    if (!startsAtUtc || !endsAtUtc || new Date(endsAtUtc) <= new Date(startsAtUtc)) {
-      return "Время окончания должно быть позже времени начала.";
+    if (
+      !startsAtUtc ||
+      !endsAtUtc ||
+      new Date(endsAtUtc) <= new Date(startsAtUtc)
+    ) {
+      return 'Время окончания должно быть позже времени начала.';
     }
-    return "";
+    return '';
   }, [startsAtDraft, endsAtDraft]);
 
-  const heroBackground = useMemo(() => buildGradient(coverSeedDraft, "event"), [coverSeedDraft]);
+  const heroBackground = useMemo(
+    () => buildGradient(coverSeedDraft, 'event'),
+    [coverSeedDraft],
+  );
   const hasRequiredFields =
     titleDraft.trim().length > 0 &&
     descriptionDraft.trim().length > 0 &&
@@ -299,15 +332,24 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
   }
 
   if (details.isError) {
-    return <ErrorState title="Не удалось загрузить событие" onRetry={() => void details.refetch()} />;
+    return (
+      <ErrorState
+        title="Не удалось загрузить событие"
+        onRetry={() => void details.refetch()}
+      />
+    );
   }
 
   if (!event) {
     return (
       <div className="mx-4 mt-4 space-y-2">
-        <h3 className="text-lg font-semibold text-neutral-900">Событие недоступно</h3>
+        <h3 className="text-lg font-semibold text-neutral-900">
+          Событие недоступно
+        </h3>
         <div className={SECTION_CARD}>
-          <p className="text-sm text-neutral-700">Проверьте ссылку или откройте другое событие.</p>
+          <p className="text-sm text-neutral-700">
+            Проверьте ссылку или откройте другое событие.
+          </p>
         </div>
       </div>
     );
@@ -315,25 +357,32 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
 
   async function handleUpdate(e?: FormEvent) {
     e?.preventDefault();
-    setHint("");
+    setHint('');
 
     if (!event || !hasChanges || !event.canManage || archived) return;
 
     if (!hasRequiredFields) {
-      setHint("Заполните обязательные поля: название, описание, локацию и время.");
+      setHint(
+        'Заполните обязательные поля: название, описание, локацию и время.',
+      );
       return;
     }
 
     const startsAtUtc = toIsoFromLocal(startsAtDraft);
     const endsAtUtc = toIsoFromLocal(endsAtDraft);
 
-    if (!startsAtUtc || !endsAtUtc || new Date(endsAtUtc) <= new Date(startsAtUtc)) {
-      setHint("Время окончания должно быть позже времени начала.");
+    if (
+      !startsAtUtc ||
+      !endsAtUtc ||
+      new Date(endsAtUtc) <= new Date(startsAtUtc)
+    ) {
+      setHint('Время окончания должно быть позже времени начала.');
       return;
     }
 
     try {
-      const normalizeMaxParticipants = (val: string) => val.replace(/^0+/, "") || "";
+      const normalizeMaxParticipants = (val: string) =>
+        val.replace(/^0+/, '') || '';
 
       await updateEvent({
         eventId: id,
@@ -351,11 +400,11 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
           : {}),
       }).unwrap();
 
-      setHint("Изменения сохранены");
+      setHint('Изменения сохранены');
       closeEditSheet();
       void details.refetch();
     } catch (error) {
-      setHint(appErrorText(error, "Не удалось сохранить изменения"));
+      setHint(appErrorText(error, 'Не удалось сохранить изменения'));
     }
   }
 
@@ -367,7 +416,7 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
       .unwrap()
       .catch((error) => {
         setJoinedOverride(null); // rollback
-        setHint(appErrorText(error, "Не удалось записаться на событие"));
+        setHint(appErrorText(error, 'Не удалось записаться на событие'));
       });
   }
 
@@ -377,7 +426,7 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
       .unwrap()
       .catch((error) => {
         setJoinedOverride(null); // rollback
-        setHint(appErrorText(error, "Не удалось отписаться от события"));
+        setHint(appErrorText(error, 'Не удалось отписаться от события'));
       });
   }
 
@@ -386,15 +435,17 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
       await cancelEvent({ eventId: id }).unwrap();
       setConfirmCancel(false);
       closeEditSheet();
-      setHint("Событие отменено");
+      setHint('Событие отменено');
       void details.refetch();
     } catch (error) {
-      setHint(appErrorText(error, "Не удалось отменить событие"));
+      setHint(appErrorText(error, 'Не удалось отменить событие'));
     }
   }
 
   const canEdit = event.canManage && !archived;
-  const ownerClubs = (eventAuthoringClubs.data ?? []).filter((club) => club.role === "owner");
+  const ownerClubs = (eventAuthoringClubs.data ?? []).filter(
+    (club) => club.role === 'owner',
+  );
 
   return (
     <>
@@ -403,7 +454,7 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
         style={{
           minHeight: ADAPTIVE_VIEWPORT_HEIGHT,
           paddingTop: SAFE_AREA_TOP,
-          paddingBottom: getBottomPadding("details"),
+          paddingBottom: getBottomPadding('details'),
         }}
       >
         {/* Top Header (parity with create-screen) */}
@@ -418,17 +469,20 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
         {/* Compact Header (sticky on scroll) */}
         <div
           className={cn(
-            "pointer-events-none fixed inset-x-0 z-[30] transition-opacity duration-200",
-            showCompactHeader ? "opacity-100" : "opacity-0"
+            'pointer-events-none fixed inset-x-0 z-[30] transition-opacity duration-200',
+            showCompactHeader ? 'opacity-100' : 'opacity-0',
           )}
           style={{ top: 0 }}
         >
           <div
-            className={cn("mx-auto relative flex w-full max-w-md items-center justify-between border-b border-neutral-200/50 bg-white/95 px-3 py-2 backdrop-blur", APP_FLOAT_SHADOW_CLASS)}
+            className={cn(
+              'mx-auto relative flex w-full max-w-md items-center justify-between border-b border-neutral-200/50 bg-white/95 px-3 py-2 backdrop-blur',
+              APP_FLOAT_SHADOW_CLASS,
+            )}
             style={{
-              paddingTop: "calc(env(safe-area-inset-top, 0px) + 12px)",
-              paddingLeft: "calc(env(safe-area-inset-left, 0px) + 12px)",
-              paddingRight: "calc(env(safe-area-inset-right, 0px) + 12px)",
+              paddingTop: 'calc(env(safe-area-inset-top, 0px) + 12px)',
+              paddingLeft: 'calc(env(safe-area-inset-left, 0px) + 12px)',
+              paddingRight: 'calc(env(safe-area-inset-right, 0px) + 12px)',
             }}
           >
             <span className="h-11 w-11 shrink-0" aria-hidden />
@@ -498,7 +552,10 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
                         className="min-h-[44px] flex items-center"
                         aria-label={`Открыть клуб ${event.clubTitle}`}
                       >
-                        <ChevronRight className="h-5 w-5 text-neutral-400" aria-hidden="true" />
+                        <ChevronRight
+                          className="h-5 w-5 text-neutral-400"
+                          aria-hidden="true"
+                        />
                       </button>
                     ) : null
                   }
@@ -537,7 +594,7 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
               <DetailRow
                 icon={<Users className="h-5 w-5" />}
                 label="Участники"
-                value={`${event.participantsCount}${event.maxParticipants ? ` / ${event.maxParticipants}` : ""}`}
+                value={`${event.participantsCount}${event.maxParticipants ? ` / ${event.maxParticipants}` : ''}`}
               />
             </div>
           </div>
@@ -551,14 +608,22 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
 
           {/* Hint message */}
           {hint && (
-            <div className={cn(
-              "p-4 rounded-2xl",
-              hint.includes("сохранены") || hint.includes("отменено") ? "bg-green-100 border border-green-200" : "bg-red-100 border border-red-200"
-            )}>
-              <p className={cn(
-                "text-sm font-medium",
-                hint.includes("сохранены") || hint.includes("отменено") ? "text-green-700" : "text-red-700"
-              )}>
+            <div
+              className={cn(
+                'p-4 rounded-2xl',
+                hint.includes('сохранены') || hint.includes('отменено')
+                  ? 'bg-green-100 border border-green-200'
+                  : 'bg-red-100 border border-red-200',
+              )}
+            >
+              <p
+                className={cn(
+                  'text-sm font-medium',
+                  hint.includes('сохранены') || hint.includes('отменено')
+                    ? 'text-green-700'
+                    : 'text-red-700',
+                )}
+              >
                 {hint}
               </p>
             </div>
@@ -571,17 +636,19 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
           rightAction={
             archived ? (
               <Button
-                variant="secondary"
-                size="lg"
+                variant={ButtonVariant.SECONDARY}
+                size={ButtonSize.LG}
                 className="rounded-full px-6"
                 disabled
               >
-                {event.status === "cancelled" ? "Событие отменено" : "Событие прошло"}
+                {event.status === 'cancelled'
+                  ? 'Событие отменено'
+                  : 'Событие прошло'}
               </Button>
             ) : joined ? (
               <Button
-                variant="secondary"
-                size="lg"
+                variant={ButtonVariant.SECONDARY}
+                size={ButtonSize.LG}
                 className="rounded-full px-6"
                 isLoading={unjoinState.isLoading}
                 onClick={handleUnjoin}
@@ -590,8 +657,8 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
               </Button>
             ) : event.freeSpots === 0 ? (
               <Button
-                variant="secondary"
-                size="lg"
+                variant={ButtonVariant.SECONDARY}
+                size={ButtonSize.LG}
                 className="rounded-full px-6"
                 disabled
               >
@@ -599,8 +666,8 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
               </Button>
             ) : (
               <Button
-                variant="primary"
-                size="lg"
+                variant={ButtonVariant.PRIMARY}
+                size={ButtonSize.LG}
                 className="rounded-full px-7"
                 isLoading={joinState.isLoading}
                 onClick={handleJoin}
@@ -618,17 +685,17 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
           <button
             type="button"
             className={cn(
-              "absolute inset-0 bg-black/45 transition-opacity duration-200 ease-out",
-              editSheetActive ? "opacity-100" : "opacity-0",
+              'absolute inset-0 bg-black/45 transition-opacity duration-200 ease-out',
+              editSheetActive ? 'opacity-100' : 'opacity-0',
             )}
             aria-label="Закрыть редактирование"
             onClick={closeEditSheet}
           />
           <div
             className={cn(
-              "absolute inset-x-0 bottom-0 mx-auto flex w-full max-w-md flex-col rounded-t-3xl bg-[#f2f2f5] p-4 transition-transform duration-200 ease-out",
+              'absolute inset-x-0 bottom-0 mx-auto flex w-full max-w-md flex-col rounded-t-3xl bg-[#f2f2f5] p-4 transition-transform duration-200 ease-out',
               APP_PANEL_SHADOW_CLASS,
-              editSheetActive ? "translate-y-0" : "translate-y-full",
+              editSheetActive ? 'translate-y-0' : 'translate-y-full',
             )}
             style={{
               transitionDuration: `${SHEET_ANIMATION_MS}ms`,
@@ -638,17 +705,19 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
             <div className="mb-3 flex items-center justify-between">
               <Button
                 type="button"
-                variant="secondary"
-                size="sm"
+                variant={ButtonVariant.SECONDARY}
+                size={ButtonSize.SM}
                 onClick={closeEditSheet}
                 className="rounded-full px-4"
               >
                 Закрыть
               </Button>
-              <p className="px-2 text-center text-sm font-semibold text-neutral-900">Редактировать</p>
+              <p className="px-2 text-center text-sm font-semibold text-neutral-900">
+                Редактировать
+              </p>
               <Button
                 type="button"
-                size="sm"
+                size={ButtonSize.SM}
                 onClick={() => void handleUpdate()}
                 disabled={!canSubmit}
                 isLoading={updateState.isLoading}
@@ -659,14 +728,21 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
             </div>
             <div
               className="min-h-0 flex-1 overflow-y-auto pb-6"
-              style={{ overscrollBehavior: "contain", WebkitOverflowScrolling: "touch" } as React.CSSProperties}
+              style={
+                {
+                  overscrollBehavior: 'contain',
+                  WebkitOverflowScrolling: 'touch',
+                } as React.CSSProperties
+              }
             >
               <div className="space-y-4">
                 <PreviewCard
-                  background={buildGradient(coverSeedDraft, "event")}
-                  title={showTitleEditor ? titleDraft : (titleDraft || event.title)}
+                  background={buildGradient(coverSeedDraft, 'event')}
+                  title={
+                    showTitleEditor ? titleDraft : titleDraft || event.title
+                  }
                   subtitle={`${formatDateTimeDisplay(startsAtDraft)} • ${locationDraft || event.locationOrLink}`}
-                  onChangeBackground={() => setCoverSeedDraft(newSeed("event"))}
+                  onChangeBackground={() => setCoverSeedDraft(newSeed('event'))}
                   titleEditing={showTitleEditor}
                   onTitleClick={() => setShowTitleEditor(true)}
                   showEditIndicator
@@ -681,17 +757,17 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
                         className="w-full min-h-[1.2em] bg-transparent text-4xl font-bold leading-tight tracking-tight text-white outline-none"
                         dir="ltr"
                         style={{
-                          outline: "none",
-                          boxShadow: "none",
-                          border: "none",
-                          WebkitTapHighlightColor: "transparent",
-                          caretColor: "#fff",
-                          direction: "ltr",
-                          textAlign: "left",
-                          unicodeBidi: "plaintext",
+                          outline: 'none',
+                          boxShadow: 'none',
+                          border: 'none',
+                          WebkitTapHighlightColor: 'transparent',
+                          caretColor: '#fff',
+                          direction: 'ltr',
+                          textAlign: 'left',
+                          unicodeBidi: 'plaintext',
                         }}
                         onInput={(e) => {
-                          const value = e.currentTarget.textContent ?? "";
+                          const value = e.currentTarget.textContent ?? '';
                           const next = value.slice(0, 60);
                           if (next !== value) {
                             e.currentTarget.textContent = next;
@@ -704,7 +780,7 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
                           setShowTitleEditor(false);
                         }}
                         onKeyDown={(e) => {
-                          if (e.key === "Enter") {
+                          if (e.key === 'Enter') {
                             e.preventDefault();
                             setTitleDraft((prev) => prev.trim());
                             setShowTitleEditor(false);
@@ -717,7 +793,9 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
                   }
                   titleHint={
                     showTitleEditor && 60 - titleDraft.length <= 10 ? (
-                      <p className="mt-2 text-xs text-white/70">Осталось символов: {60 - titleDraft.length}</p>
+                      <p className="mt-2 text-xs text-white/70">
+                        Осталось символов: {60 - titleDraft.length}
+                      </p>
                     ) : null
                   }
                 />
@@ -744,16 +822,24 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
                       type="button"
                       role="switch"
                       aria-checked={Boolean(selectedClubIdDraft)}
-                      onClick={() => setSelectedClubIdDraft((prev) => (prev ? "" : (ownerClubs[0]?.id ?? "")))}
+                      onClick={() =>
+                        setSelectedClubIdDraft((prev) =>
+                          prev ? '' : (ownerClubs[0]?.id ?? ''),
+                        )
+                      }
                       className={cn(
-                        "relative inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-colors mt-0.5",
-                        selectedClubIdDraft ? "bg-primary-500" : "bg-neutral-300",
+                        'relative inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-colors mt-0.5',
+                        selectedClubIdDraft
+                          ? 'bg-primary-500'
+                          : 'bg-neutral-300',
                       )}
                     >
                       <span
                         className={cn(
-                          "inline-block h-5 w-5 transform rounded-full bg-white transition-transform",
-                          selectedClubIdDraft ? "translate-x-6" : "translate-x-1",
+                          'inline-block h-5 w-5 transform rounded-full bg-white transition-transform',
+                          selectedClubIdDraft
+                            ? 'translate-x-6'
+                            : 'translate-x-1',
                         )}
                       />
                     </button>
@@ -763,17 +849,22 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
                     <>
                       {eventAuthoringClubs.isLoading ? (
                         <div className="rounded-2xl bg-neutral-200 p-4 mt-4">
-                          <p className="text-sm text-neutral-600">Загружаем ваши клубы...</p>
+                          <p className="text-sm text-neutral-600">
+                            Загружаем ваши клубы...
+                          </p>
                         </div>
                       ) : null}
 
                       {eventAuthoringClubs.isError ? (
                         <div className="rounded-2xl bg-red-100 border border-red-200 p-4 mt-4">
-                          <p className="text-sm text-red-600">Не удалось загрузить список клубов.</p>
+                          <p className="text-sm text-red-600">
+                            Не удалось загрузить список клубов.
+                          </p>
                         </div>
                       ) : null}
 
-                      {!eventAuthoringClubs.isLoading && !eventAuthoringClubs.isError ? (
+                      {!eventAuthoringClubs.isLoading &&
+                      !eventAuthoringClubs.isError ? (
                         ownerClubs.length > 0 ? (
                           <div className="mt-3 space-y-1.5">
                             {ownerClubs.map((club) => (
@@ -781,24 +872,28 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
                                 key={club.id}
                                 type="button"
                                 className={cn(
-                                  "w-full rounded-lg p-2.5 text-left transition-all duration-200",
-                                  "flex items-center gap-3 min-h-[56px]",
+                                  'w-full rounded-lg p-2.5 text-left transition-all duration-200',
+                                  'flex items-center gap-3 min-h-[56px]',
                                   selectedClubIdDraft === club.id
-                                    ? "bg-primary-500 text-white shadow-md"
-                                    : "ring-1 ring-neutral-200 bg-white text-neutral-900 hover:ring-neutral-300 shadow-sm",
+                                    ? 'bg-primary-500 text-white shadow-md'
+                                    : 'ring-1 ring-neutral-200 bg-white text-neutral-900 hover:ring-neutral-300 shadow-sm',
                                 )}
                                 onClick={() => setSelectedClubIdDraft(club.id)}
                               >
                                 <div className="h-9 w-9 shrink-0 rounded-md bg-black/20 grid place-items-center text-sm font-bold text-white">
                                   {club.title.slice(0, 1).toUpperCase()}
                                 </div>
-                                <p className="flex-1 min-w-0 text-sm font-medium leading-snug">{club.title}</p>
+                                <p className="flex-1 min-w-0 text-sm font-medium leading-snug">
+                                  {club.title}
+                                </p>
                               </button>
                             ))}
                           </div>
                         ) : (
                           <div className="mt-4 rounded-2xl bg-neutral-100 border border-neutral-200 p-4">
-                            <p className="text-sm text-neutral-700">У вас нет клубов с ролью «владелец».</p>
+                            <p className="text-sm text-neutral-700">
+                              У вас нет клубов с ролью «владелец».
+                            </p>
                           </div>
                         )
                       ) : null}
@@ -810,9 +905,14 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
                   <h3 className={SECTION_TITLE_CLASS}>Детали</h3>
                   <div className={SHEET_SECTION_CARD}>
                     <div className="flex items-center gap-3 bg-white rounded-2xl pl-3 pr-4 py-3.5">
-                      <MapPin className="h-5 w-5 text-neutral-700 flex-shrink-0" aria-hidden="true" />
-                      <span className="text-sm font-medium text-neutral-900 flex-shrink-0 w-[90px]">Локация</span>
-                      <div className={cn("ml-auto", DETAIL_LABEL_WIDTH)}>
+                      <MapPin
+                        className="h-5 w-5 text-neutral-700 flex-shrink-0"
+                        aria-hidden="true"
+                      />
+                      <span className="text-sm font-medium text-neutral-900 flex-shrink-0 w-[90px]">
+                        Локация
+                      </span>
+                      <div className={cn('ml-auto', DETAIL_LABEL_WIDTH)}>
                         <input
                           type="text"
                           value={locationDraft}
@@ -824,11 +924,26 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
                     </div>
 
                     <div className="flex items-center gap-3 bg-white rounded-2xl pl-3 pr-4 py-3.5">
-                      <CalendarArrowUp className="h-5 w-5 text-neutral-700 flex-shrink-0" aria-hidden="true" />
-                      <span className="text-sm font-medium text-neutral-900 flex-shrink-0 w-[90px]">Начало</span>
-                      <label className={cn("relative ml-auto flex cursor-pointer items-center justify-end gap-2", DETAIL_LABEL_WIDTH)}>
-                        <span className="text-right text-sm leading-6 tabular-nums text-neutral-500">{formatDateTimeDisplay(startsAtDraft)}</span>
-                        <Calendar className="h-4 w-4 text-neutral-400" aria-hidden="true" />
+                      <CalendarArrowUp
+                        className="h-5 w-5 text-neutral-700 flex-shrink-0"
+                        aria-hidden="true"
+                      />
+                      <span className="text-sm font-medium text-neutral-900 flex-shrink-0 w-[90px]">
+                        Начало
+                      </span>
+                      <label
+                        className={cn(
+                          'relative ml-auto flex cursor-pointer items-center justify-end gap-2',
+                          DETAIL_LABEL_WIDTH,
+                        )}
+                      >
+                        <span className="text-right text-sm leading-6 tabular-nums text-neutral-500">
+                          {formatDateTimeDisplay(startsAtDraft)}
+                        </span>
+                        <Calendar
+                          className="h-4 w-4 text-neutral-400"
+                          aria-hidden="true"
+                        />
                         <input
                           type="datetime-local"
                           value={startsAtDraft}
@@ -839,11 +954,26 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
                     </div>
 
                     <div className="flex items-center gap-3 bg-white rounded-2xl pl-3 pr-4 py-3.5">
-                      <CalendarArrowDown className="h-5 w-5 text-neutral-700 flex-shrink-0" aria-hidden="true" />
-                      <span className="text-sm font-medium text-neutral-900 flex-shrink-0 w-[90px]">Окончание</span>
-                      <label className={cn("relative ml-auto flex cursor-pointer items-center justify-end gap-2", DETAIL_LABEL_WIDTH)}>
-                        <span className="text-right text-sm leading-6 tabular-nums text-neutral-500">{formatDateTimeDisplay(endsAtDraft)}</span>
-                        <Calendar className="h-4 w-4 text-neutral-400" aria-hidden="true" />
+                      <CalendarArrowDown
+                        className="h-5 w-5 text-neutral-700 flex-shrink-0"
+                        aria-hidden="true"
+                      />
+                      <span className="text-sm font-medium text-neutral-900 flex-shrink-0 w-[90px]">
+                        Окончание
+                      </span>
+                      <label
+                        className={cn(
+                          'relative ml-auto flex cursor-pointer items-center justify-end gap-2',
+                          DETAIL_LABEL_WIDTH,
+                        )}
+                      >
+                        <span className="text-right text-sm leading-6 tabular-nums text-neutral-500">
+                          {formatDateTimeDisplay(endsAtDraft)}
+                        </span>
+                        <Calendar
+                          className="h-4 w-4 text-neutral-400"
+                          aria-hidden="true"
+                        />
                         <input
                           type="datetime-local"
                           value={endsAtDraft}
@@ -854,16 +984,23 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
                     </div>
 
                     <div className="flex items-center gap-3 bg-white rounded-2xl pl-3 pr-4 py-3.5">
-                      <Users className="h-5 w-5 text-neutral-700 flex-shrink-0" aria-hidden="true" />
-                      <span className="text-sm font-medium text-neutral-900 flex-shrink-0 w-[90px]">Лимит</span>
-                      <div className={cn("ml-auto", DETAIL_LABEL_WIDTH)}>
+                      <Users
+                        className="h-5 w-5 text-neutral-700 flex-shrink-0"
+                        aria-hidden="true"
+                      />
+                      <span className="text-sm font-medium text-neutral-900 flex-shrink-0 w-[90px]">
+                        Лимит
+                      </span>
+                      <div className={cn('ml-auto', DETAIL_LABEL_WIDTH)}>
                         <input
                           type="text"
                           inputMode="numeric"
                           value={maxParticipantsDraft}
                           onChange={(e) => {
-                            const digitsOnly = e.target.value.replace(/[^\d]/g, "").slice(0, 4);
-                            const normalized = digitsOnly.replace(/^0+/, "");
+                            const digitsOnly = e.target.value
+                              .replace(/[^\d]/g, '')
+                              .slice(0, 4);
+                            const normalized = digitsOnly.replace(/^0+/, '');
                             setMaxParticipantsDraft(normalized);
                           }}
                           placeholder="Без лимита"
@@ -873,13 +1010,17 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
                       </div>
                     </div>
                   </div>
-                  {eventTimeError ? <p className="text-sm text-red-500 mt-2">{eventTimeError}</p> : null}
+                  {eventTimeError ? (
+                    <p className="text-sm text-red-500 mt-2">
+                      {eventTimeError}
+                    </p>
+                  ) : null}
                 </div>
 
                 <Button
                   type="button"
-                  variant="secondary"
-                  size="lg"
+                  variant={ButtonVariant.SECONDARY}
+                  size={ButtonSize.LG}
                   fullWidth
                   className="rounded-full text-lg font-bold !bg-red-600 !text-white !shadow-none hover:!bg-red-700 border-0"
                   onClick={() => setConfirmCancel(true)}

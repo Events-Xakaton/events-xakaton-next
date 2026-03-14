@@ -47,7 +47,7 @@ export interface TelegramWebApp {
   };
 
   // Theming
-  colorScheme?: "light" | "dark";
+  colorScheme?: 'light' | 'dark';
 
   // Platform Info
   platform?: string;
@@ -64,13 +64,13 @@ export type TelegramProfile = {
  * Initialize Telegram WebApp with fullscreen support
  */
 export function initTelegramWebApp(): void {
-  if (typeof window === "undefined") {
+  if (typeof window === 'undefined') {
     return;
   }
 
   const webApp = window.Telegram?.WebApp;
   if (!webApp) {
-    console.warn("[Telegram WebApp] Not available");
+    console.warn('[Telegram WebApp] Not available');
     return;
   }
 
@@ -98,19 +98,22 @@ export function initTelegramWebApp(): void {
   // Step 6: Setup fullscreen event handlers
   setupFullscreenHandlers(webApp);
 
-  console.log("[Telegram WebApp] Initialization complete");
+  console.log('[Telegram WebApp] Initialization complete');
 }
 
 function disableVerticalSwipesSafe(webApp: TelegramWebApp): void {
-  if (typeof webApp.disableVerticalSwipes !== "function") {
-    console.warn("[Telegram WebApp] disableVerticalSwipes not available");
+  if (typeof webApp.disableVerticalSwipes !== 'function') {
+    console.warn('[Telegram WebApp] disableVerticalSwipes not available');
     return;
   }
   try {
     webApp.disableVerticalSwipes();
-    console.log("[Telegram WebApp] Vertical swipes disabled");
+    console.log('[Telegram WebApp] Vertical swipes disabled');
   } catch (error) {
-    console.error("[Telegram WebApp] Failed to disable vertical swipes:", error);
+    console.error(
+      '[Telegram WebApp] Failed to disable vertical swipes:',
+      error,
+    );
   }
 }
 
@@ -121,12 +124,12 @@ function logTelegramInit(webApp: TelegramWebApp): void {
   const info = {
     platform: webApp.platform,
     version: webApp.version,
-    hasFullscreenAPI: typeof webApp.requestFullscreen === "function",
+    hasFullscreenAPI: typeof webApp.requestFullscreen === 'function',
     initialViewportHeight: webApp.viewportStableHeight,
     initialIsFullscreen: webApp.isFullscreen,
   };
 
-  console.log("[Telegram WebApp] Initializing...", info);
+  console.log('[Telegram WebApp] Initializing...', info);
 }
 
 /**
@@ -134,18 +137,18 @@ function logTelegramInit(webApp: TelegramWebApp): void {
  */
 async function requestFullscreenSafe(webApp: TelegramWebApp): Promise<void> {
   // Check API availability
-  if (typeof webApp.requestFullscreen !== "function") {
-    console.warn("[Telegram WebApp] requestFullscreen not available");
+  if (typeof webApp.requestFullscreen !== 'function') {
+    console.warn('[Telegram WebApp] requestFullscreen not available');
     return;
   }
 
-  console.log("[Telegram WebApp] Requesting fullscreen...");
+  console.log('[Telegram WebApp] Requesting fullscreen...');
 
   try {
     await webApp.requestFullscreen();
-    console.log("[Telegram WebApp] Fullscreen request sent");
+    console.log('[Telegram WebApp] Fullscreen request sent');
   } catch (error) {
-    console.error("[Telegram WebApp] Fullscreen request failed:", error);
+    console.error('[Telegram WebApp] Fullscreen request failed:', error);
     // Expected errors:
     // - "UNSUPPORTED" - platform doesn't support fullscreen
     // - "ALREADY_FULLSCREEN" - already in fullscreen mode
@@ -159,8 +162,11 @@ async function requestFullscreenSafe(webApp: TelegramWebApp): Promise<void> {
 function setupViewportTracking(webApp: TelegramWebApp): void {
   const updateViewport = () => {
     // Update viewport height
-    const vh = webApp.viewportStableHeight || webApp.viewportHeight || window.innerHeight;
-    document.documentElement.style.setProperty("--app-vh", `${vh}px`);
+    const vh =
+      webApp.viewportStableHeight ||
+      webApp.viewportHeight ||
+      window.innerHeight;
+    document.documentElement.style.setProperty('--app-vh', `${vh}px`);
 
     // Update safe area insets
     const { top, bottom, left, right } = webApp.safeAreaInset || {
@@ -169,13 +175,19 @@ function setupViewportTracking(webApp: TelegramWebApp): void {
       left: 0,
       right: 0,
     };
-    document.documentElement.style.setProperty("--safe-area-top", `${top}px`);
-    document.documentElement.style.setProperty("--safe-area-bottom", `${bottom}px`);
-    document.documentElement.style.setProperty("--safe-area-left", `${left}px`);
-    document.documentElement.style.setProperty("--safe-area-right", `${right}px`);
+    document.documentElement.style.setProperty('--safe-area-top', `${top}px`);
+    document.documentElement.style.setProperty(
+      '--safe-area-bottom',
+      `${bottom}px`,
+    );
+    document.documentElement.style.setProperty('--safe-area-left', `${left}px`);
+    document.documentElement.style.setProperty(
+      '--safe-area-right',
+      `${right}px`,
+    );
 
     // Diagnostic logging
-    console.log("[Telegram WebApp] Viewport updated:", {
+    console.log('[Telegram WebApp] Viewport updated:', {
       stableHeight: webApp.viewportStableHeight,
       currentHeight: webApp.viewportHeight,
       isFullscreen: webApp.isFullscreen,
@@ -186,9 +198,9 @@ function setupViewportTracking(webApp: TelegramWebApp): void {
   updateViewport();
 
   // Listen to multiple events for better responsiveness
-  webApp.onEvent?.("viewportChanged", updateViewport);
-  window.addEventListener("resize", updateViewport);
-  window.addEventListener("orientationchange", updateViewport);
+  webApp.onEvent?.('viewportChanged', updateViewport);
+  window.addEventListener('resize', updateViewport);
+  window.addEventListener('orientationchange', updateViewport);
 }
 
 /**
@@ -196,23 +208,23 @@ function setupViewportTracking(webApp: TelegramWebApp): void {
  */
 function setupFullscreenHandlers(webApp: TelegramWebApp): void {
   // fullscreen_changed event
-  webApp.onEvent?.("fullscreen_changed", (params) => {
-    console.log("[Telegram WebApp] Fullscreen changed:", {
+  webApp.onEvent?.('fullscreen_changed', (params) => {
+    console.log('[Telegram WebApp] Fullscreen changed:', {
       isFullscreen: webApp.isFullscreen,
       params,
     });
 
     // Dispatch custom event for React components (optional)
     window.dispatchEvent(
-      new CustomEvent("telegram-fullscreen-change", {
+      new CustomEvent('telegram-fullscreen-change', {
         detail: { isFullscreen: webApp.isFullscreen },
-      })
+      }),
     );
   });
 
   // fullscreen_failed event
-  webApp.onEvent?.("fullscreen_failed", (params) => {
-    console.error("[Telegram WebApp] Fullscreen failed:", params);
+  webApp.onEvent?.('fullscreen_failed', (params) => {
+    console.error('[Telegram WebApp] Fullscreen failed:', params);
     // Expected errors: UNSUPPORTED, ALREADY_FULLSCREEN
   });
 }
@@ -223,19 +235,19 @@ function setupFullscreenHandlers(webApp: TelegramWebApp): void {
  * Устанавливает светлые системные цвета, чтобы overscroll зоны не были черными.
  */
 function setTelegramThemeColors(webApp: TelegramWebApp): void {
-  const appBg = "#f2f2f5";
-  const appHeader = "#ffffff";
+  const appBg = '#f2f2f5';
+  const appHeader = '#ffffff';
 
   // На некоторых клиентах overscroll берет цвет header; выставляем светлый, чтобы не было черной зоны.
-  if (typeof (webApp as any).setHeaderColor === "function") {
+  if (typeof (webApp as any).setHeaderColor === 'function') {
     (webApp as any).setHeaderColor(appHeader);
-    console.log("[Telegram WebApp] Header color set to", appHeader);
+    console.log('[Telegram WebApp] Header color set to', appHeader);
   }
 
   // Установить светлый фон
-  if (typeof (webApp as any).setBackgroundColor === "function") {
+  if (typeof (webApp as any).setBackgroundColor === 'function') {
     (webApp as any).setBackgroundColor(appBg);
-    console.log("[Telegram WebApp] Background color set to", appBg);
+    console.log('[Telegram WebApp] Background color set to', appBg);
   }
 }
 
@@ -254,21 +266,21 @@ export function getTelegramPlatformInfo() {
   return {
     platform: webApp?.platform,
     version: webApp?.version,
-    hasFullscreenAPI: typeof webApp?.requestFullscreen === "function",
+    hasFullscreenAPI: typeof webApp?.requestFullscreen === 'function',
     isFullscreen: webApp?.isFullscreen ?? false,
   };
 }
 
 export function getTelegramInitData(): string | null {
-  if (typeof window === "undefined") {
+  if (typeof window === 'undefined') {
     return null;
   }
   return window.Telegram?.WebApp?.initData ?? null;
 }
 
 export function getTelegramUserIdFallback(): string {
-  if (typeof window === "undefined") {
-    return "900000001";
+  if (typeof window === 'undefined') {
+    return '900000001';
   }
 
   const fromTelegram = window.Telegram?.WebApp?.initDataUnsafe?.user?.id;
@@ -276,26 +288,29 @@ export function getTelegramUserIdFallback(): string {
     return String(fromTelegram);
   }
 
-  return window.localStorage.getItem("tg_demo_user_id") || "900000001";
+  return window.localStorage.getItem('tg_demo_user_id') || '900000001';
 }
 
 export function getTelegramProfileFallback(): TelegramProfile {
-  if (typeof window === "undefined") {
+  if (typeof window === 'undefined') {
     return {
-      telegramUserId: "900000001",
-      fullName: "Вы",
+      telegramUserId: '900000001',
+      fullName: 'Вы',
       avatarUrl: null,
     };
   }
 
   const user = window.Telegram?.WebApp?.initDataUnsafe?.user;
   const fromTelegramId = user?.id ? String(user.id) : null;
-  const telegramUserId = fromTelegramId ?? window.localStorage.getItem("tg_demo_user_id") ?? "900000001";
+  const telegramUserId =
+    fromTelegramId ??
+    window.localStorage.getItem('tg_demo_user_id') ??
+    '900000001';
 
-  const firstName = (user?.first_name ?? "").trim();
-  const lastName = (user?.last_name ?? "").trim();
-  const fallbackName = (user?.username ?? "").trim();
-  const fullName = `${firstName} ${lastName}`.trim() || fallbackName || "Вы";
+  const firstName = (user?.first_name ?? '').trim();
+  const lastName = (user?.last_name ?? '').trim();
+  const fallbackName = (user?.username ?? '').trim();
+  const fullName = `${firstName} ${lastName}`.trim() || fallbackName || 'Вы';
 
   return {
     telegramUserId,

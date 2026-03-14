@@ -1,20 +1,22 @@
-"use client";
+'use client';
 
-import { useMemo } from "react";
-import { Bookmark, Check, ChevronRight, Plus } from "lucide-react";
-import { cn, pluralize } from "@/shared/lib/utils";
-import { buildGradient } from "@/shared/lib/gradient";
-import { getClubGradient, APP_ELEVATED_CARD_CLASS, APP_FEED_SCRIM_CLASS } from "@/shared/lib/ui-styles";
-import { getTelegramProfileFallback } from "@/shared/lib/telegram";
-import { Button } from "@/shared/components/button";
-import { Avatar } from "@/shared/components/avatar";
-import { useClubDetailsQuery, useClubMembersQuery } from "../api";
-import type { ClubCard } from "../types";
+import { Bookmark, Check, ChevronRight, Plus } from 'lucide-react';
+import { useMemo } from 'react';
 
-const FEED_CARD_CLASS = cn(
-  "relative snap-start overflow-hidden rounded-[30px] border border-neutral-200",
+import { Avatar, AvatarSize } from '@/shared/components/avatar';
+import { Button, ButtonSize, ButtonVariant } from '@/shared/components/button';
+import { buildGradient } from '@/shared/lib/gradient';
+import { getTelegramProfileFallback } from '@/shared/lib/telegram';
+import {
   APP_ELEVATED_CARD_CLASS,
-);
+  APP_FEED_SCRIM_CLASS,
+  getClubGradient,
+} from '@/shared/lib/ui-styles';
+import { cn, pluralize } from '@/shared/lib/utils';
+
+import { useClubDetailsQuery, useClubMembersQuery } from '../api';
+import type { ClubCard } from '../types';
+import './styles/club-feed-card.css';
 
 /**
  * AvatarGroup inline — используется только внутри карточки клуба.
@@ -36,7 +38,7 @@ function InlineAvatarGroup({
           key={index}
           src={avatar.src}
           alt={avatar.alt}
-          size="sm"
+          size={AvatarSize.SM}
           className="ring-2 ring-neutral-900"
         />
       ))}
@@ -77,20 +79,39 @@ export function ClubFeedCard({
   const currentUser = getTelegramProfileFallback();
   const currentTelegramId = currentUser.telegramUserId;
 
-  const joined = typeof joinedOverride === "boolean" ? joinedOverride : club.joinedByMe;
+  const joined =
+    typeof joinedOverride === 'boolean' ? joinedOverride : club.joinedByMe;
   const membersCount = details.data?.membersCount ?? club.membersCount;
 
   const visibleMembers = useMemo(() => {
     const members = membersQuery.data ?? [];
     if (members.length === 0) {
       return joined
-        ? [{ telegramUserId: currentTelegramId, fullName: "Вы", avatarUrl: currentUser.avatarUrl, followedByMe: false }]
+        ? [
+            {
+              telegramUserId: currentTelegramId,
+              fullName: 'Вы',
+              avatarUrl: currentUser.avatarUrl,
+              followedByMe: false,
+            },
+          ]
         : [];
     }
 
     let prepared = members;
-    if (joined && !members.some((m) => m.telegramUserId === currentTelegramId)) {
-      prepared = [{ telegramUserId: currentTelegramId, fullName: "Вы", avatarUrl: currentUser.avatarUrl, followedByMe: false }, ...members];
+    if (
+      joined &&
+      !members.some((m) => m.telegramUserId === currentTelegramId)
+    ) {
+      prepared = [
+        {
+          telegramUserId: currentTelegramId,
+          fullName: 'Вы',
+          avatarUrl: currentUser.avatarUrl,
+          followedByMe: false,
+        },
+        ...members,
+      ];
     }
     return prepared
       .map((member) =>
@@ -106,37 +127,34 @@ export function ClubFeedCard({
     if (details.data?.coverUrl) {
       return {
         backgroundImage: `linear-gradient(180deg, rgba(15,23,42,0.15) 0%, rgba(2,6,23,0.65) 100%), url('${details.data.coverUrl}')`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
       };
     }
 
     // Приоритет 2: coverSeed (градиент)
     if (club.coverSeed) {
-      return { background: buildGradient(club.coverSeed, "club") };
+      return { background: buildGradient(club.coverSeed, 'club') };
     }
 
     // Приоритет 3: fallback для старых записей
     return { background: getClubGradient(club.id) };
   }, [details.data?.coverUrl, club.coverSeed, club.id]);
 
-  const avatarList = visibleMembers.length > 0
-    ? visibleMembers.map(m => ({
-        src: m.avatarUrl,
-        alt: m.fullName
-      }))
-    : [];
-
-  const cardClassName = useMemo(() => {
-    if (noShadow) {
-      return "relative snap-start overflow-hidden rounded-[30px] border border-neutral-200";
-    }
-    return FEED_CARD_CLASS;
-  }, [noShadow]);
+  const avatarList =
+    visibleMembers.length > 0
+      ? visibleMembers.map((m) => ({
+          src: m.avatarUrl,
+          alt: m.fullName,
+        }))
+      : [];
 
   return (
     <article
-      className={cardClassName}
+      className={cn(
+        'club-feed-card',
+        !noShadow && APP_ELEVATED_CARD_CLASS,
+      )}
       style={{ ...cardBackgroundStyle, ...cardStyle }}
       role="article"
       aria-label={`Клуб: ${club.title}`}
@@ -144,57 +162,62 @@ export function ClubFeedCard({
     >
       {/* Scrim overlay - только для градиентов, не для изображений */}
       {!details.data?.coverUrl && (
-        <div className={cn("absolute inset-0", APP_FEED_SCRIM_CLASS)} />
+        <div className={cn('club-feed-card__scrim', APP_FEED_SCRIM_CLASS)} />
       )}
 
-      <div className="relative flex h-full flex-col p-5 pb-7 pr-6">
-        <div className="mt-auto">
-          <div className="mb-3 flex items-center gap-2">
+      <div className="club-feed-card__body">
+        <div className="club-feed-card__meta">
+          <div className="club-feed-card__members">
             {avatarList.length > 0 ? (
-              <InlineAvatarGroup
-                avatars={avatarList}
-                max={5}
-              />
+              <InlineAvatarGroup avatars={avatarList} max={5} />
             ) : (
               <div className="grid h-9 w-9 place-items-center rounded-full border-2 border-zinc-200 bg-white text-[10px] font-semibold text-zinc-900">
                 ?
               </div>
             )}
-            <span className="text-sm text-white/90 drop-shadow" aria-label={`${membersCount} участников`}>
-              {membersCount} {pluralize(membersCount, "участник", "участника", "участников")}
+            <span
+              className="club-feed-card__members-count"
+              aria-label={`${membersCount} участников`}
+            >
+              {membersCount}{' '}
+              {pluralize(membersCount, 'участник', 'участника', 'участников')}
             </span>
           </div>
 
-          <h2 className="font-display text-4xl leading-[0.98] tracking-tight text-white drop-shadow-lg line-clamp-2">
+          <h2 className="club-feed-card__title">
             {club.title}
           </h2>
-          <p className="mt-2 max-w-[85%] text-sm text-white/90 drop-shadow line-clamp-2">
+          <p className="club-feed-card__description">
             {club.description}
           </p>
         </div>
 
-        <div className="mt-5 flex items-end justify-between gap-3">
+        <div className="club-feed-card__actions">
           {!hideJoinButton && (
-            <div className="flex items-center gap-2.5">
+            <div className="club-feed-card__join-group">
               <button
                 type="button"
                 onClick={() => onToggleSaved(club.id)}
-                aria-label={saved ? "Убрать из избранного" : "Добавить в избранное"}
-                title={saved ? "Убрать из избранного" : "Добавить в избранное"}
+                aria-label={
+                  saved ? 'Убрать из избранного' : 'Добавить в избранное'
+                }
+                title={saved ? 'Убрать из избранного' : 'Добавить в избранное'}
                 className={cn(
-                  "inline-flex h-11 w-11 min-h-[44px] min-w-[44px] items-center justify-center rounded-full transition-all duration-200",
-                  "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500",
-                  "active:scale-95",
-                  saved ? "bg-zinc-900 text-white hover:bg-zinc-800 shadow-md" : "bg-white/90 backdrop-blur-sm text-zinc-900 hover:bg-white shadow-md"
+                  'inline-flex h-11 w-11 min-h-[44px] min-w-[44px] items-center justify-center rounded-full transition-all duration-200',
+                  'focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500',
+                  'active:scale-95',
+                  saved
+                    ? 'bg-zinc-900 text-white hover:bg-zinc-800 shadow-md'
+                    : 'bg-white/90 backdrop-blur-sm text-zinc-900 hover:bg-white shadow-md',
                 )}
               >
-                <Bookmark className={cn("h-5 w-5", saved && "fill-current")} />
+                <Bookmark className={cn('h-5 w-5', saved && 'fill-current')} />
               </button>
 
               {joined ? (
                 <Button
-                  variant="secondary"
-                  size="md"
+                  variant={ButtonVariant.SECONDARY}
+                  size={ButtonSize.MD}
                   onClick={() => onJoin(club.id)}
                   isLoading={joinLoading}
                   disabled={joined}
@@ -205,8 +228,8 @@ export function ClubFeedCard({
                 </Button>
               ) : (
                 <Button
-                  variant="primary"
-                  size="md"
+                  variant={ButtonVariant.PRIMARY}
+                  size={ButtonSize.MD}
                   onClick={() => onJoin(club.id)}
                   isLoading={joinLoading}
                   className="rounded-full px-7"
@@ -219,8 +242,8 @@ export function ClubFeedCard({
           )}
 
           <Button
-            variant="secondary"
-            size="md"
+            variant={ButtonVariant.SECONDARY}
+            size={ButtonSize.MD}
             onClick={() => onOpenClub(club.id)}
             className="ml-auto rounded-full border-white/25 bg-white/90 px-5 py-2.5 text-[15px] font-semibold text-zinc-900 shadow-md hover:bg-white"
             aria-label={`Посмотреть детали клуба ${club.title}`}

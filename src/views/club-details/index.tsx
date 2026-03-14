@@ -1,57 +1,56 @@
-"use client";
+'use client';
 
-import { useEffect, useMemo, useState } from "react";
-import {
-  CalendarDays,
-  Plus,
-  Users,
-} from "lucide-react";
+import { CalendarDays, Plus, Users } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+
+import { PeopleList } from '@/widgets/people-list';
+
 import {
   type ClubEventBucket,
   type ClubEventListItem,
   useClubDetailsQuery,
-  useClubMembersQuery,
   useClubEventsQuery,
+  useClubMembersQuery,
+  useDeleteClubMutation,
   useJoinClubMutation,
   useLeaveClubMutation,
-  useDeleteClubMutation,
-} from "@/entities/club/api";
-import { buildGradient } from "@/shared/lib/gradient";
-import { useTelegramBackButton } from "@/shared/lib/telegram/useTelegramButtons";
-import { cn, appErrorText } from "@/shared/lib/utils";
-import { ConfirmDialog } from "@/shared/components/confirm-dialog";
-import { ErrorState } from "@/shared/components/error-state";
-import { Button } from "@/shared/components/button";
-import { PreviewCard } from "@/shared/components/preview-card";
+} from '@/entities/club/api';
+
+import { Button, ButtonSize, ButtonVariant } from '@/shared/components/button';
+import { ConfirmDialog } from '@/shared/components/confirm-dialog';
 import {
   AboutSection,
   DetailRow,
-  StickyActionsPanel,
-  OverflowMenuButton,
   type MenuItemType,
-} from "@/shared/components/detail-shared";
-import { PeopleList } from "@/widgets/people-list";
+  OverflowMenuButton,
+  StickyActionsPanel,
+} from '@/shared/components/detail-shared';
+import { ErrorState } from '@/shared/components/error-state';
+import { PreviewCard } from '@/shared/components/preview-card';
+import { buildGradient } from '@/shared/lib/gradient';
+import { useTelegramBackButton } from '@/shared/lib/telegram/useTelegramButtons';
 import {
   ADAPTIVE_VIEWPORT_HEIGHT,
+  APP_FLOAT_SHADOW_CLASS,
+  APP_SECTION_CARD_CLASS,
   SAFE_AREA_TOP,
   getBottomPadding,
-  APP_SECTION_CARD_CLASS,
-  APP_FLOAT_SHADOW_CLASS,
-} from "@/shared/lib/ui-styles";
+} from '@/shared/lib/ui-styles';
+import { appErrorText, cn } from '@/shared/lib/utils';
 
 function formatEventTime(value: string): string {
-  return new Date(value).toLocaleString("ru-RU", {
-    day: "2-digit",
-    month: "short",
-    hour: "2-digit",
-    minute: "2-digit",
+  return new Date(value).toLocaleString('ru-RU', {
+    day: '2-digit',
+    month: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
     hour12: false,
   });
 }
 
 // Constants
 const SECTION_CARD = APP_SECTION_CARD_CLASS;
-const SECTION_TITLE_CLASS = "text-lg font-semibold text-neutral-900";
+const SECTION_TITLE_CLASS = 'text-lg font-semibold text-neutral-900';
 
 export type ClubDetailsProps = {
   id: string;
@@ -65,12 +64,14 @@ export function ClubDetails({ id, onBack, onOpenEvent }: ClubDetailsProps) {
   const members = useClubMembersQuery({ clubId: id });
 
   // Events tabs state
-  const [eventsBucket, setEventsBucket] = useState<ClubEventBucket>("upcoming");
-  const [eventsPage, setEventsPage] = useState<Record<ClubEventBucket, number>>({
-    upcoming: 1,
-    ongoing: 1,
-    past: 1,
-  });
+  const [eventsBucket, setEventsBucket] = useState<ClubEventBucket>('upcoming');
+  const [eventsPage, setEventsPage] = useState<Record<ClubEventBucket, number>>(
+    {
+      upcoming: 1,
+      ongoing: 1,
+      past: 1,
+    },
+  );
 
   const clubEvents = useClubEventsQuery({
     clubId: id,
@@ -85,26 +86,28 @@ export function ClubDetails({ id, onBack, onOpenEvent }: ClubDetailsProps) {
   const [deleteClub, deleteState] = useDeleteClubMutation();
 
   // Local state
-  const [hint, setHint] = useState("");
+  const [hint, setHint] = useState('');
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [joinedOverride, setJoinedOverride] = useState<boolean | null>(null);
   const [showCompactHeader, setShowCompactHeader] = useState(false);
 
   // Events cache для накопления при пагинации
-  const [eventsCache, setEventsCache] = useState<Record<ClubEventBucket, ClubEventListItem[]>>({
+  const [eventsCache, setEventsCache] = useState<
+    Record<ClubEventBucket, ClubEventListItem[]>
+  >({
     upcoming: [],
     ongoing: [],
     past: [],
   });
 
   // Gradient или coverUrl
-  const coverSeed = details.data?.coverSeed || details.data?.id || "fallback";
+  const coverSeed = details.data?.coverSeed || details.data?.id || 'fallback';
   const heroBackground = useMemo(() => {
     if (details.data?.coverUrl) {
       return `url('${details.data.coverUrl}') center / cover no-repeat`;
     }
-    return buildGradient(coverSeed, "club");
+    return buildGradient(coverSeed, 'club');
   }, [details.data?.coverUrl, coverSeed]);
 
   // Telegram BackButton
@@ -117,8 +120,8 @@ export function ClubDetails({ id, onBack, onOpenEvent }: ClubDetailsProps) {
   useEffect(() => {
     const onScroll = () => setShowCompactHeader(window.scrollY > 170);
     onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   // Накапливаем события в cache при загрузке новых страниц
@@ -133,7 +136,7 @@ export function ClubDetails({ id, onBack, onOpenEvent }: ClubDetailsProps) {
           : [
               ...current,
               ...eventsData.items.filter(
-                (item) => !current.some((existing) => existing.id === item.id)
+                (item) => !current.some((existing) => existing.id === item.id),
               ),
             ]; // следующие - добавляем с дедупликацией
       return { ...prev, [eventsBucket]: nextItems };
@@ -165,11 +168,13 @@ export function ClubDetails({ id, onBack, onOpenEvent }: ClubDetailsProps) {
         style={{
           minHeight: ADAPTIVE_VIEWPORT_HEIGHT,
           paddingTop: SAFE_AREA_TOP,
-          paddingBottom: getBottomPadding("details"),
+          paddingBottom: getBottomPadding('details'),
         }}
       >
         <div className="mx-4 mt-4 space-y-2">
-          <h3 className="text-lg font-semibold text-neutral-900">Клуб недоступен</h3>
+          <h3 className="text-lg font-semibold text-neutral-900">
+            Клуб недоступен
+          </h3>
           <div className={SECTION_CARD}>
             <p className="text-sm text-neutral-700">
               Проверьте ссылку или откройте другой клуб.
@@ -191,7 +196,7 @@ export function ClubDetails({ id, onBack, onOpenEvent }: ClubDetailsProps) {
       .unwrap()
       .catch((error) => {
         setJoinedOverride(null); // rollback
-        setHint(appErrorText(error, "Не удалось вступить в клуб"));
+        setHint(appErrorText(error, 'Не удалось вступить в клуб'));
       });
   }
 
@@ -201,7 +206,7 @@ export function ClubDetails({ id, onBack, onOpenEvent }: ClubDetailsProps) {
       .unwrap()
       .catch((error) => {
         setJoinedOverride(null); // rollback
-        setHint(appErrorText(error, "Не удалось выйти из клуба"));
+        setHint(appErrorText(error, 'Не удалось выйти из клуба'));
       });
   }
 
@@ -211,13 +216,18 @@ export function ClubDetails({ id, onBack, onOpenEvent }: ClubDetailsProps) {
       setConfirmDelete(false);
       onBack(); // Navigate back after successful delete
     } catch (error) {
-      setHint(appErrorText(error, "Не удалось удалить клуб"));
+      setHint(appErrorText(error, 'Не удалось удалить клуб'));
     }
   }
 
   const menuItems: MenuItemType[] = club.canManage
     ? [
-        { id: "delete", label: "Удалить клуб", danger: true, onClick: () => setConfirmDelete(true) },
+        {
+          id: 'delete',
+          label: 'Удалить клуб',
+          danger: true,
+          onClick: () => setConfirmDelete(true),
+        },
       ]
     : [];
 
@@ -228,11 +238,15 @@ export function ClubDetails({ id, onBack, onOpenEvent }: ClubDetailsProps) {
         style={{
           minHeight: ADAPTIVE_VIEWPORT_HEIGHT,
           paddingTop: SAFE_AREA_TOP,
-          paddingBottom: getBottomPadding("details"),
+          paddingBottom: getBottomPadding('details'),
         }}
       >
         {/* OverflowMenu fixed (if canManage) */}
-        <OverflowMenuButton items={menuItems} isOpen={menuOpen} onToggle={() => setMenuOpen((v) => !v)} />
+        <OverflowMenuButton
+          items={menuItems}
+          isOpen={menuOpen}
+          onToggle={() => setMenuOpen((v) => !v)}
+        />
 
         {/* Top Header (parity with create-screen) */}
         <div className="sticky top-0 z-[20] mb-4 mt-4 h-14 border-b border-neutral-200/50 bg-[#f2f2f5] px-4">
@@ -246,17 +260,20 @@ export function ClubDetails({ id, onBack, onOpenEvent }: ClubDetailsProps) {
         {/* Compact Header (sticky on scroll) */}
         <div
           className={cn(
-            "pointer-events-none fixed inset-x-0 z-[30] transition-opacity duration-200",
-            showCompactHeader ? "opacity-100" : "opacity-0"
+            'pointer-events-none fixed inset-x-0 z-[30] transition-opacity duration-200',
+            showCompactHeader ? 'opacity-100' : 'opacity-0',
           )}
           style={{ top: 0 }}
         >
           <div
-            className={cn("mx-auto relative flex w-full max-w-md items-center justify-between border-b border-neutral-200/50 bg-white/95 px-3 py-2 backdrop-blur", APP_FLOAT_SHADOW_CLASS)}
+            className={cn(
+              'mx-auto relative flex w-full max-w-md items-center justify-between border-b border-neutral-200/50 bg-white/95 px-3 py-2 backdrop-blur',
+              APP_FLOAT_SHADOW_CLASS,
+            )}
             style={{
-              paddingTop: "calc(env(safe-area-inset-top, 0px) + 12px)",
-              paddingLeft: "calc(env(safe-area-inset-left, 0px) + 12px)",
-              paddingRight: "calc(env(safe-area-inset-right, 0px) + 12px)",
+              paddingTop: 'calc(env(safe-area-inset-top, 0px) + 12px)',
+              paddingLeft: 'calc(env(safe-area-inset-left, 0px) + 12px)',
+              paddingRight: 'calc(env(safe-area-inset-right, 0px) + 12px)',
             }}
           >
             <span className="h-11 w-11 shrink-0" aria-hidden />
@@ -323,15 +340,19 @@ export function ClubDetails({ id, onBack, onOpenEvent }: ClubDetailsProps) {
             <div className={SECTION_CARD}>
               {/* Tabs */}
               <div className="grid grid-cols-3 gap-2">
-                {([
-                  { value: "upcoming", label: "Будущие" },
-                  { value: "ongoing", label: "Текущие" },
-                  { value: "past", label: "Прошедшие" },
-                ] as const).map((tab) => (
+                {(
+                  [
+                    { value: 'upcoming', label: 'Будущие' },
+                    { value: 'ongoing', label: 'Текущие' },
+                    { value: 'past', label: 'Прошедшие' },
+                  ] as const
+                ).map((tab) => (
                   <Button
                     key={tab.value}
-                    variant={eventsBucket === tab.value ? "primary" : "secondary"}
-                    size="sm"
+                    variant={
+                      eventsBucket === tab.value ? ButtonVariant.PRIMARY : ButtonVariant.SECONDARY
+                    }
+                    size={ButtonSize.SM}
                     onClick={() => {
                       setEventsBucket(tab.value);
                       // Reset to page 1 when switching tabs
@@ -348,7 +369,9 @@ export function ClubDetails({ id, onBack, onOpenEvent }: ClubDetailsProps) {
 
               {/* Events list */}
               {clubEvents.isLoading && eventsPage[eventsBucket] === 1 ? (
-                <p className="text-sm text-neutral-500 py-4">Загрузка мероприятий...</p>
+                <p className="text-sm text-neutral-500 py-4">
+                  Загрузка мероприятий...
+                </p>
               ) : null}
 
               {clubEvents.isError ? (
@@ -358,8 +381,12 @@ export function ClubDetails({ id, onBack, onOpenEvent }: ClubDetailsProps) {
                 />
               ) : null}
 
-              {!clubEvents.isLoading && !clubEvents.isError && eventsCache[eventsBucket].length === 0 ? (
-                <p className="text-sm text-neutral-500 py-4">В этой секции пока нет мероприятий.</p>
+              {!clubEvents.isLoading &&
+              !clubEvents.isError &&
+              eventsCache[eventsBucket].length === 0 ? (
+                <p className="text-sm text-neutral-500 py-4">
+                  В этой секции пока нет мероприятий.
+                </p>
               ) : null}
 
               {eventsCache[eventsBucket].length > 0 && (
@@ -371,7 +398,9 @@ export function ClubDetails({ id, onBack, onOpenEvent }: ClubDetailsProps) {
                       className="w-full rounded-2xl border border-neutral-200 bg-white p-3 text-left hover:bg-neutral-50 transition min-h-[64px]"
                       onClick={() => onOpenEvent?.(event.id)}
                     >
-                      <p className="font-semibold text-neutral-900 text-[15px]">{event.title}</p>
+                      <p className="font-semibold text-neutral-900 text-[15px]">
+                        {event.title}
+                      </p>
                       <div className="mt-2 flex items-center gap-2 text-xs text-neutral-500">
                         <CalendarDays className="h-4 w-4" />
                         <span>{formatEventTime(event.startsAtUtc)}</span>
@@ -386,8 +415,8 @@ export function ClubDetails({ id, onBack, onOpenEvent }: ClubDetailsProps) {
               {/* Pagination */}
               {clubEvents.data?.hasMore && (
                 <Button
-                  variant="secondary"
-                  size="md"
+                  variant={ButtonVariant.SECONDARY}
+                  size={ButtonSize.MD}
                   fullWidth
                   onClick={() =>
                     setEventsPage((prev) => ({
@@ -395,7 +424,9 @@ export function ClubDetails({ id, onBack, onOpenEvent }: ClubDetailsProps) {
                       [eventsBucket]: prev[eventsBucket] + 1,
                     }))
                   }
-                  isLoading={clubEvents.isLoading && eventsPage[eventsBucket] > 1}
+                  isLoading={
+                    clubEvents.isLoading && eventsPage[eventsBucket] > 1
+                  }
                   className="mt-3 rounded-full"
                 >
                   Показать еще
@@ -423,18 +454,18 @@ export function ClubDetails({ id, onBack, onOpenEvent }: ClubDetailsProps) {
           {hint && (
             <div
               className={cn(
-                "p-4 rounded-2xl",
-                hint.includes("обновлен") || hint.includes("сохранены")
-                  ? "bg-green-100 border border-green-200"
-                  : "bg-red-100 border border-red-200"
+                'p-4 rounded-2xl',
+                hint.includes('обновлен') || hint.includes('сохранены')
+                  ? 'bg-green-100 border border-green-200'
+                  : 'bg-red-100 border border-red-200',
               )}
             >
               <p
                 className={cn(
-                  "text-sm font-medium",
-                  hint.includes("обновлен") || hint.includes("сохранены")
-                    ? "text-green-700"
-                    : "text-red-700"
+                  'text-sm font-medium',
+                  hint.includes('обновлен') || hint.includes('сохранены')
+                    ? 'text-green-700'
+                    : 'text-red-700',
                 )}
                 role="status"
               >
@@ -442,7 +473,6 @@ export function ClubDetails({ id, onBack, onOpenEvent }: ClubDetailsProps) {
               </p>
             </div>
           )}
-
         </div>
 
         {/* Sticky Actions */}
@@ -451,8 +481,8 @@ export function ClubDetails({ id, onBack, onOpenEvent }: ClubDetailsProps) {
           rightAction={
             joined ? (
               <Button
-                variant="secondary"
-                size="lg"
+                variant={ButtonVariant.SECONDARY}
+                size={ButtonSize.LG}
                 className="rounded-full px-6"
                 isLoading={leaveState.isLoading}
                 onClick={handleLeave}
@@ -461,8 +491,8 @@ export function ClubDetails({ id, onBack, onOpenEvent }: ClubDetailsProps) {
               </Button>
             ) : (
               <Button
-                variant="primary"
-                size="lg"
+                variant={ButtonVariant.PRIMARY}
+                size={ButtonSize.LG}
                 className="rounded-full px-7"
                 isLoading={joinState.isLoading}
                 onClick={handleJoin}

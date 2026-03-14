@@ -1,54 +1,47 @@
-"use client";
+'use client';
 
-import { ReactNode, useState } from "react";
-import { Ellipsis } from "lucide-react";
-import { cn } from "@/shared/lib/utils";
+import { Ellipsis } from 'lucide-react';
+import { FC, ReactNode, useState } from 'react';
+
 import {
   APP_FLOAT_SHADOW_CLASS,
   APP_PANEL_SHADOW_CLASS,
   APP_SECTION_CARD_CLASS,
-} from "@/shared/lib/ui-styles";
+} from '@/shared/lib/ui-styles';
+import { cn } from '@/shared/lib/utils';
+
+import './styles/detail-shared.css';
 
 const SECTION_CARD = APP_SECTION_CARD_CLASS;
 
-/**
- * AboutSection - Expandable description с "Читать далее"
- */
-export type AboutSectionProps = {
+type AboutSectionProps = {
   text: string;
   maxLength?: number;
 };
 
-export function AboutSection({ text, maxLength = 220 }: AboutSectionProps) {
+export const AboutSection: FC<AboutSectionProps> = ({ text, maxLength = 220 }) => {
   const [expanded, setExpanded] = useState(false);
   const needsExpansion = text.length > maxLength;
-  const displayText = expanded || !needsExpansion
-    ? text
-    : `${text.slice(0, maxLength).trimEnd()}...`;
+  const displayText =
+    expanded || !needsExpansion ? text : `${text.slice(0, maxLength).trimEnd()}...`;
 
   return (
     <div>
-      <p className="whitespace-pre-wrap text-sm leading-6 text-neutral-700">
-        {displayText || "Описание пока не заполнено."}
-      </p>
+      <p className="about-section__text">{displayText || 'Описание пока не заполнено.'}</p>
       {needsExpansion && (
         <button
           type="button"
           onClick={() => setExpanded(!expanded)}
-          className="mt-3 text-sm font-medium text-primary-600 hover:text-primary-700 transition"
+          className="about-section__toggle"
         >
-          {expanded ? "Свернуть" : "Читать далее"}
+          {expanded ? 'Свернуть' : 'Читать далее'}
         </button>
       )}
     </div>
   );
-}
+};
 
-/**
- * DetailRow - Icon + Label + Value layout для информации
- * Горизонтальный layout как в create-screen: icon + label (слева) + value (справа)
- */
-export type DetailRowProps = {
+type DetailRowProps = {
   icon: ReactNode;
   label: string;
   value: string | ReactNode;
@@ -56,65 +49,49 @@ export type DetailRowProps = {
   onClick?: () => void;
 };
 
-const DETAIL_LABEL_WIDTH = "w-[58%] min-w-[176px] pr-2";
+const DETAIL_LABEL_WIDTH = 'w-[58%] min-w-[176px] pr-2';
 
-export function DetailRow({ icon, label, value, rightElement, onClick }: DetailRowProps) {
-  const Component = onClick ? "button" : "div";
+export const DetailRow: FC<DetailRowProps> = ({ icon, label, value, rightElement, onClick }) => {
+  const Component = onClick ? 'button' : 'div';
   return (
-    <Component
-      onClick={onClick}
-      className={cn(
-        "flex items-center gap-3 bg-white rounded-2xl pl-3 pr-4 py-3.5",
-        onClick && "cursor-pointer hover:bg-neutral-50 active:bg-neutral-100 transition"
-      )}
-    >
-      <div className="text-neutral-700 flex-shrink-0" aria-hidden="true">
+    <Component onClick={onClick} className={cn('detail-row', onClick && 'detail-row--clickable')}>
+      <div className="detail-row__icon" aria-hidden="true">
         {icon}
       </div>
-      <span className="text-sm font-medium text-neutral-900 flex-shrink-0 w-[90px]">
-        {label}
-      </span>
-      <div className={cn("ml-auto flex items-center justify-end gap-2", DETAIL_LABEL_WIDTH)}>
-        {typeof value === "string" ? (
-          <span className="text-right text-sm leading-6 text-neutral-500 flex-1">
-            {value}
-          </span>
+      <span className="detail-row__label">{label}</span>
+      <div className={cn('detail-row__value', DETAIL_LABEL_WIDTH)}>
+        {typeof value === 'string' ? (
+          <span className="detail-row__value-text">{value}</span>
         ) : (
-          <div className="flex items-center justify-end gap-2 flex-1">{value}</div>
+          <div className="detail-row__value-node">{value}</div>
         )}
         {rightElement}
       </div>
     </Component>
   );
-}
+};
 
-/**
- * StickyActionsPanel - Fixed bottom panel с CTA кнопками
- */
-export type StickyActionsPanelProps = {
+type StickyActionsPanelProps = {
   leftActions: ReactNode;
   rightAction: ReactNode;
 };
 
-export function StickyActionsPanel({ leftActions, rightAction }: StickyActionsPanelProps) {
+export const StickyActionsPanel: FC<StickyActionsPanelProps> = ({ leftActions, rightAction }) => {
   return (
     <div
-      className="fixed inset-x-0 z-[20] px-4"
-      style={{ bottom: "calc(env(safe-area-inset-bottom, 0px) + 8px)" }}
+      className="sticky-actions"
+      style={{ bottom: 'calc(env(safe-area-inset-bottom, 0px) + 8px)' }}
     >
-      <div className={cn("mx-auto w-full max-w-md rounded-[26px] border border-neutral-200/80 bg-white/95 p-2 backdrop-blur", APP_FLOAT_SHADOW_CLASS)}>
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2">{leftActions}</div>
-          <div className="flex-1">{rightAction}</div>
+      <div className={cn('sticky-actions__panel', APP_FLOAT_SHADOW_CLASS)}>
+        <div className="sticky-actions__inner">
+          <div className="sticky-actions__left">{leftActions}</div>
+          <div className="sticky-actions__right">{rightAction}</div>
         </div>
       </div>
     </div>
   );
-}
+};
 
-/**
- * OverflowMenuButton - Three-dots menu (top-right)
- */
 export type MenuItemType = {
   id: string;
   label: string;
@@ -122,21 +99,21 @@ export type MenuItemType = {
   onClick: () => void;
 };
 
-export type OverflowMenuButtonProps = {
+type OverflowMenuButtonProps = {
   items: MenuItemType[];
   isOpen: boolean;
   onToggle: () => void;
 };
 
-export function OverflowMenuButton({ items, isOpen, onToggle }: OverflowMenuButtonProps) {
+export const OverflowMenuButton: FC<OverflowMenuButtonProps> = ({ items, isOpen, onToggle }) => {
   if (items.length === 0) return null;
 
   return (
-    <div className="relative">
+    <div className="overflow-menu-button">
       <button
         type="button"
         onClick={onToggle}
-        className={cn("fixed z-[30] inline-flex h-11 w-11 items-center justify-center rounded-full border border-neutral-300 bg-white/90 text-neutral-900 backdrop-blur hover:bg-white active:scale-[0.98]", APP_FLOAT_SHADOW_CLASS)}
+        className={cn('overflow-menu-button__trigger', APP_FLOAT_SHADOW_CLASS)}
         style={{
           top: `calc(env(safe-area-inset-top, 0px) + 20px)`,
           right: `calc(env(safe-area-inset-right, 0px) + 12px)`,
@@ -149,15 +126,13 @@ export function OverflowMenuButton({ items, isOpen, onToggle }: OverflowMenuButt
 
       {isOpen && (
         <>
-          {/* Backdrop to close menu */}
           <div
-            className="fixed inset-0 z-[25]"
+            className="overflow-menu-button__backdrop"
             onClick={onToggle}
             aria-hidden="true"
           />
-          {/* Menu dropdown */}
           <div
-            className={cn("fixed z-[30] w-64 overflow-hidden rounded-2xl border border-neutral-200 bg-white", APP_PANEL_SHADOW_CLASS)}
+            className={cn('overflow-menu-button__dropdown', APP_PANEL_SHADOW_CLASS)}
             style={{
               top: `calc(env(safe-area-inset-top, 0px) + 76px)`,
               right: `calc(env(safe-area-inset-right, 0px) + 12px)`,
@@ -172,11 +147,11 @@ export function OverflowMenuButton({ items, isOpen, onToggle }: OverflowMenuButt
                   item.onClick();
                 }}
                 className={cn(
-                  "block w-full min-h-[44px] px-4 py-3 text-left text-sm transition",
+                  'overflow-menu-button__item',
                   item.danger
-                    ? "text-red-600 hover:bg-red-50"
-                    : "text-neutral-900 hover:bg-neutral-100",
-                  index !== 0 && "border-t border-neutral-100"
+                    ? 'overflow-menu-button__item--danger'
+                    : 'overflow-menu-button__item--default',
+                  index !== 0 && 'overflow-menu-button__item--bordered',
                 )}
               >
                 {item.label}
@@ -187,4 +162,4 @@ export function OverflowMenuButton({ items, isOpen, onToggle }: OverflowMenuButt
       )}
     </div>
   );
-}
+};

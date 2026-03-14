@@ -1,0 +1,54 @@
+@import '../lib/styles/theme.css';
+
+/* Загальний контейнер варіанту popover */
+.date-filter-popover {
+  @apply relative;
+
+  &__dropdown {
+    @apply absolute right-0 top-full z-popover mt-2 w-52 origin-top-right;
+    @apply rounded-2xl border border-neutral-200 bg-white shadow-xl;
+  }
+
+  &__dropdown-inner {
+    @apply p-2;
+  }
+
+  &__option {
+    @apply flex w-full items-center gap-3 rounded-xl px-3 py-2.5;
+    @apply text-left text-sm transition-colors min-h-[44px];
+
+    &--active {
+      @apply bg-gradient-to-br from-primary-500 to-primary-600 text-white shadow-lg font-semibold;
+    }
+
+    &--inactive {
+      @apply text-neutral-700 hover:bg-neutral-50 active:bg-neutral-100;
+    }
+  }
+
+  &__chevron {
+    @apply h-3.5 w-3.5 text-neutral-600 transition-transform duration-200;
+
+    &--open {
+      @apply rotate-180;
+    }
+  }
+}
+
+/* Варіант з кнопками (buttons) */
+.date-filter-buttons {
+  @apply inline-flex rounded-full border border-neutral-200 bg-white/90 shadow-sm p-1;
+
+  &__option {
+    @apply px-2.5 py-1.5 text-[11px] font-semibold rounded-full;
+    @apply transition-all duration-200 whitespace-nowrap min-h-[32px];
+
+    &--active {
+      @apply bg-gradient-to-br from-primary-500 to-primary-600 text-white shadow-lg;
+    }
+
+    &--inactive {
+      @apply text-neutral-700 hover:bg-neutral-50 active:bg-neutral-100;
+    }
+  }
+}

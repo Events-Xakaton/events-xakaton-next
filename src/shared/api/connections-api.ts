@@ -1,22 +1,27 @@
-import { apiBase } from "./base-api";
+import { apiBase } from './base-api';
+import { ApiTag } from '@/shared/redux';
 
 export const connectionsApi = apiBase.injectEndpoints({
   endpoints: (builder) => ({
     follow: builder.mutation<{ status: string }, { telegramUserId: string }>({
       query: ({ telegramUserId }) => ({
         url: `/connections/${telegramUserId}/follow`,
-        method: "POST",
-        headers: { "idempotency-key": `follow-${telegramUserId}-${Date.now()}` },
+        method: 'POST',
+        headers: {
+          'idempotency-key': `follow-${telegramUserId}-${Date.now()}`,
+        },
       }),
-      invalidatesTags: ["Feed", "Notifications"],
+      invalidatesTags: [ApiTag.FEED, ApiTag.NOTIFICATIONS],
     }),
     unfollow: builder.mutation<{ status: string }, { telegramUserId: string }>({
       query: ({ telegramUserId }) => ({
         url: `/connections/${telegramUserId}/unfollow`,
-        method: "POST",
-        headers: { "idempotency-key": `unfollow-${telegramUserId}-${Date.now()}` },
+        method: 'POST',
+        headers: {
+          'idempotency-key': `unfollow-${telegramUserId}-${Date.now()}`,
+        },
       }),
-      invalidatesTags: ["Feed", "Notifications"],
+      invalidatesTags: [ApiTag.FEED, ApiTag.NOTIFICATIONS],
     }),
   }),
 });

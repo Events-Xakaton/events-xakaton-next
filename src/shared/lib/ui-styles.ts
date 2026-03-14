@@ -14,7 +14,7 @@
  * Используется в: BottomNav, Tabs, DateFilter, и других интерактивных элементах
  */
 export const ACTIVE_GRADIENT_CLASS =
-  "bg-gradient-to-br from-primary-500 to-primary-600 text-white shadow-lg";
+  'bg-gradient-to-br from-primary-500 to-primary-600 text-white shadow-lg';
 
 // ============================================================================
 // Unified Visual Tokens (Mini App)
@@ -24,37 +24,36 @@ export const ACTIVE_GRADIENT_CLASS =
  * Primary surface card style used across list/details/create/account screens.
  */
 export const APP_SECTION_CARD_CLASS =
-  "bg-white/[0.88] border border-white/20 rounded-2xl backdrop-blur-xl p-4 space-y-4 shadow-[0_25px_60px_rgba(15,23,42,0.25)]";
+  'bg-white/[0.88] border border-white/20 rounded-2xl backdrop-blur-xl p-4 space-y-4 shadow-[0_25px_60px_rgba(15,23,42,0.25)]';
 
 /**
  * Elevated card style for feed cards and prominent white surfaces.
  */
 export const APP_ELEVATED_CARD_CLASS =
-  "shadow-[0_18px_44px_rgba(15,23,42,0.22)]";
+  'shadow-[0_18px_44px_rgba(15,23,42,0.22)]';
 
 /**
  * Floating control/button/menu shadow style.
  */
 export const APP_FLOAT_SHADOW_CLASS =
-  "shadow-[0_10px_24px_rgba(15,23,42,0.15)]";
+  'shadow-[0_10px_24px_rgba(15,23,42,0.15)]';
 
 /**
  * Popover/menu/sheet panel shadow style.
  */
-export const APP_PANEL_SHADOW_CLASS =
-  "shadow-[0_20px_60px_rgba(2,6,23,0.2)]";
+export const APP_PANEL_SHADOW_CLASS = 'shadow-[0_20px_60px_rgba(2,6,23,0.2)]';
 
 /**
  * Hero cover scrim for create/details previews.
  */
 export const APP_PREVIEW_SCRIM_CLASS =
-  "bg-gradient-to-b from-black/10 via-black/28 to-black/52";
+  'bg-gradient-to-b from-black/10 via-black/28 to-black/52';
 
 /**
  * Stronger feed card scrim for text readability on image/gradient covers.
  */
 export const APP_FEED_SCRIM_CLASS =
-  "bg-gradient-to-b from-black/20 via-black/40 to-black/70";
+  'bg-gradient-to-b from-black/20 via-black/40 to-black/70';
 
 // ============================================================================
 // Toggle Button Styles
@@ -65,14 +64,14 @@ export const APP_FEED_SCRIM_CLASS =
  * Используется в: DateFilter, Tabs
  */
 export const TOGGLE_BUTTON_ACTIVE_CLASS =
-  "inline-flex h-10 min-h-[44px] items-center rounded-full text-xs font-semibold shadow-sm transition-all duration-200 bg-gradient-to-br from-primary-500 to-primary-600 text-white shadow-lg";
+  'inline-flex h-10 min-h-[44px] items-center rounded-full text-xs font-semibold shadow-sm transition-all duration-200 bg-gradient-to-br from-primary-500 to-primary-600 text-white shadow-lg';
 
 /**
  * Стиль для неактивного переключателя/фильтра
  * Используется в: DateFilter, верхние контролы
  */
 export const TOGGLE_BUTTON_INACTIVE_CLASS =
-  "inline-flex h-10 items-center rounded-full border border-neutral-200 bg-white/90 text-xs font-semibold text-neutral-800 shadow-sm transition hover:bg-white";
+  'inline-flex h-10 items-center rounded-full border border-neutral-200 bg-white/90 text-xs font-semibold text-neutral-800 shadow-sm transition hover:bg-white';
 
 // ============================================================================
 // Layout Constants
@@ -94,7 +93,7 @@ export const TOGGLE_BUTTON_INACTIVE_CLASS =
  *
  * @deprecated Используйте getContentBottomPadding() для адаптивного расчета
  */
-export const CONTENT_BOTTOM_PADDING = "78px";
+export const CONTENT_BOTTOM_PADDING = '78px';
 
 /**
  * CSS calc expression для padding-bottom с safe-area
@@ -102,7 +101,7 @@ export const CONTENT_BOTTOM_PADDING = "78px";
  * @deprecated Используйте getContentBottomPadding() для адаптивного расчета
  */
 export const CONTENT_BOTTOM_PADDING_WITH_SAFE_AREA =
-  "calc(env(safe-area-inset-bottom, 0px) + 78px)";
+  'calc(env(safe-area-inset-bottom, 0px) + 78px)';
 
 // ============================================================================
 // Adaptive Layout System (Fullscreen Viewport Support)
@@ -294,18 +293,19 @@ export const BOTTOM_SPACING = {
  * paddingBottom: getBottomPadding('details')  // 94px (DETAILS_STICKY_HEIGHT_BASE)
  */
 export function getBottomPadding(
-  type: 'feed' | 'list' | 'form' | 'details'
+  type: 'feed' | 'list' | 'form' | 'details',
 ): string {
   const spacingMap = {
-    feed: BOTTOM_SPACING.TIGHT,      // 8px for snap-scroll
-    list: BOTTOM_SPACING.STANDARD,   // 16px breathing room
-    form: BOTTOM_SPACING.RELAXED,    // 24px for inputs
-    details: 0,                      // Uses DETAILS_STICKY_HEIGHT_BASE
+    feed: BOTTOM_SPACING.TIGHT, // 8px for snap-scroll
+    list: BOTTOM_SPACING.STANDARD, // 16px breathing room
+    form: BOTTOM_SPACING.RELAXED, // 24px for inputs
+    details: 0, // Uses DETAILS_STICKY_HEIGHT_BASE
   };
 
-  const base = type === 'details'
-    ? DETAILS_STICKY_HEIGHT_BASE
-    : BOTTOM_NAV_HEIGHT_BASE + spacingMap[type];
+  const base =
+    type === 'details'
+      ? DETAILS_STICKY_HEIGHT_BASE
+      : BOTTOM_NAV_HEIGHT_BASE + spacingMap[type];
 
   return `calc(env(safe-area-inset-bottom, 0px) + ${base}px)`;
 }
@@ -318,15 +318,15 @@ export function getBottomPadding(
  * style={{ minHeight: ADAPTIVE_VIEWPORT_HEIGHT }}
  * // Output: "var(--app-vh, 100dvh)"
  */
-export const ADAPTIVE_VIEWPORT_HEIGHT = "var(--app-vh, 100dvh)";
+export const ADAPTIVE_VIEWPORT_HEIGHT = 'var(--app-vh, 100dvh)';
 
 /**
  * Safe area insets (iOS notch/Dynamic Island, Android gesture bar)
  */
-export const SAFE_AREA_TOP = "env(safe-area-inset-top, 0px)";
-export const SAFE_AREA_BOTTOM = "env(safe-area-inset-bottom, 0px)";
-export const SAFE_AREA_LEFT = "env(safe-area-inset-left, 0px)";
-export const SAFE_AREA_RIGHT = "env(safe-area-inset-right, 0px)";
+export const SAFE_AREA_TOP = 'env(safe-area-inset-top, 0px)';
+export const SAFE_AREA_BOTTOM = 'env(safe-area-inset-bottom, 0px)';
+export const SAFE_AREA_LEFT = 'env(safe-area-inset-left, 0px)';
+export const SAFE_AREA_RIGHT = 'env(safe-area-inset-right, 0px)';
 
 // ============================================================================
 // Compact Mode Constants (Telegram Header & System Buttons)
@@ -348,7 +348,7 @@ export const COMPACT_MAINBUTTON_HEIGHT = 48;
  * Unified geometry contract for Home feed viewport.
  * Keeps cards anchored to the same screen-relative slot across tabs/states.
  */
-export function getHomeFeedLayout(mode: "fullscreen" | "compact"): {
+export function getHomeFeedLayout(mode: 'fullscreen' | 'compact'): {
   headerTopPadding: string;
   feedTopOffset: string;
   feedScrollHeight: string;
@@ -358,15 +358,16 @@ export function getHomeFeedLayout(mode: "fullscreen" | "compact"): {
   scrollPaddingBottom: string;
   feedBottomPadding: string;
 } {
-  const fullscreenBottomReserve = getBottomPadding("feed");
+  const fullscreenBottomReserve = getBottomPadding('feed');
   const cardGapPx = 0;
-  const scrollPaddingTop = "0px";
-  const scrollPaddingBottom = "0px";
+  const scrollPaddingTop = '0px';
+  const scrollPaddingBottom = '0px';
 
-  if (mode === "compact") {
-    const compactTopOffsetPx = COMPACT_HEADER_HEIGHT + 12 + FEED_TOP_CONTROLS_HEIGHT;
+  if (mode === 'compact') {
+    const compactTopOffsetPx =
+      COMPACT_HEADER_HEIGHT + 12 + FEED_TOP_CONTROLS_HEIGHT;
     const compactTopOffset = `${compactTopOffsetPx}px`;
-    const compactBottomReserve = getBottomPadding("feed");
+    const compactBottomReserve = getBottomPadding('feed');
     const feedScrollHeight = `calc(${ADAPTIVE_VIEWPORT_HEIGHT} - ${compactTopOffset} - ${compactBottomReserve})`;
     const cardHeight = `max(200px, calc(${feedScrollHeight} - ${cardGapPx}px))`;
 
@@ -378,7 +379,7 @@ export function getHomeFeedLayout(mode: "fullscreen" | "compact"): {
       cardGapPx,
       scrollPaddingTop,
       scrollPaddingBottom,
-      feedBottomPadding: "0px",
+      feedBottomPadding: '0px',
     };
   }
 
@@ -394,7 +395,7 @@ export function getHomeFeedLayout(mode: "fullscreen" | "compact"): {
     cardGapPx,
     scrollPaddingTop,
     scrollPaddingBottom,
-    feedBottomPadding: "0px",
+    feedBottomPadding: '0px',
   };
 }
 
@@ -425,7 +426,7 @@ export function getHomeFeedLayout(mode: "fullscreen" | "compact"): {
  *
  * **Safeguard:** `max(200px, ...)` предотвращает отрицательную высоту на маленьких экранах
  */
-export function getFeedCardHeight(mode: "fullscreen" | "compact"): string {
+export function getFeedCardHeight(mode: 'fullscreen' | 'compact'): string {
   return getHomeFeedLayout(mode).cardHeight;
 }
 
@@ -438,10 +439,10 @@ export function getFeedCardHeight(mode: "fullscreen" | "compact"): string {
  * Стабильное распределение на основе event.id
  */
 export const EVENT_GRADIENTS = [
-  "linear-gradient(180deg, #dbeafe 0%, #bfdbfe 58%, #93c5fd 100%)", // Синий
-  "linear-gradient(180deg, #d1fae5 0%, #a7f3d0 58%, #6ee7b7 100%)", // Зеленый
-  "linear-gradient(180deg, #f3e8ff 0%, #e9d5ff 58%, #d8b4fe 100%)", // Фиолетовый
-  "linear-gradient(180deg, #fef9c3 0%, #fef08a 58%, #fde047 100%)", // Желтый
+  'linear-gradient(180deg, #dbeafe 0%, #bfdbfe 58%, #93c5fd 100%)', // Синий
+  'linear-gradient(180deg, #d1fae5 0%, #a7f3d0 58%, #6ee7b7 100%)', // Зеленый
+  'linear-gradient(180deg, #f3e8ff 0%, #e9d5ff 58%, #d8b4fe 100%)', // Фиолетовый
+  'linear-gradient(180deg, #fef9c3 0%, #fef08a 58%, #fde047 100%)', // Желтый
 ];
 
 /**
@@ -449,10 +450,10 @@ export const EVENT_GRADIENTS = [
  * Стабильное распределение на основе club.id
  */
 export const CLUB_GRADIENTS = [
-  "linear-gradient(180deg, #e0f2fe 0%, #bae6fd 55%, #7dd3fc 100%)", // Голубой
-  "linear-gradient(180deg, #dcfce7 0%, #bbf7d0 55%, #86efac 100%)", // Светло-зеленый
-  "linear-gradient(180deg, #fae8ff 0%, #f3e8ff 55%, #e9d5ff 100%)", // Лавандовый
-  "linear-gradient(180deg, #fef3c7 0%, #fde68a 55%, #fcd34d 100%)", // Золотой
+  'linear-gradient(180deg, #e0f2fe 0%, #bae6fd 55%, #7dd3fc 100%)', // Голубой
+  'linear-gradient(180deg, #dcfce7 0%, #bbf7d0 55%, #86efac 100%)', // Светло-зеленый
+  'linear-gradient(180deg, #fae8ff 0%, #f3e8ff 55%, #e9d5ff 100%)', // Лавандовый
+  'linear-gradient(180deg, #fef3c7 0%, #fde68a 55%, #fcd34d 100%)', // Золотой
 ];
 
 // ============================================================================

@@ -1,0 +1,44 @@
+@import '../lib/styles/theme.css';
+
+.form-input {
+  @apply flex flex-col gap-1.5;
+
+  &--full-width {
+    @apply w-full;
+  }
+
+  &__label {
+    @apply block text-sm font-medium text-neutral-300;
+  }
+
+  &__required-mark {
+    @apply text-red-400 ml-1;
+  }
+
+  &__field {
+    @apply w-full px-4 py-2.5;
+    @apply min-h-[44px];
+    @apply bg-neutral-900 border border-neutral-700;
+    @apply text-white placeholder:text-neutral-500;
+    @apply rounded-lg;
+    @apply transition-all duration-200;
+    @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+    @apply disabled:opacity-50 disabled:cursor-not-allowed;
+
+    &--error {
+      @apply border-red-500 focus:ring-red-500;
+    }
+
+    &--default {
+      @apply hover:border-neutral-600;
+    }
+  }
+
+  &__helper {
+    @apply mt-1.5 text-sm text-neutral-500;
+  }
+
+  &__error {
+    @apply mt-1.5 text-sm text-red-400;
+  }
+}

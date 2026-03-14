@@ -1,0 +1,93 @@
+@import '../lib/styles/theme.css';
+
+.about-section {
+  &__text {
+    @apply whitespace-pre-wrap text-sm leading-6 text-neutral-700;
+  }
+
+  &__toggle {
+    @apply mt-3 text-sm font-medium text-primary-600 hover:text-primary-700 transition;
+  }
+}
+
+.detail-row {
+  @apply flex items-center gap-3 bg-white rounded-2xl pl-3 pr-4 py-3.5;
+
+  &--clickable {
+    @apply cursor-pointer hover:bg-neutral-50 active:bg-neutral-100 transition;
+  }
+
+  &__icon {
+    @apply text-neutral-700 flex-shrink-0;
+  }
+
+  &__label {
+    @apply text-sm font-medium text-neutral-900 flex-shrink-0 w-[90px];
+  }
+
+  &__value {
+    @apply ml-auto flex items-center justify-end gap-2;
+  }
+
+  &__value-text {
+    @apply text-right text-sm leading-6 text-neutral-500 flex-1;
+  }
+
+  &__value-node {
+    @apply flex items-center justify-end gap-2 flex-1;
+  }
+}
+
+.sticky-actions {
+  @apply fixed inset-x-0 z-[20] px-4;
+
+  &__panel {
+    @apply mx-auto w-full max-w-md rounded-[26px] border border-neutral-200/80 bg-white/95 p-2 backdrop-blur;
+  }
+
+  &__inner {
+    @apply flex items-center justify-between gap-2;
+  }
+
+  &__left {
+    @apply flex items-center gap-2;
+  }
+
+  &__right {
+    @apply flex-1;
+  }
+}
+
+.overflow-menu-button {
+  @apply relative;
+
+  &__trigger {
+    @apply fixed z-[30] inline-flex h-11 w-11 items-center justify-center;
+    @apply rounded-full border border-neutral-300 bg-white/90 text-neutral-900 backdrop-blur;
+    @apply hover:bg-white active:scale-[0.98];
+  }
+
+  &__backdrop {
+    @apply fixed inset-0 z-[25];
+  }
+
+  &__dropdown {
+    @apply fixed z-[30] w-64 overflow-hidden rounded-2xl border border-neutral-200 bg-white;
+  }
+
+  &__item {
+    @apply block w-full min-h-[44px] px-4 py-3 text-left text-sm transition;
+
+    &--default {
+      @apply text-neutral-900 hover:bg-neutral-100;
+    }
+
+    &--danger {
+      @apply text-red-600 hover:bg-red-50;
+    }
+
+    &--bordered {
+      @apply border-t border-neutral-100;
+    }
+  }
+}

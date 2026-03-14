@@ -1,0 +1,34 @@
+@import '../../shared/lib/styles/theme.css';
+
+.people-list {
+  @apply space-y-2;
+
+  &__title {
+    @apply text-lg font-semibold text-neutral-900;
+  }
+
+  &__item {
+    @apply flex items-center gap-3 bg-white rounded-2xl pl-3 pr-4 py-3.5;
+  }
+
+  &__avatar-img {
+    @apply h-10 w-10 rounded-full object-cover;
+  }
+
+  &__avatar-fallback {
+    @apply grid h-10 w-10 min-h-[40px] min-w-[40px] place-items-center;
+    @apply rounded-full bg-primary-500 text-xs font-semibold text-white;
+  }
+
+  &__name {
+    @apply flex-1 text-sm font-medium text-neutral-900;
+  }
+
+  &__self-label {
+    @apply px-1 text-xs text-neutral-500;
+  }
+
+  &__show-all {
+    @apply mt-2 w-full rounded-full;
+  }
+}

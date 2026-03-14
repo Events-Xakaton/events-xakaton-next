@@ -1,27 +1,42 @@
-import chroma from "chroma-js";
-import seedrandom from "seedrandom";
+import chroma from 'chroma-js';
+import seedrandom from 'seedrandom';
 
 const EVENT_GRADIENT_PALETTE = [
-  "#f97316", "#fb7185", "#ef4444", "#22c55e",
-  "#06b6d4", "#3b82f6", "#8b5cf6"
+  '#f97316',
+  '#fb7185',
+  '#ef4444',
+  '#22c55e',
+  '#06b6d4',
+  '#3b82f6',
+  '#8b5cf6',
 ];
 
 const CLUB_GRADIENT_PALETTE = [
-  "#1d4ed8", "#0f766e", "#4338ca", "#7c3aed",
-  "#0f172a", "#334155", "#0369a1"
+  '#1d4ed8',
+  '#0f766e',
+  '#4338ca',
+  '#7c3aed',
+  '#0f172a',
+  '#334155',
+  '#0369a1',
 ];
 
-export function newSeed(prefix: "event" | "club"): string {
+export function newSeed(prefix: 'event' | 'club'): string {
   return `${prefix}-${Date.now()}-${Math.floor(Math.random() * 1_000_000)}`;
 }
 
-export function buildGradient(seed: string, mode: "event" | "club"): string {
+export function buildGradient(seed: string, mode: 'event' | 'club'): string {
   const rng = seedrandom(seed);
-  const palette = mode === "event" ? EVENT_GRADIENT_PALETTE : CLUB_GRADIENT_PALETTE;
+  const palette =
+    mode === 'event' ? EVENT_GRADIENT_PALETTE : CLUB_GRADIENT_PALETTE;
   const pick = () => palette[Math.floor(rng() * palette.length)] ?? palette[0];
-  const c1 = chroma(pick()).saturate(mode === "event" ? 1.2 : 0.9).brighten(mode === "event" ? 0.3 : 0.15);
-  const c2 = chroma(pick()).saturate(mode === "event" ? 1.0 : 0.75).darken(mode === "event" ? 0.1 : 0.35);
-  const c3 = chroma(pick()).darken(mode === "event" ? 1.0 : 1.2);
+  const c1 = chroma(pick())
+    .saturate(mode === 'event' ? 1.2 : 0.9)
+    .brighten(mode === 'event' ? 0.3 : 0.15);
+  const c2 = chroma(pick())
+    .saturate(mode === 'event' ? 1.0 : 0.75)
+    .darken(mode === 'event' ? 0.1 : 0.35);
+  const c3 = chroma(pick()).darken(mode === 'event' ? 1.0 : 1.2);
   const a1 = Math.floor(rng() * 360);
   const a2 = (a1 + 90 + Math.floor(rng() * 60)) % 360;
   const p1x = 12 + Math.floor(rng() * 30);

@@ -1,7 +1,10 @@
-"use client";
+'use client';
 
-import { useRef } from "react";
-import { cn } from "@/shared/lib/utils";
+import { FC, useRef } from 'react';
+
+import { cn } from '@/shared/lib/utils';
+
+import './styles/pill-tabs.css';
 
 export type PillTabItem<T extends string = string> = {
   value: T;
@@ -9,37 +12,32 @@ export type PillTabItem<T extends string = string> = {
   count?: number;
 };
 
-export interface PillTabsProps<T extends string> {
+type Props<T extends string> = {
   value: T;
   onChange: (value: T) => void;
   items: PillTabItem<T>[];
   className?: string;
-}
+};
 
-export function PillTabs<T extends string>({
+export const PillTabs = <T extends string>({
   value,
   onChange,
   items,
   className,
-}: PillTabsProps<T>) {
+}: Props<T>): ReturnType<FC> => {
   const buttonRefs = useRef<Map<T, HTMLButtonElement>>(new Map());
 
-  const handleClick = (itemValue: T) => {
+  const handleClick = (itemValue: T): void => {
     onChange(itemValue);
 
-    // Прокрутить выбранный таб в видимую область
     const button = buttonRefs.current.get(itemValue);
     if (button) {
-      button.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
-        inline: "center",
-      });
+      button.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
     }
   };
 
   return (
-    <div className={cn("flex items-center gap-2 overflow-x-auto pb-1", className)}>
+    <div className={cn('pill-tabs', className)}>
       {items.map((item) => {
         const isActive = value === item.value;
 
@@ -55,22 +53,17 @@ export function PillTabs<T extends string>({
             }}
             onClick={() => handleClick(item.value)}
             className={cn(
-              "inline-flex items-center gap-1.5 px-4 py-2 rounded-full",
-              "text-sm font-medium whitespace-nowrap",
-              "transition-all duration-200",
-              "min-h-[36px]",
-              isActive
-                ? "bg-neutral-900 text-white shadow-sm"
-                : "bg-transparent text-neutral-600 hover:bg-neutral-100 active:bg-neutral-200"
+              'pill-tabs__item',
+              isActive ? 'pill-tabs__item--active' : 'pill-tabs__item--inactive',
             )}
             type="button"
           >
             <span>{item.label}</span>
-            {typeof item.count === "number" && (
+            {typeof item.count === 'number' && (
               <span
                 className={cn(
-                  "text-xs font-semibold",
-                  isActive ? "text-neutral-300" : "text-neutral-500"
+                  'pill-tabs__count',
+                  isActive ? 'pill-tabs__count--active' : 'pill-tabs__count--inactive',
                 )}
               >
                 {item.count}
@@ -81,4 +74,4 @@ export function PillTabs<T extends string>({
       })}
     </div>
   );
-}
+};

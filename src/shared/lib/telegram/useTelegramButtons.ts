@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
 /**
  * Управление Telegram MainButton (BottomButton)
@@ -33,7 +33,7 @@ export function useTelegramMainButton(config: {
 }): void {
   useEffect(() => {
     // SSR guard
-    if (typeof window === "undefined") {
+    if (typeof window === 'undefined') {
       return;
     }
 
@@ -44,15 +44,15 @@ export function useTelegramMainButton(config: {
 
     const button = (webApp as any).MainButton;
     if (!button) {
-      console.warn("[useTelegramMainButton] MainButton API not available");
+      console.warn('[useTelegramMainButton] MainButton API not available');
       return;
     }
 
     if (config.visible) {
       // Настроить внешний вид
       button.text = config.text;
-      button.color = "#7c3aed"; // primary-500
-      button.textColor = "#ffffff";
+      button.color = '#7c3aed'; // primary-500
+      button.textColor = '#ffffff';
 
       // Состояние enabled/disabled
       if (config.enabled) {
@@ -102,7 +102,7 @@ export function useTelegramBackButton(config: {
 }): void {
   useEffect(() => {
     // SSR guard
-    if (typeof window === "undefined") {
+    if (typeof window === 'undefined') {
       return;
     }
 
@@ -113,7 +113,7 @@ export function useTelegramBackButton(config: {
 
     const button = (webApp as any).BackButton;
     if (!button) {
-      console.warn("[useTelegramBackButton] BackButton API not available");
+      console.warn('[useTelegramBackButton] BackButton API not available');
       return;
     }
 

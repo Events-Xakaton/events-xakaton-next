@@ -1,9 +1,8 @@
 /**
  * Design System + App Utilities
  */
-
-import { type ClassValue, clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
+import { type ClassValue, clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 /**
  * Merge Tailwind classes with clsx
@@ -18,11 +17,11 @@ export function cn(...inputs: ClassValue[]): string {
  */
 export function getInitials(name: string, maxLength: number = 2): string {
   return name
-    .split(" ")
+    .split(' ')
     .filter(Boolean)
     .slice(0, maxLength)
-    .map((word) => word[0]?.toUpperCase() ?? "")
-    .join("");
+    .map((word) => word[0]?.toUpperCase() ?? '')
+    .join('');
 }
 
 /**
@@ -30,13 +29,13 @@ export function getInitials(name: string, maxLength: number = 2): string {
  */
 export function truncate(text: string, maxLength: number): string {
   if (text.length <= maxLength) return text;
-  return text.slice(0, maxLength).trim() + "...";
+  return text.slice(0, maxLength).trim() + '...';
 }
 
 /**
  * Format number with locale
  */
-export function formatNumber(num: number, locale: string = "ru-RU"): string {
+export function formatNumber(num: number, locale: string = 'ru-RU'): string {
   return new Intl.NumberFormat(locale).format(num);
 }
 
@@ -52,7 +51,7 @@ export function clamp(value: number, min: number, max: number): number {
  */
 export function debounce<T extends (...args: unknown[]) => unknown>(
   func: T,
-  wait: number
+  wait: number,
 ): (...args: Parameters<T>) => void {
   let timeout: ReturnType<typeof setTimeout> | null = null;
 
@@ -72,7 +71,7 @@ export function debounce<T extends (...args: unknown[]) => unknown>(
  */
 export function throttle<T extends (...args: unknown[]) => unknown>(
   func: T,
-  limit: number
+  limit: number,
 ): (...args: Parameters<T>) => void {
   let inThrottle: boolean;
 
@@ -93,7 +92,8 @@ export function isInViewport(element: HTMLElement): boolean {
   return (
     rect.top >= 0 &&
     rect.left >= 0 &&
-    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+    rect.bottom <=
+      (window.innerHeight || document.documentElement.clientHeight) &&
     rect.right <= (window.innerWidth || document.documentElement.clientWidth)
   );
 }
@@ -103,11 +103,11 @@ export function isInViewport(element: HTMLElement): boolean {
  */
 export function scrollToElement(
   element: HTMLElement,
-  options?: ScrollIntoViewOptions
+  options?: ScrollIntoViewOptions,
 ): void {
   element.scrollIntoView({
-    behavior: "smooth",
-    block: "start",
+    behavior: 'smooth',
+    block: 'start',
     ...options,
   });
 }
@@ -120,7 +120,7 @@ export async function copyToClipboard(text: string): Promise<boolean> {
     await navigator.clipboard.writeText(text);
     return true;
   } catch (err) {
-    console.error("Failed to copy:", err);
+    console.error('Failed to copy:', err);
     return false;
   }
 }
@@ -129,19 +129,19 @@ export async function copyToClipboard(text: string): Promise<boolean> {
  * Format file size
  */
 export function formatFileSize(bytes: number): string {
-  if (bytes === 0) return "0 Bytes";
+  if (bytes === 0) return '0 Bytes';
 
   const k = 1024;
-  const sizes = ["Bytes", "KB", "MB", "GB"];
+  const sizes = ['Bytes', 'KB', 'MB', 'GB'];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
 
-  return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + " " + sizes[i];
+  return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
 }
 
 /**
  * Generate random ID
  */
-export function generateId(prefix: string = "id"): string {
+export function generateId(prefix: string = 'id'): string {
   return `${prefix}-${Math.random().toString(36).substr(2, 9)}`;
 }
 
@@ -152,7 +152,7 @@ export function pluralize(
   count: number,
   one: string,
   few: string,
-  many: string
+  many: string,
 ): string {
   const mod10 = count % 10;
   const mod100 = count % 100;
@@ -169,15 +169,19 @@ export type ApiError = {
 
 export function appErrorText(error: unknown, fallback: string): string {
   const e = error as ApiError;
-  if (typeof e?.data === "string" && e.data.trim()) return e.data;
-  if (typeof e?.data === "object" && typeof e.data?.message === "string" && e.data.message.trim()) {
+  if (typeof e?.data === 'string' && e.data.trim()) return e.data;
+  if (
+    typeof e?.data === 'object' &&
+    typeof e.data?.message === 'string' &&
+    e.data.message.trim()
+  ) {
     return e.data.message;
   }
-  if (typeof e?.error === "string" && e.error.trim()) return e.error;
+  if (typeof e?.error === 'string' && e.error.trim()) return e.error;
   return fallback;
 }
 
 export function toIsoFromLocal(value: string): string {
-  if (!value) return "";
+  if (!value) return '';
   return new Date(value).toISOString();
 }

@@ -67,8 +67,10 @@ html {
 
 html,
 body {
-  @apply min-h-full bg-background text-foreground;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
+  @apply bg-background text-foreground min-h-full;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue',
+    Arial, sans-serif;
 }
 
 body {
@@ -82,14 +84,16 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue',
+    Arial, sans-serif;
   font-weight: 600;
   line-height: 1.2;
 }
 
 /* Focus Visible - Accessibility */
 *:focus-visible {
-  @apply outline-none ring-2 ring-primary-500 ring-offset-2 ring-offset-background;
+  @apply ring-primary-500 ring-offset-background ring-2 ring-offset-2 outline-none;
 }
 
 /* Remove default button styles */
@@ -161,7 +165,7 @@ body {
 
   /* Focus Ring Utilities */
   .focus-ring {
-    @apply focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+    @apply focus-visible:ring-primary-500 focus-visible:ring-offset-background focus-visible:ring-2 focus-visible:ring-offset-2;
   }
 
   /* Touch Target Helper */
@@ -171,22 +175,22 @@ body {
 
   /* Skeleton Loading */
   .skeleton {
-    @apply animate-pulse bg-neutral-200 rounded;
+    @apply animate-pulse rounded bg-neutral-200;
   }
 
   /* Skeleton for dark backgrounds */
   .skeleton-dark {
-    @apply animate-pulse bg-neutral-800 rounded;
+    @apply animate-pulse rounded bg-neutral-800;
   }
 
   /* Gradient Text */
   .gradient-text {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-400 to-accent-400;
+    @apply from-primary-400 to-accent-400 bg-gradient-to-r bg-clip-text text-transparent;
   }
 
   /* Glass Morphism */
   .glass {
-    @apply bg-white/5 backdrop-blur-lg border border-white/10;
+    @apply border border-white/10 bg-white/5 backdrop-blur-lg;
   }
 }
 
@@ -194,12 +198,12 @@ body {
 @layer components {
   /* Link Styles */
   .link {
-    @apply text-accent-400 hover:text-accent-300 underline-offset-2 hover:underline transition-colors;
+    @apply text-accent-400 hover:text-accent-300 underline-offset-2 transition-colors hover:underline;
   }
 
   /* Container */
   .container {
-    @apply mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl;
+    @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
   }
 
   /* Section Spacing */

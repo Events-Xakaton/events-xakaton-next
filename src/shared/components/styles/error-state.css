@@ -1,0 +1,11 @@
+@import '../lib/styles/theme.css';
+
+.error-state {
+  &__message {
+    @apply text-sm text-red-400;
+  }
+
+  &__retry {
+    @apply mt-3;
+  }
+}

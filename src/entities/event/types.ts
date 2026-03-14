@@ -38,7 +38,7 @@ export type EventDetails = {
 export type ClubEventListItem = {
   id: string;
   title: string;
-  status: "upcoming" | "ongoing" | "past" | "cancelled";
+  status: 'upcoming' | 'ongoing' | 'past' | 'cancelled';
   startsAtUtc: string;
   endsAtUtc: string;
   participantsCount: number;

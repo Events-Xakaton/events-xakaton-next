@@ -1,0 +1,91 @@
+@import '../lib/styles/theme.css';
+
+.button {
+  @apply inline-flex items-center justify-center gap-2 font-medium rounded-xl;
+  @apply transition-all duration-200;
+  @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none;
+  @apply active:scale-[0.98];
+
+  &--primary {
+    @apply bg-gradient-to-br from-primary-500 to-primary-600 text-white;
+    @apply shadow-lg hover:shadow-xl;
+    @apply hover:from-primary-600 hover:to-primary-700;
+  }
+
+  &--secondary {
+    @apply bg-neutral-800 border border-neutral-700 text-white shadow-md;
+    @apply hover:bg-neutral-700 hover:border-neutral-600 hover:shadow-lg;
+  }
+
+  &--ghost {
+    @apply bg-transparent text-neutral-200;
+    @apply hover:bg-white/5 active:bg-white/10;
+  }
+
+  &--destructive {
+    @apply bg-gradient-to-br from-red-500 to-red-600 text-white shadow-lg;
+    @apply hover:shadow-xl hover:from-red-600 hover:to-red-700;
+  }
+
+  &--sm {
+    @apply px-4 py-2 text-sm min-h-[40px];
+  }
+
+  &--md {
+    @apply px-5 py-2.5 text-base min-h-[44px];
+  }
+
+  &--lg {
+    @apply px-6 py-3 text-lg min-h-[48px];
+  }
+
+  &--full-width {
+    @apply w-full;
+  }
+
+  &__spinner {
+    @apply animate-spin h-4 w-4;
+  }
+
+  &__spinner-track {
+    @apply opacity-25;
+  }
+
+  &__spinner-fill {
+    @apply opacity-75;
+  }
+}
+
+.icon-button {
+  @apply inline-flex items-center justify-center rounded-full;
+  @apply transition-all duration-200;
+  @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+  @apply active:scale-95;
+
+  &--primary {
+    @apply bg-gradient-to-br from-primary-500 to-primary-600 text-white shadow-lg;
+    @apply hover:shadow-xl;
+  }
+
+  &--secondary {
+    @apply bg-neutral-800 border border-neutral-700 text-white hover:bg-neutral-700;
+  }
+
+  &--ghost {
+    @apply bg-transparent text-neutral-300 hover:bg-white/10;
+  }
+
+  &--sm {
+    @apply w-10 h-10 min-w-[40px] min-h-[40px];
+  }
+
+  &--md {
+    @apply w-11 h-11 min-w-[44px] min-h-[44px];
+  }
+
+  &--lg {
+    @apply w-12 h-12 min-w-[48px] min-h-[48px];
+  }
+}

@@ -1,21 +1,26 @@
-import type { Metadata, Viewport } from "next";
-import { AppProviders } from "./providers";
-import "./globals.css";
+import type { Metadata, Viewport } from 'next';
+
+import './globals.css';
+import { AppProviders } from './providers';
 
 export const metadata: Metadata = {
-  title: "Events Mini App",
-  description: "Telegram mini app for employee clubs and events",
+  title: 'Events Mini App',
+  description: 'Telegram mini app for employee clubs and events',
 };
 
 export const viewport: Viewport = {
-  width: "device-width",
+  width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  viewportFit: "cover",
+  viewportFit: 'cover',
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="ru" suppressHydrationWarning>
       <head>
@@ -23,7 +28,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script src="https://telegram.org/js/telegram-web-app.js" async />
 
         {/* Preload critical logo */}
-        <link rel="preload" href="/some-logo.svg" as="image" type="image/svg+xml" />
+        <link
+          rel="preload"
+          href="/some-logo.svg"
+          as="image"
+          type="image/svg+xml"
+        />
       </head>
       <body>
         <AppProviders>{children}</AppProviders>

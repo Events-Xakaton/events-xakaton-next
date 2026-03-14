@@ -1,28 +1,26 @@
-"use client";
+'use client';
 
-import { Card, CardTitle, CardDescription } from "./card";
+import { FC, ReactNode } from 'react';
 
-/**
- * EmptyState - Placeholder for empty lists/views
- */
-export function EmptyState({
-  title,
-  description,
-  action,
-}: {
+import { Card, CardDescription, CardTitle, CardVariant, CardPadding } from './card';
+import './styles/empty-state.css';
+
+type Props = {
   title: string;
   description?: string;
-  action?: React.ReactNode;
-}) {
+  action?: ReactNode;
+};
+
+export const EmptyState: FC<Props> = ({ title, description, action }) => {
   return (
-    <Card variant="outlined" padding="lg" className="text-center">
+    <Card variant={CardVariant.OUTLINED} padding={CardPadding.LG} className="empty-state">
       <CardTitle as="h3" className="text-lg text-neutral-200">
         {title}
       </CardTitle>
       {description && (
         <CardDescription className="mt-2">{description}</CardDescription>
       )}
-      {action && <div className="mt-4">{action}</div>}
+      {action && <div className="empty-state__action">{action}</div>}
     </Card>
   );
-}
+};

@@ -1,0 +1,53 @@
+@import '../lib/styles/theme.css';
+
+.card {
+  @apply rounded-xl transition-all duration-200;
+
+  &--default {
+    @apply bg-neutral-900/80 backdrop-blur-sm border border-white/10 shadow-lg;
+  }
+
+  &--elevated {
+    @apply bg-neutral-900 border border-white/10 shadow-2xl;
+  }
+
+  &--outlined {
+    @apply bg-transparent border border-neutral-700;
+  }
+
+  &--ghost {
+    @apply bg-transparent border-none;
+  }
+
+  &--padding-sm {
+    @apply p-3 sm:p-4;
+  }
+
+  &--padding-md {
+    @apply p-4 sm:p-5 md:p-6;
+  }
+
+  &--padding-lg {
+    @apply p-5 sm:p-6 md:p-8;
+  }
+
+  &--hover {
+    @apply hover:scale-[1.02] hover:shadow-xl;
+  }
+
+  &__header {
+    @apply mb-4;
+  }
+
+  &__title {
+    @apply text-xl font-semibold text-white;
+  }
+
+  &__description {
+    @apply text-sm text-neutral-400;
+  }
+
+  &__footer {
+    @apply mt-4 flex items-center gap-2;
+  }
+}

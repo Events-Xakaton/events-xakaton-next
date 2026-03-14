@@ -1,133 +1,104 @@
-/**
- * Badge Component
- *
- * Small status indicators and labels.
- * Used for event status, categories, counts, etc.
- */
+'use client';
 
-import { HTMLAttributes, ReactNode, forwardRef } from "react";
-import { cn } from "@/shared/lib/utils";
+import { FC, HTMLAttributes, ReactNode } from 'react';
 
-export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
-  variant?: "default" | "primary" | "success" | "warning" | "error" | "info" | "outline";
-  size?: "sm" | "md" | "lg";
+import { cn } from '@/shared/lib/utils';
+
+import './styles/badge.css';
+
+export enum BadgeVariant {
+  DEFAULT = 'default',
+  PRIMARY = 'primary',
+  SUCCESS = 'success',
+  WARNING = 'warning',
+  ERROR = 'error',
+  INFO = 'info',
+  OUTLINE = 'outline',
+}
+
+export enum BadgeSize {
+  SM = 'sm',
+  MD = 'md',
+  LG = 'lg',
+}
+
+export enum EventStatus {
+  UPCOMING = 'upcoming',
+  ONGOING = 'ongoing',
+  PAST = 'past',
+  CANCELLED = 'cancelled',
+  ACTIVE = 'active',
+  DRAFT = 'draft',
+}
+
+type Props = HTMLAttributes<HTMLSpanElement> & {
+  variant?: BadgeVariant;
+  size?: BadgeSize;
   children: ReactNode;
-}
+};
 
-export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
-  ({ variant = "default", size = "md", children, className, ...props }, ref) => {
-    const baseClasses = `
-      inline-flex items-center justify-center
-      font-medium rounded-full
-      transition-colors duration-200
-    `;
+export const Badge: FC<Props> = ({
+  variant = BadgeVariant.DEFAULT,
+  size = BadgeSize.MD,
+  children,
+  className,
+  ...props
+}) => {
+  return (
+    <span
+      className={cn('badge', `badge--${variant}`, `badge--${size}`, className)}
+      {...props}
+    >
+      {children}
+    </span>
+  );
+};
 
-    const variantClasses = {
-      default: `
-        bg-neutral-800 border border-neutral-700
-        text-neutral-300
-      `,
-      primary: `
-        bg-primary-500/20 border border-primary-500/30
-        text-primary-300
-      `,
-      success: `
-        bg-green-500/20 border border-green-500/30
-        text-green-300
-      `,
-      warning: `
-        bg-amber-500/20 border border-amber-500/30
-        text-amber-300
-      `,
-      error: `
-        bg-red-500/20 border border-red-500/30
-        text-red-300
-      `,
-      info: `
-        bg-blue-500/20 border border-blue-500/30
-        text-blue-300
-      `,
-      outline: `
-        bg-transparent border border-neutral-600
-        text-neutral-400
-      `,
-    };
+type StatusBadgeProps = Omit<Props, 'variant'> & {
+  status: EventStatus;
+};
 
-    const sizeClasses = {
-      sm: "px-2 py-0.5 text-xs",
-      md: "px-2.5 py-1 text-sm",
-      lg: "px-3 py-1.5 text-base",
-    };
+const statusVariantMap: Record<EventStatus, BadgeVariant> = {
+  [EventStatus.UPCOMING]: BadgeVariant.INFO,
+  [EventStatus.ONGOING]: BadgeVariant.SUCCESS,
+  [EventStatus.PAST]: BadgeVariant.DEFAULT,
+  [EventStatus.CANCELLED]: BadgeVariant.ERROR,
+  [EventStatus.ACTIVE]: BadgeVariant.SUCCESS,
+  [EventStatus.DRAFT]: BadgeVariant.WARNING,
+};
 
-    return (
-      <span
-        ref={ref}
-        className={cn(baseClasses, variantClasses[variant], sizeClasses[size], className)}
-        {...props}
-      >
-        {children}
-      </span>
-    );
-  }
-);
+const statusLabelMap: Record<EventStatus, string> = {
+  [EventStatus.UPCOMING]: 'Предстоящее',
+  [EventStatus.ONGOING]: 'Идёт сейчас',
+  [EventStatus.PAST]: 'Завершено',
+  [EventStatus.CANCELLED]: 'Отменено',
+  [EventStatus.ACTIVE]: 'Активно',
+  [EventStatus.DRAFT]: 'Черновик',
+};
 
-Badge.displayName = "Badge";
+export const StatusBadge: FC<StatusBadgeProps> = ({ status, ...props }) => {
+  return (
+    <Badge variant={statusVariantMap[status]} {...props}>
+      {statusLabelMap[status]}
+    </Badge>
+  );
+};
 
-/**
- * StatusBadge - Semantic badge for event/club status
- */
-export interface StatusBadgeProps extends Omit<BadgeProps, "variant"> {
-  status: "upcoming" | "ongoing" | "past" | "cancelled" | "active" | "draft";
-}
-
-export const StatusBadge = forwardRef<HTMLSpanElement, StatusBadgeProps>(
-  ({ status, ...props }, ref) => {
-    const variantMap = {
-      upcoming: "info" as const,
-      ongoing: "success" as const,
-      past: "default" as const,
-      cancelled: "error" as const,
-      active: "success" as const,
-      draft: "warning" as const,
-    };
-
-    const labelMap = {
-      upcoming: "Предстоящее",
-      ongoing: "Идёт сейчас",
-      past: "Завершено",
-      cancelled: "Отменено",
-      active: "Активно",
-      draft: "Черновик",
-    };
-
-    return (
-      <Badge ref={ref} variant={variantMap[status]} {...props}>
-        {labelMap[status]}
-      </Badge>
-    );
-  }
-);
-
-StatusBadge.displayName = "StatusBadge";
-
-/**
- * CountBadge - Numeric badge (e.g., notification count)
- */
-export interface CountBadgeProps extends Omit<BadgeProps, "children"> {
+type CountBadgeProps = Omit<Props, 'children'> & {
   count: number;
   max?: number;
-}
+};
 
-export const CountBadge = forwardRef<HTMLSpanElement, CountBadgeProps>(
-  ({ count, max = 99, variant = "error", ...props }, ref) => {
-    const displayCount = count > max ? `${max}+` : count.toString();
-
-    return (
-      <Badge ref={ref} variant={variant} size="sm" {...props}>
-        {displayCount}
-      </Badge>
-    );
-  }
-);
-
-CountBadge.displayName = "CountBadge";
+export const CountBadge: FC<CountBadgeProps> = ({
+  count,
+  max = 99,
+  variant = BadgeVariant.ERROR,
+  ...props
+}) => {
+  const displayCount = count > max ? `${max}+` : count.toString();
+  return (
+    <Badge variant={variant} size={BadgeSize.SM} {...props}>
+      {displayCount}
+    </Badge>
+  );
+};

@@ -1,0 +1,17 @@
+@import '../lib/styles/theme.css';
+
+.list-skeleton {
+  @apply space-y-3;
+
+  &__item {
+    @apply skeleton h-4 w-2/3;
+  }
+
+  &__item-sub {
+    @apply skeleton mt-2 h-3 w-1/2;
+  }
+
+  &__item-action {
+    @apply skeleton mt-3 h-9 w-24 rounded-xl;
+  }
+}

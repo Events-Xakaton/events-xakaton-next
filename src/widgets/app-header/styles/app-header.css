@@ -1,0 +1,53 @@
+@import '../../shared/lib/styles/theme.css';
+
+.app-header {
+  @apply z-[200] bg-[#f2f2f5];
+
+  &--sticky {
+    @apply sticky top-0;
+  }
+
+  &--fixed {
+    @apply fixed inset-x-0 top-0;
+  }
+
+  &--divider {
+    @apply border-b border-neutral-200/50;
+  }
+
+  &__body {
+    /* contenitore interno: gap sticky/fixed */
+  }
+
+  &__body--spaced {
+    @apply mb-4 mt-4;
+  }
+
+  &__row-wrap {
+    @apply h-14 px-4;
+  }
+
+  &__row {
+    @apply flex h-full items-center justify-between;
+  }
+
+  &__slot-left {
+    @apply flex min-w-0 flex-1 items-center;
+  }
+
+  &__slot-center {
+    @apply flex min-w-0 flex-1 items-center justify-center;
+  }
+
+  &__slot-right {
+    @apply flex min-w-0 flex-1 items-center justify-end;
+  }
+
+  &__title {
+    @apply truncate text-[17px] font-semibold tracking-tight text-neutral-900;
+  }
+
+  &__sub-row {
+    @apply px-4 pb-2;
+  }
+}

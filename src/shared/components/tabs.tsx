@@ -1,44 +1,31 @@
-"use client";
+'use client';
 
-import { cn } from "@/shared/lib/utils";
-import { ACTIVE_GRADIENT_CLASS } from "@/shared/lib/ui-styles";
+import { FC } from 'react';
 
-/**
- * Tabs Component - Mobile-friendly tab switcher
- */
-export function Tabs<T extends string>({
-  value,
-  onChange,
-  items,
-}: {
+import { cn } from '@/shared/lib/utils';
+
+import './styles/tabs.css';
+
+type Props<T extends string> = {
   value: T;
   onChange: (v: T) => void;
   items: Array<{ value: T; label: string }>;
-}) {
+};
+
+export const Tabs = <T extends string>({ value, onChange, items }: Props<T>): ReturnType<FC> => {
+  const colCount = Math.min(items.length, 4) as 1 | 2 | 3 | 4;
+
   return (
-    <div className="rounded-xl bg-neutral-800 p-1">
-      <div
-        className={cn(
-          "grid gap-1",
-          items.length <= 1 && "grid-cols-1",
-          items.length === 2 && "grid-cols-2",
-          items.length === 3 && "grid-cols-3",
-          items.length >= 4 && "grid-cols-4"
-        )}
-      >
+    <div className="tabs">
+      <div className={cn('tabs__grid', `tabs__grid--${colCount}`)}>
         {items.map((item) => (
           <button
             key={item.value}
             type="button"
             onClick={() => onChange(item.value)}
             className={cn(
-              // Touch target - 44px minimum
-              "min-h-[44px] rounded-lg px-3 py-2 text-sm font-medium",
-              "transition-all duration-200",
-              "focus-visible:ring-2 focus-visible:ring-primary-500",
-              value === item.value
-                ? ACTIVE_GRADIENT_CLASS
-                : "text-neutral-400 hover:bg-white/5 hover:text-neutral-200"
+              'tabs__item',
+              value === item.value ? 'tabs__item--active' : 'tabs__item--inactive',
             )}
             aria-selected={value === item.value}
             role="tab"
@@ -49,4 +36,4 @@ export function Tabs<T extends string>({
       </div>
     </div>
   );
-}
+};

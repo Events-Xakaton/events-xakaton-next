@@ -1,5 +1,7 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { loadAuthSession } from "@/shared/lib/auth-session";
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+
+import { loadAuthSession } from '@/shared/lib/auth-session';
+import { StateNameType } from '@/shared/redux';
 
 type AuthState = {
   isVerified: boolean;
@@ -10,10 +12,10 @@ type AuthState = {
 function getInitialState(): AuthState {
   const base: AuthState = {
     isVerified: false,
-    reddyUserKey: "",
+    reddyUserKey: '',
     verifiedAtMs: null,
   };
-  if (typeof window === "undefined") {
+  if (typeof window === 'undefined') {
     return base;
   }
   const session = loadAuthSession();
@@ -30,7 +32,7 @@ function getInitialState(): AuthState {
 const initialState: AuthState = getInitialState();
 
 const authSlice = createSlice({
-  name: "auth",
+  name: StateNameType.AUTH,
   initialState,
   reducers: {
     setVerified(
@@ -43,7 +45,7 @@ const authSlice = createSlice({
     },
     resetAuth(state) {
       state.isVerified = false;
-      state.reddyUserKey = "";
+      state.reddyUserKey = '';
       state.verifiedAtMs = null;
     },
   },

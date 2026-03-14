@@ -1,0 +1,28 @@
+@import '../lib/styles/theme.css';
+
+.tabs {
+  @apply rounded-xl bg-neutral-800 p-1;
+
+  &__grid {
+    @apply grid gap-1;
+
+    &--1 { @apply grid-cols-1; }
+    &--2 { @apply grid-cols-2; }
+    &--3 { @apply grid-cols-3; }
+    &--4 { @apply grid-cols-4; }
+  }
+
+  &__item {
+    @apply min-h-[44px] rounded-lg px-3 py-2 text-sm font-medium;
+    @apply transition-all duration-200;
+    @apply focus-visible:ring-2 focus-visible:ring-primary-500;
+
+    &--active {
+      @apply bg-gradient-to-br from-primary-500 to-primary-600 text-white shadow-lg;
+    }
+
+    &--inactive {
+      @apply text-neutral-400 hover:bg-white/5 hover:text-neutral-200;
+    }
+  }
+}

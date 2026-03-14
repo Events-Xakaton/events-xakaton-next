@@ -1,26 +1,27 @@
-"use client";
+'use client';
 
-import { Card } from "./card";
-import { Button } from "./button";
+import { FC } from 'react';
 
-/**
- * ErrorState - Error display with retry option
- */
-export function ErrorState({
-  title,
-  onRetry,
-}: {
+import { Button, ButtonVariant } from './button';
+import { Card, CardVariant, CardPadding } from './card';
+import './styles/error-state.css';
+
+type Props = {
   title: string;
   onRetry?: () => void;
-}) {
+};
+
+export const ErrorState: FC<Props> = ({ title, onRetry }) => {
   return (
-    <Card variant="outlined" padding="md">
-      <p className="text-sm text-red-400">{title}</p>
+    <Card variant={CardVariant.OUTLINED} padding={CardPadding.MD}>
+      <p className="error-state__message">{title}</p>
       {onRetry && (
-        <Button className="mt-3" variant="secondary" onClick={onRetry}>
-          Повторить
-        </Button>
+        <div className="error-state__retry">
+          <Button variant={ButtonVariant.SECONDARY} onClick={onRetry}>
+            Повторить
+          </Button>
+        </div>
       )}
     </Card>
   );
-}
+};

@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 /**
  * Viewport mode: fullscreen или compact
@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
  * - **fullscreen**: Открыто из чата (menu button ☰) или поддерживается Bot API 8.0+
  * - **compact**: Открыто из профиля бота или старый клиент без fullscreen API
  */
-export type ViewportMode = "fullscreen" | "compact";
+export type ViewportMode = 'fullscreen' | 'compact';
 
 /**
  * Хук для определения режима viewport
@@ -34,26 +34,26 @@ export type ViewportMode = "fullscreen" | "compact";
  * ```
  */
 export function useViewportMode(): ViewportMode {
-  const [mode, setMode] = useState<ViewportMode>("compact");
+  const [mode, setMode] = useState<ViewportMode>('compact');
 
   useEffect(() => {
     // SSR guard
-    if (typeof window === "undefined") {
+    if (typeof window === 'undefined') {
       return;
     }
 
     const webApp = window.Telegram?.WebApp;
     if (!webApp) {
-      console.warn("[useViewportMode] Telegram WebApp not available");
+      console.warn('[useViewportMode] Telegram WebApp not available');
       return;
     }
 
     // Handler для fullscreen_changed события
     const handleFullscreenChanged = () => {
       const isFullscreen = webApp.isFullscreen ?? false;
-      const newMode: ViewportMode = isFullscreen ? "fullscreen" : "compact";
+      const newMode: ViewportMode = isFullscreen ? 'fullscreen' : 'compact';
 
-      console.log("[useViewportMode] Fullscreen changed:", {
+      console.log('[useViewportMode] Fullscreen changed:', {
         isFullscreen,
         mode: newMode,
         viewportHeight: webApp.viewportStableHeight,
@@ -65,9 +65,11 @@ export function useViewportMode(): ViewportMode {
     // КРИТИЧНО: Проверить ТЕКУЩЕЕ состояние при инициализации
     // Это обрабатывает случай когда хук монтируется ПОСЛЕ fullscreen_changed
     const currentIsFullscreen = webApp.isFullscreen ?? false;
-    const initialMode: ViewportMode = currentIsFullscreen ? "fullscreen" : "compact";
+    const initialMode: ViewportMode = currentIsFullscreen
+      ? 'fullscreen'
+      : 'compact';
 
-    console.log("[useViewportMode] Initial state:", {
+    console.log('[useViewportMode] Initial state:', {
       isFullscreen: currentIsFullscreen,
       mode: initialMode,
       viewportHeight: webApp.viewportStableHeight,
@@ -76,10 +78,10 @@ export function useViewportMode(): ViewportMode {
     setMode(initialMode);
 
     // Слушаем ТОЛЬКО fullscreen_changed (единственный надежный источник истины)
-    webApp.onEvent?.("fullscreen_changed", handleFullscreenChanged);
+    webApp.onEvent?.('fullscreen_changed', handleFullscreenChanged);
 
     return () => {
-      webApp.offEvent?.("fullscreen_changed", handleFullscreenChanged);
+      webApp.offEvent?.('fullscreen_changed', handleFullscreenChanged);
     };
   }, []);
 

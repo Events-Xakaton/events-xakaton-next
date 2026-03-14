@@ -1,20 +1,24 @@
-"use client";
+'use client';
 
-import { Card } from "./card";
+import { FC } from 'react';
 
-/**
- * ListSkeleton - Loading placeholder for lists
- */
-export function ListSkeleton({ rows = 3 }: { rows?: number }) {
+import { Card, CardVariant, CardPadding } from './card';
+import './styles/list-skeleton.css';
+
+type Props = {
+  rows?: number;
+};
+
+export const ListSkeleton: FC<Props> = ({ rows = 3 }) => {
   return (
-    <div className="space-y-3">
+    <div className="list-skeleton">
       {Array.from({ length: rows }).map((_, index) => (
-        <Card key={index} variant="default" padding="md">
-          <div className="skeleton h-4 w-2/3" />
-          <div className="skeleton mt-2 h-3 w-1/2" />
-          <div className="skeleton mt-3 h-9 w-24 rounded-xl" />
+        <Card key={index} variant={CardVariant.DEFAULT} padding={CardPadding.MD}>
+          <div className="list-skeleton__item" />
+          <div className="list-skeleton__item-sub" />
+          <div className="list-skeleton__item-action" />
         </Card>
       ))}
     </div>
   );
-}
+};

@@ -1,6 +1,13 @@
 const config = {
   plugins: {
-    "@tailwindcss/postcss": {},
+    'postcss-nested': {},
+    '@tailwindcss/postcss': {
+      optimize: false,
+    },
+    autoprefixer: {},
+    'postcss-lightningcss': {
+      minify: true,
+    },
   },
 };
 

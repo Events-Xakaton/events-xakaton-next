@@ -1,0 +1,9 @@
+@import '../lib/styles/theme.css';
+
+.confirm-dialog {
+  @apply fixed inset-0 z-[1050] grid place-items-center bg-black/50 px-4 backdrop-blur-sm;
+
+  &__actions {
+    @apply mt-6 flex gap-3;
+  }
+}

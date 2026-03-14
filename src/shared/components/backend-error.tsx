@@ -1,50 +1,51 @@
-"use client";
+'use client';
 
-import { ServerOff, RefreshCw } from "lucide-react";
-import { Button } from "./button";
-import { Card } from "./card";
+import { RefreshCw, ServerOff } from 'lucide-react';
+import { FC } from 'react';
 
-export function BackendError({ onRetry }: { onRetry?: () => void }) {
+import { Button, ButtonVariant, ButtonSize } from './button';
+import { Card, CardVariant, CardPadding } from './card';
+import './styles/backend-error.css';
+
+type Props = {
+  onRetry?: () => void;
+};
+
+export const BackendError: FC<Props> = ({ onRetry }) => {
   return (
-    <div className="mx-auto flex min-h-screen w-full max-w-md items-center px-4 py-8">
-      <Card variant="elevated" padding="lg" className="w-full">
-        <div className="flex flex-col items-center text-center">
-          <div className="mb-4 grid h-16 w-16 place-items-center rounded-full bg-red-500/10">
+    <div className="backend-error">
+      <Card variant={CardVariant.ELEVATED} padding={CardPadding.LG} className="w-full">
+        <div className="backend-error__inner">
+          <div className="backend-error__icon">
             <ServerOff className="h-8 w-8 text-red-400" aria-hidden="true" />
           </div>
 
-          <h2 className="mb-2 text-xl font-semibold text-neutral-100">
-            Сервер недоступен
-          </h2>
+          <h2 className="backend-error__title">Сервер недоступен</h2>
 
-          <p className="mb-6 text-sm text-neutral-400">
-            Backend не запущен. Выполните в терминале:
-          </p>
+          <p className="backend-error__message">Backend не запущен. Выполните в терминале:</p>
 
-          <div className="mb-6 w-full rounded-lg bg-neutral-900 p-3">
-            <code className="text-sm text-accent-400">
-              npm start
-            </code>
+          <div className="backend-error__code-block">
+            <code className="text-sm text-accent-400">npm start</code>
           </div>
 
-          <p className="mb-6 text-xs text-neutral-500">
-            Или используйте: ./scripts/quick-start.sh
-          </p>
+          <p className="backend-error__hint">Или используйте: ./scripts/quick-start.sh</p>
 
           {onRetry && (
-            <Button
-              variant="primary"
-              size="lg"
-              fullWidth
-              onClick={onRetry}
-              className="rounded-lg"
-            >
-              <RefreshCw className="mr-2 h-5 w-5" aria-hidden="true" />
-              Повторить
-            </Button>
+            <div className="backend-error__action">
+              <Button
+                variant={ButtonVariant.PRIMARY}
+                size={ButtonSize.LG}
+                fullWidth
+                onClick={onRetry}
+                className="rounded-lg"
+              >
+                <RefreshCw className="mr-2 h-5 w-5" aria-hidden="true" />
+                Повторить
+              </Button>
+            </div>
           )}
         </div>
       </Card>
     </div>
   );
-}
+};

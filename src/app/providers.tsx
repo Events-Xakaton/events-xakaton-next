@@ -1,10 +1,11 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import { Provider } from "react-redux";
-import { store } from "@/shared/store/store";
-import { initFrontendTelemetry } from "@/shared/observability/telemetry";
-import { WebVitalsListener } from "@/shared/observability/web-vitals-listener";
+import { useEffect } from 'react';
+import { Provider } from 'react-redux';
+
+import { initFrontendTelemetry } from '@/shared/observability/telemetry';
+import { WebVitalsListener } from '@/shared/observability/web-vitals-listener';
+import { store } from '@/shared/store/store';
 
 export function AppProviders({ children }: { children: React.ReactNode }) {
   useEffect(() => {

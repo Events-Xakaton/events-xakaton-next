@@ -1,0 +1,26 @@
+{
+  "singleQuote": true,
+  "trailingComma": "all",
+  "plugins": [
+    "prettier-plugin-tailwindcss",
+    "@trivago/prettier-plugin-sort-imports"
+  ],
+  "importOrder": [
+    "<THIRD_PARTY_MODULES>",
+    "^@/app$",
+    "^@/app/(.*)$",
+    "^@/views$",
+    "^@/views/(.*)$",
+    "^@/widgets$",
+    "^@/widgets/(.*)$",
+    "^@/features$",
+    "^@/features/(.*)$",
+    "^@/entities$",
+    "^@/entities/(.*)$",
+    "^@/shared$",
+    "^@/shared/(.*)$",
+    "^[./]"
+  ],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true
+}

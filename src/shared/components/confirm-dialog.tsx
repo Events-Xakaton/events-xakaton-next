@@ -1,23 +1,12 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import { Card, CardTitle, CardDescription } from "./card";
-import { Button } from "./button";
+import { FC, useEffect } from 'react';
 
-/**
- * ConfirmDialog - Modal confirmation dialog
- * Accessible with focus trap and keyboard support
- */
-export function ConfirmDialog({
-  open,
-  title,
-  description,
-  confirmText,
-  cancelText = "Отмена",
-  onCancel,
-  onConfirm,
-  loading,
-}: {
+import { Button, ButtonVariant } from './button';
+import { Card, CardDescription, CardTitle, CardVariant, CardPadding } from './card';
+import './styles/confirm-dialog.css';
+
+type Props = {
   open: boolean;
   title: string;
   description?: string;
@@ -26,31 +15,42 @@ export function ConfirmDialog({
   onCancel: () => void;
   onConfirm: () => void;
   loading?: boolean;
-}) {
+};
+
+export const ConfirmDialog: FC<Props> = ({
+  open,
+  title,
+  description,
+  confirmText,
+  cancelText = 'Отмена',
+  onCancel,
+  onConfirm,
+  loading,
+}) => {
   useEffect(() => {
     if (!open) return;
 
-    function onEscape(event: KeyboardEvent) {
-      if (event.key === "Escape") {
+    function onEscape(event: KeyboardEvent): void {
+      if (event.key === 'Escape') {
         onCancel();
       }
     }
 
-    document.addEventListener("keydown", onEscape);
-    return () => document.removeEventListener("keydown", onEscape);
+    document.addEventListener('keydown', onEscape);
+    return () => document.removeEventListener('keydown', onEscape);
   }, [open, onCancel]);
 
   if (!open) return null;
 
   return (
     <div
-      className="fixed inset-0 z-modal grid place-items-center bg-black/50 px-4 backdrop-blur-sm"
+      className="confirm-dialog"
       role="dialog"
       aria-modal="true"
       aria-labelledby="confirm-dialog-title"
-      aria-describedby={description ? "confirm-dialog-description" : undefined}
+      aria-describedby={description ? 'confirm-dialog-description' : undefined}
     >
-      <Card variant="elevated" padding="lg" className="w-full max-w-sm">
+      <Card variant={CardVariant.ELEVATED} padding={CardPadding.LG} className="w-full max-w-sm">
         <CardTitle id="confirm-dialog-title" className="text-base">
           {title}
         </CardTitle>
@@ -59,10 +59,10 @@ export function ConfirmDialog({
             {description}
           </CardDescription>
         )}
-        <div className="mt-6 flex gap-3">
+        <div className="confirm-dialog__actions">
           <Button
             className="flex-1"
-            variant="secondary"
+            variant={ButtonVariant.SECONDARY}
             onClick={onCancel}
             disabled={loading}
           >
@@ -70,7 +70,7 @@ export function ConfirmDialog({
           </Button>
           <Button
             className="flex-1"
-            variant="destructive"
+            variant={ButtonVariant.DESTRUCTIVE}
             onClick={onConfirm}
             isLoading={loading}
           >
@@ -80,4 +80,4 @@ export function ConfirmDialog({
       </Card>
     </div>
   );
-}
+};

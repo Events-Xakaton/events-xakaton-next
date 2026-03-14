@@ -1,36 +1,41 @@
-"use client";
+'use client';
 
-import { useMemo, useState } from "react";
-import { Plus, Users, ChevronRight } from "lucide-react";
+import { ChevronRight, Plus, Users } from 'lucide-react';
+import { useMemo, useState } from 'react';
+
 import {
+  type ClubCard,
   useClubDetailsQuery,
   useClubsQuery,
-  type ClubCard,
-} from "@/entities/club/api";
-import { cn } from "@/shared/lib/utils";
-import { EmptyState } from "@/shared/components/empty-state";
-import { ErrorState } from "@/shared/components/error-state";
-import { IconButton, Button, pluralize } from "@/shared/components";
-import { buildGradient } from "@/shared/lib/gradient";
-import { getClubGradient, APP_FEED_SCRIM_CLASS } from "@/shared/lib/ui-styles";
-import { PillTabs } from "@/shared/components/pill-tabs";
+} from '@/entities/club/api';
+
+import { Button, ButtonSize, ButtonVariant, IconButton, pluralize } from '@/shared/components';
+import { EmptyState } from '@/shared/components/empty-state';
+import { ErrorState } from '@/shared/components/error-state';
+import { PillTabs } from '@/shared/components/pill-tabs';
+import { buildGradient } from '@/shared/lib/gradient';
+import { APP_FEED_SCRIM_CLASS, getClubGradient } from '@/shared/lib/ui-styles';
+import { cn } from '@/shared/lib/utils';
 
 // ============================================================================
 // Constants
 // ============================================================================
 
-const SECTION_TITLE_CLASS = "text-lg font-semibold text-neutral-900";
+const SECTION_TITLE_CLASS = 'text-lg font-semibold text-neutral-900';
 
-type ClubCategory = "all" | "created";
+type ClubCategory = 'all' | 'created';
 
-const EMPTY_MESSAGES: Record<ClubCategory, { title: string; description: string }> = {
+const EMPTY_MESSAGES: Record<
+  ClubCategory,
+  { title: string; description: string }
+> = {
   all: {
-    title: "Нет клубов",
-    description: "Вы не вступили ни в один клуб",
+    title: 'Нет клубов',
+    description: 'Вы не вступили ни в один клуб',
   },
   created: {
-    title: "Нет созданных клубов",
-    description: "Вы ещё не создали ни одного клуба",
+    title: 'Нет созданных клубов',
+    description: 'Вы ещё не создали ни одного клуба',
   },
 };
 
@@ -42,18 +47,22 @@ function CreatedClubsPlaceholderCard() {
   return (
     <div
       className={cn(
-        "snap-start snap-always w-[min(85vw,320px)] h-[240px] shrink-0",
-        "rounded-2xl border-2 border-dashed border-neutral-300",
-        "bg-transparent",
-        "flex flex-col items-center justify-center gap-3"
+        'snap-start snap-always w-[min(85vw,320px)] h-[240px] shrink-0',
+        'rounded-2xl border-2 border-dashed border-neutral-300',
+        'bg-transparent',
+        'flex flex-col items-center justify-center gap-3',
       )}
       aria-label="Нет созданных клубов"
     >
       <div className="rounded-full bg-neutral-100 p-4">
         <Users className="h-8 w-8 text-neutral-500" />
       </div>
-      <p className="text-lg font-semibold text-neutral-900">Нет созданных клубов</p>
-      <p className="text-sm text-neutral-600">Создайте клуб для единомышленников</p>
+      <p className="text-lg font-semibold text-neutral-900">
+        Нет созданных клубов
+      </p>
+      <p className="text-sm text-neutral-600">
+        Создайте клуб для единомышленников
+      </p>
     </div>
   );
 }
@@ -75,13 +84,13 @@ function ProfileClubCard({
     if (details.data?.coverUrl) {
       return {
         backgroundImage: `linear-gradient(180deg, rgba(15,23,42,0.15) 0%, rgba(2,6,23,0.65) 100%), url('${details.data.coverUrl}')`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
       };
     }
 
     if (club.coverSeed) {
-      return { background: buildGradient(club.coverSeed, "club") };
+      return { background: buildGradient(club.coverSeed, 'club') };
     }
 
     return { background: getClubGradient(club.id) };
@@ -96,7 +105,7 @@ function ProfileClubCard({
       data-feed-card="club"
     >
       {/* Scrim overlay */}
-      <div className={cn("absolute inset-0", APP_FEED_SCRIM_CLASS)} />
+      <div className={cn('absolute inset-0', APP_FEED_SCRIM_CLASS)} />
 
       <div className="relative flex h-full flex-col p-5 pb-6">
         {/* Контент внизу */}
@@ -108,7 +117,13 @@ function ProfileClubCard({
           <p className="mt-2 flex items-center gap-2 text-sm text-white/90 drop-shadow">
             <Users className="h-4 w-4" aria-hidden="true" />
             <span aria-label={`${club.membersCount} участников`}>
-              {club.membersCount} {pluralize(club.membersCount, "участник", "участника", "участников")}
+              {club.membersCount}{' '}
+              {pluralize(
+                club.membersCount,
+                'участник',
+                'участника',
+                'участников',
+              )}
             </span>
           </p>
         </div>
@@ -116,8 +131,8 @@ function ProfileClubCard({
         {/* Кнопка Детали */}
         <div className="mt-5 flex items-end justify-between gap-3">
           <Button
-            variant="secondary"
-            size="md"
+            variant={ButtonVariant.SECONDARY}
+            size={ButtonSize.MD}
             onClick={() => onOpenClub(club.id)}
             className="ml-auto rounded-full border-white/25 bg-white/90 p-3 text-zinc-900 shadow-md hover:bg-white"
             aria-label={`Посмотреть детали клуба ${club.title}`}
@@ -141,7 +156,7 @@ export function ProfileClubsSection({
   onOpenClub: (clubId: string) => void;
   onNavigateToCreate: () => void;
 }) {
-  const [activeTab, setActiveTab] = useState<ClubCategory>("all");
+  const [activeTab, setActiveTab] = useState<ClubCategory>('all');
 
   // Data fetching
   const clubsQuery = useClubsQuery();
@@ -163,17 +178,17 @@ export function ProfileClubsSection({
     let filtered: ClubCard[] = [];
 
     switch (activeTab) {
-      case "all":
+      case 'all':
         // Все клубы, куда вступил пользователь
         filtered = clubsQuery.data.filter((c) => c.joinedByMe);
         // Сортировка: по названию (алфавит)
-        return filtered.sort((a, b) => a.title.localeCompare(b.title, "ru"));
+        return filtered.sort((a, b) => a.title.localeCompare(b.title, 'ru'));
 
-      case "created":
+      case 'created':
         // Клубы, созданные пользователем
         filtered = clubsQuery.data.filter((c) => c.isCreator);
         // Сортировка: по названию (алфавит)
-        return filtered.sort((a, b) => a.title.localeCompare(b.title, "ru"));
+        return filtered.sort((a, b) => a.title.localeCompare(b.title, 'ru'));
 
       default:
         return clubsQuery.data;
@@ -197,8 +212,8 @@ export function ProfileClubsSection({
         value={activeTab}
         onChange={setActiveTab}
         items={[
-          { value: "all", label: "Все", count: clubCounts.all },
-          { value: "created", label: "Созданные", count: clubCounts.created },
+          { value: 'all', label: 'Все', count: clubCounts.all },
+          { value: 'created', label: 'Созданные', count: clubCounts.created },
         ]}
       />
 
@@ -224,7 +239,7 @@ export function ProfileClubsSection({
         />
       ) : filteredClubs.length === 0 ? (
         // Empty state
-        activeTab === "created" ? (
+        activeTab === 'created' ? (
           // Placeholder card для созданных клубов
           <div className="overflow-x-auto -mx-4 snap-x snap-mandatory scroll-pl-4">
             <div className="flex gap-3 px-4">
@@ -256,10 +271,7 @@ export function ProfileClubsSection({
                 key={club.id}
                 className="snap-start snap-always w-[min(85vw,320px)] shrink-0"
               >
-                <ProfileClubCard
-                  club={club}
-                  onOpenClub={onOpenClub}
-                />
+                <ProfileClubCard club={club} onOpenClub={onOpenClub} />
               </div>
             ))}
           </div>

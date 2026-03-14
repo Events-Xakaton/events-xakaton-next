@@ -1,0 +1,9 @@
+@import '../lib/styles/theme.css';
+
+.empty-state {
+  @apply text-center;
+
+  &__action {
+    @apply mt-4;
+  }
+}

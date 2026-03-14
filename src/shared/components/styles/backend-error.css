@@ -1,0 +1,33 @@
+@import '../lib/styles/theme.css';
+
+.backend-error {
+  @apply mx-auto flex min-h-screen w-full max-w-md items-center px-4 py-8;
+
+  &__inner {
+    @apply flex flex-col items-center text-center;
+  }
+
+  &__icon {
+    @apply mb-4 grid h-16 w-16 place-items-center rounded-full bg-red-500/10;
+  }
+
+  &__title {
+    @apply mb-2 text-xl font-semibold text-neutral-100;
+  }
+
+  &__message {
+    @apply mb-6 text-sm text-neutral-400;
+  }
+
+  &__code-block {
+    @apply mb-6 w-full rounded-lg bg-neutral-900 p-3;
+  }
+
+  &__hint {
+    @apply mb-6 text-xs text-neutral-500;
+  }
+
+  &__action {
+    @apply w-full;
+  }
+}

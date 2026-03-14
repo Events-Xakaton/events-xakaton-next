@@ -1,0 +1,32 @@
+@import '../lib/styles/theme.css';
+
+.overflow-menu {
+  @apply relative;
+
+  &__trigger {
+    @apply flex h-11 w-11 min-h-[44px] min-w-[44px] items-center justify-center;
+    @apply rounded-full glass text-lg text-white;
+    @apply transition-all duration-200 hover:bg-white/10;
+    @apply focus-visible:ring-2 focus-visible:ring-primary-500;
+  }
+
+  &__dropdown {
+    @apply absolute right-0 z-dropdown mt-1 min-w-40 rounded-xl;
+    @apply glass border border-neutral-700 p-1 shadow-xl;
+  }
+
+  &__item {
+    @apply block w-full min-h-[44px] cursor-pointer rounded-lg px-3 py-2;
+    @apply text-left text-sm;
+    @apply transition-colors duration-200;
+    @apply focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-inset;
+
+    &--default {
+      @apply text-neutral-200 hover:bg-white/5;
+    }
+
+    &--danger {
+      @apply text-red-400 hover:bg-red-500/10;
+    }
+  }
+}

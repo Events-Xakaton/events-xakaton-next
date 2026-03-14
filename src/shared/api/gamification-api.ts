@@ -1,4 +1,5 @@
-import { apiBase } from "./base-api";
+import { apiBase } from './base-api';
+import { ApiTag } from '@/shared/redux';
 
 export type Balance = {
   lifetime: number;
@@ -21,24 +22,37 @@ export type PointsHistoryItem = {
 export const gamificationApi = apiBase.injectEndpoints({
   endpoints: (builder) => ({
     balance: builder.query<Balance, void>({
-      query: () => "/points/balance",
-      providesTags: ["Profile"],
+      query: () => '/points/balance',
+      providesTags: [ApiTag.PROFILE],
     }),
-    leaderboard: builder.query<{
-      period: "weekly" | "monthly";
-      top: Array<{ rank: number; userId: string; fullName: string; points: number }>;
-      currentUser: { rank: number; userId: string; fullName: string; points: number } | null;
-    }, { period: "weekly" | "monthly" }>({
+    leaderboard: builder.query<
+      {
+        period: 'weekly' | 'monthly';
+        top: Array<{
+          rank: number;
+          userId: string;
+          fullName: string;
+          points: number;
+        }>;
+        currentUser: {
+          rank: number;
+          userId: string;
+          fullName: string;
+          points: number;
+        } | null;
+      },
+      { period: 'weekly' | 'monthly' }
+    >({
       query: ({ period }) => `/leaderboard?period=${period}`,
-      providesTags: ["Profile"],
+      providesTags: [ApiTag.PROFILE],
     }),
     pointsRules: builder.query<PointsRule[], void>({
-      query: () => "/points/rules",
-      providesTags: ["Profile"],
+      query: () => '/points/rules',
+      providesTags: [ApiTag.PROFILE],
     }),
     pointsHistory: builder.query<PointsHistoryItem[], void>({
-      query: () => "/points/history",
-      providesTags: ["Profile"],
+      query: () => '/points/history',
+      providesTags: [ApiTag.PROFILE],
     }),
   }),
 });
