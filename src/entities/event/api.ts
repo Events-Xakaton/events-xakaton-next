@@ -29,6 +29,10 @@ export const eventApi = apiBase.injectEndpoints({
   endpoints: (builder) => ({
     events: builder.query<EventCard[], void>({
       query: () => '/events',
+      transformResponse: (response: unknown): EventCard[] => {
+        if (!Array.isArray(response)) return [];
+        return response as EventCard[];
+      },
       providesTags: [ApiTag.FEED],
     }),
     eventDetails: builder.query<EventDetails, { eventId: string }>({
@@ -47,23 +51,81 @@ export const eventApi = apiBase.injectEndpoints({
       query: ({ eventId }) => ({
         url: `/events/${eventId}/join`,
         method: 'POST',
-        headers: { 'idempotency-key': `join-event-${eventId}-${Date.now()}` },
+        headers: { 'idempotency-key': crypto.randomUUID() },
       }),
+      async onQueryStarted({ eventId }, { dispatch, queryFulfilled }) {
+        const listPatch = dispatch(
+          eventApi.util.updateQueryData('events', undefined, (draft) => {
+            const event = draft.find((e) => e.id === eventId);
+            if (event) {
+              event.joinedByMe = true;
+              event.participantsCount += 1;
+              if (event.freeSpots !== null) {
+                event.freeSpots = Math.max(0, event.freeSpots - 1);
+              }
+            }
+          }),
+        );
+        const detailsPatch = dispatch(
+          eventApi.util.updateQueryData('eventDetails', { eventId }, (draft) => {
+            draft.joinedByMe = true;
+            draft.participantsCount += 1;
+            if (draft.freeSpots !== null) {
+              draft.freeSpots = Math.max(0, draft.freeSpots - 1);
+            }
+          }),
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          listPatch.undo();
+          detailsPatch.undo();
+        }
+      },
       invalidatesTags: [ApiTag.FEED, ApiTag.PROFILE],
     }),
     unjoinEvent: builder.mutation<{ status: string }, { eventId: string }>({
       query: ({ eventId }) => ({
         url: `/events/${eventId}/unjoin`,
         method: 'POST',
-        headers: { 'idempotency-key': `unjoin-event-${eventId}-${Date.now()}` },
+        headers: { 'idempotency-key': crypto.randomUUID() },
       }),
+      async onQueryStarted({ eventId }, { dispatch, queryFulfilled }) {
+        const listPatch = dispatch(
+          eventApi.util.updateQueryData('events', undefined, (draft) => {
+            const event = draft.find((e) => e.id === eventId);
+            if (event) {
+              event.joinedByMe = false;
+              event.participantsCount = Math.max(0, event.participantsCount - 1);
+              if (event.freeSpots !== null) {
+                event.freeSpots += 1;
+              }
+            }
+          }),
+        );
+        const detailsPatch = dispatch(
+          eventApi.util.updateQueryData('eventDetails', { eventId }, (draft) => {
+            draft.joinedByMe = false;
+            draft.participantsCount = Math.max(0, draft.participantsCount - 1);
+            if (draft.freeSpots !== null) {
+              draft.freeSpots += 1;
+            }
+          }),
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          listPatch.undo();
+          detailsPatch.undo();
+        }
+      },
       invalidatesTags: [ApiTag.FEED, ApiTag.PROFILE],
     }),
     cancelEvent: builder.mutation<{ status: string }, { eventId: string }>({
       query: ({ eventId }) => ({
         url: `/events/${eventId}/cancel`,
         method: 'POST',
-        headers: { 'idempotency-key': `cancel-event-${eventId}-${Date.now()}` },
+        headers: { 'idempotency-key': crypto.randomUUID() },
       }),
       invalidatesTags: [ApiTag.FEED, ApiTag.PROFILE, ApiTag.NOTIFICATIONS],
     }),
@@ -85,7 +147,7 @@ export const eventApi = apiBase.injectEndpoints({
       query: (body) => ({
         url: '/events',
         method: 'POST',
-        headers: { 'idempotency-key': `create-event-${Date.now()}` },
+        headers: { 'idempotency-key': crypto.randomUUID() },
         body,
       }),
       invalidatesTags: [ApiTag.FEED, ApiTag.PROFILE],
@@ -107,7 +169,7 @@ export const eventApi = apiBase.injectEndpoints({
       query: ({ eventId, ...body }) => ({
         url: `/events/${eventId}`,
         method: 'PATCH',
-        headers: { 'idempotency-key': `update-event-${eventId}-${Date.now()}` },
+        headers: { 'idempotency-key': crypto.randomUUID() },
         body,
       }),
       invalidatesTags: [ApiTag.FEED, ApiTag.PROFILE, ApiTag.NOTIFICATIONS],
@@ -120,7 +182,7 @@ export const eventApi = apiBase.injectEndpoints({
         url: `/events/${eventId}/feedback`,
         method: 'POST',
         headers: {
-          'idempotency-key': `event-feedback-${eventId}-${Date.now()}`,
+          'idempotency-key': crypto.randomUUID(),
         },
         body,
       }),

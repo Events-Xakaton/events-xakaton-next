@@ -7,12 +7,14 @@ import { initFrontendTelemetry } from '@/shared/observability/telemetry';
 import { WebVitalsListener } from '@/shared/observability/web-vitals-listener';
 import { store } from '@/shared/store/store';
 
+// Откладываем инициализацию телеметрии, чтобы не блокировать первый рендер
+const TELEMETRY_INIT_DELAY_MS = 100;
+
 export function AppProviders({ children }: { children: React.ReactNode }) {
   useEffect(() => {
-    // Defer telemetry init to not block initial render
     const timer = setTimeout(() => {
       initFrontendTelemetry();
-    }, 100);
+    }, TELEMETRY_INIT_DELAY_MS);
     return () => clearTimeout(timer);
   }, []);
 

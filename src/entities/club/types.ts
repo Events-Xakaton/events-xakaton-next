@@ -2,6 +2,19 @@
  * Club entity types
  */
 
+// Типы пагинации событий клуба живут здесь, а не в entities/event,
+// так как эндпоинт /clubs/:id/events принадлежит клубному API.
+export type ClubEventBucket = 'upcoming' | 'ongoing' | 'past';
+
+export type ClubEventsPage = {
+  bucket: ClubEventBucket;
+  page: number;
+  limit: number;
+  hasMore: boolean;
+  total: number;
+  items: import('@/entities/event/types').ClubEventListItem[];
+};
+
 export type ClubCard = {
   id: string;
   title: string;

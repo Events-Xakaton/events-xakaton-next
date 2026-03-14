@@ -42,7 +42,7 @@ export function useTelegramMainButton(config: {
       return;
     }
 
-    const button = (webApp as any).MainButton;
+    const button = webApp.MainButton;
     if (!button) {
       console.warn('[useTelegramMainButton] MainButton API not available');
       return;
@@ -111,7 +111,7 @@ export function useTelegramBackButton(config: {
       return;
     }
 
-    const button = (webApp as any).BackButton;
+    const button = webApp.BackButton;
     if (!button) {
       console.warn('[useTelegramBackButton] BackButton API not available');
       return;

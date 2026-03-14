@@ -1,6 +1,7 @@
 'use client';
 
-import { FC, ImgHTMLAttributes } from 'react';
+import Image from 'next/image';
+import { FC } from 'react';
 
 import { cn } from '@/shared/lib/utils';
 
@@ -14,11 +15,12 @@ export enum AvatarSize {
   XL = 'xl',
 }
 
-type Props = Omit<ImgHTMLAttributes<HTMLImageElement>, 'src'> & {
+type Props = {
   src?: string | null;
   alt: string;
   size?: AvatarSize;
   fallback?: string;
+  className?: string;
 };
 
 const getInitials = (name: string): string => {
@@ -36,19 +38,18 @@ export const Avatar: FC<Props> = ({
   size = AvatarSize.MD,
   fallback,
   className,
-  ...props
 }) => {
   const displayFallback = fallback || getInitials(alt) || '?';
 
   return (
     <div className={cn('avatar', `avatar--${size}`, className)}>
       {src ? (
-        <img
+        <Image
           src={src}
           alt={alt}
+          fill
           className="avatar__image"
-          loading="lazy"
-          {...props}
+          sizes="64px"
         />
       ) : (
         <span className="avatar__fallback" aria-label={alt}>
@@ -87,7 +88,7 @@ export const AvatarGroup: FC<AvatarGroupProps> = ({
     <div className={cn('avatar-group', className)}>
       {displayAvatars.map((avatar, index) => (
         <Avatar
-          key={index}
+          key={`${avatar.alt}-${index}`}
           src={avatar.src}
           alt={avatar.alt}
           size={size}

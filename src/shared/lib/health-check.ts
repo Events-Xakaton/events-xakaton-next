@@ -2,11 +2,13 @@
  * Health check utilities for detecting backend availability
  */
 
+const HEALTH_CHECK_TIMEOUT_MS = 3_000;
+
 export async function checkBackendHealth(): Promise<boolean> {
   try {
     const response = await fetch('/api/health', {
       method: 'GET',
-      signal: AbortSignal.timeout(3000),
+      signal: AbortSignal.timeout(HEALTH_CHECK_TIMEOUT_MS),
     });
     return response.ok;
   } catch {

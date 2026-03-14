@@ -32,6 +32,8 @@ export { OverflowMenu } from './overflow-menu';
 export { ConfirmDialog } from './confirm-dialog';
 
 export { PreviewCard } from './preview-card';
+export { InlineTitleEditor } from './inline-title-editor';
+export { DescriptionSection } from './description-section';
 
 export {
   AboutSection,

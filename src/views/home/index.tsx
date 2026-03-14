@@ -5,10 +5,9 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { AppHeader } from '@/widgets/app-header';
 
-import { useClubsQuery, useJoinClubMutation } from '@/entities/club/api';
+import { useClubsQuery } from '@/entities/club/api';
 import { ClubFeedCard } from '@/entities/club/ui/club-feed-card';
 import { useEventsQuery } from '@/entities/event/api';
-import { useJoinEventMutation } from '@/entities/event/api';
 import { EventFeedCard } from '@/entities/event/ui/event-feed-card';
 
 import { Button, ButtonVariant } from '@/shared/components/button';
@@ -20,26 +19,14 @@ import {
   APP_PANEL_SHADOW_CLASS,
   getHomeFeedLayout,
 } from '@/shared/lib/ui-styles';
-import { appErrorText, cn } from '@/shared/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import { HomeTab } from '@/shared/types/navigation';
 
-const DAY_FILTERS = [
-  { id: 'any', label: 'В любой день' },
-  { id: 'today', label: 'Сегодня' },
-  { id: 'tomorrow', label: 'Завтра' },
-  { id: 'week', label: 'На этой неделе' },
-  { id: 'weekend', label: 'В эти выходные' },
-  { id: 'next-week', label: 'На следующей неделе' },
-] as const;
-
-const DAY_FILTER_SHORT: Record<(typeof DAY_FILTERS)[number]['id'], string> = {
-  any: 'Любой',
-  today: 'Сегодня',
-  tomorrow: 'Завтра',
-  week: 'Неделя',
-  weekend: 'Выходные',
-  'next-week': 'След. нед.',
-};
+import {
+  DAY_FILTERS,
+  useEventFilter,
+} from './model/use-event-filter';
+import { useFeedActions } from './model/use-feed-actions';
 
 const FEED_CARD_HORIZONTAL_PADDING_PX = 8;
 const CARD_CONTENT_HORIZONTAL_PADDING_PX = 20;
@@ -56,32 +43,23 @@ export function HomeScreen({
 }) {
   const mode = useViewportMode();
   const [homeTab, setHomeTab] = useState<HomeTab>('events');
-  const [hint, setHint] = useState('');
-  const [savedClubIds, setSavedClubIds] = useState<string[]>([]);
-  const [joinedClubIds, setJoinedClubIds] = useState<Record<string, boolean>>(
-    {},
-  );
-  const [joinedEventIds, setJoinedEventIds] = useState<Record<string, boolean>>(
-    {},
-  );
   const [filterOpen, setFilterOpen] = useState(false);
-  const [dayFilter, setDayFilter] =
-    useState<(typeof DAY_FILTERS)[number]['id']>('any');
-  const [sortByDate, setSortByDate] = useState(true);
   const feedScrollRef = useRef<HTMLDivElement>(null);
   const filterRef = useRef<HTMLDivElement>(null);
 
   const events = useEventsQuery();
   const clubs = useClubsQuery();
-  const [joinEvent, joinEventState] = useJoinEventMutation();
-  const [joinClub, joinClubState] = useJoinClubMutation();
+
+  const filter = useEventFilter(events.data);
+  const feedActions = useFeedActions(() => void clubs.refetch());
 
   const feedLayout = useMemo(() => getHomeFeedLayout(mode), [mode]);
-  const FEED_CARD_HEIGHT = feedLayout.cardHeight;
+
   const FEED_CARD_STYLE = {
-    height: FEED_CARD_HEIGHT,
+    height: feedLayout.cardHeight,
     flexShrink: 0,
   } as const;
+
   const FEED_SCROLL_CONTAINER_STYLE = {
     height: feedLayout.feedScrollHeight,
     marginTop: feedLayout.feedTopOffset,
@@ -92,67 +70,22 @@ export function HomeScreen({
     flexDirection: 'column',
     gap: `${feedLayout.cardGapPx}px`,
   } as const;
+
   const FEED_STATE_CONTAINER_STYLE = {
     height: feedLayout.feedScrollHeight,
     marginTop: feedLayout.feedTopOffset,
     paddingBottom: feedLayout.feedBottomPadding,
   } as const;
+
   const FEED_MIN_HEIGHT_STYLE = {
     minHeight: ADAPTIVE_VIEWPORT_HEIGHT,
   } as const;
 
   const clubsItems = clubs.data ?? [];
-
-  const filteredEvents = useMemo(() => {
-    const now = new Date();
-    const startOfToday = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate(),
-    );
-    const endOfToday = new Date(startOfToday);
-    endOfToday.setDate(endOfToday.getDate() + 1);
-    const endOfTomorrow = new Date(endOfToday);
-    endOfTomorrow.setDate(endOfTomorrow.getDate() + 1);
-    const endOfWeek = new Date(startOfToday);
-    endOfWeek.setDate(endOfWeek.getDate() + 7);
-    const startOfWeekend = new Date(startOfToday);
-    const day = startOfWeekend.getDay();
-    const deltaToSat = (6 - day + 7) % 7;
-    startOfWeekend.setDate(startOfWeekend.getDate() + deltaToSat);
-    const endOfWeekend = new Date(startOfWeekend);
-    endOfWeekend.setDate(endOfWeekend.getDate() + 2);
-    const nextWeekStart = new Date(endOfWeek);
-    const nextWeekEnd = new Date(nextWeekStart);
-    nextWeekEnd.setDate(nextWeekEnd.getDate() + 7);
-
-    return (events.data ?? []).filter((event) => {
-      const starts = new Date(event.startsAtUtc);
-      if (Number.isNaN(starts.getTime())) return true;
-
-      if (dayFilter === 'today')
-        return starts >= startOfToday && starts < endOfToday;
-      if (dayFilter === 'tomorrow')
-        return starts >= endOfToday && starts < endOfTomorrow;
-      if (dayFilter === 'week')
-        return starts >= startOfToday && starts < endOfWeek;
-      if (dayFilter === 'weekend')
-        return starts >= startOfWeekend && starts < endOfWeekend;
-      if (dayFilter === 'next-week')
-        return starts >= nextWeekStart && starts < nextWeekEnd;
-      return true;
-    });
-  }, [events.data, dayFilter]);
-
-  const eventItems = useMemo(
-    () => (sortByDate ? filteredEvents : [...filteredEvents].reverse()),
-    [filteredEvents, sortByDate],
-  );
-
   const loading = homeTab === 'events' ? events.isLoading : clubs.isLoading;
   const error = homeTab === 'events' ? events.isError : clubs.isError;
-  const selectedDayFilterShort = DAY_FILTER_SHORT[dayFilter] ?? 'Любой';
 
+  // Закрытие фильтра по клику вне
   useEffect(() => {
     function onClickOutside(event: MouseEvent) {
       if (!filterRef.current) return;
@@ -160,25 +93,19 @@ export function HomeScreen({
         setFilterOpen(false);
       }
     }
-
     if (filterOpen) {
       document.addEventListener('mousedown', onClickOutside);
     }
-
-    return () => {
-      document.removeEventListener('mousedown', onClickOutside);
-    };
+    return () => document.removeEventListener('mousedown', onClickOutside);
   }, [filterOpen]);
 
+  // Сброс скролла при смене таба или фильтра
   useEffect(() => {
-    const node = feedScrollRef.current;
-    if (!node) return;
-    node.scrollTo({ top: 0, behavior: 'auto' });
-  }, [homeTab, dayFilter, sortByDate]);
+    feedScrollRef.current?.scrollTo({ top: 0, behavior: 'auto' });
+  }, [homeTab, filter.dayFilter, filter.sortByDate]);
 
   return (
     <div className="relative bg-[#f2f2f5]" style={FEED_MIN_HEIGHT_STYLE}>
-      {/* Fixed Header Bar */}
       <AppHeader
         mode="fixed"
         topClassName="z-fixed"
@@ -192,7 +119,6 @@ export function HomeScreen({
               type="button"
               onClick={() => {
                 setHomeTab('events');
-                setHint('');
               }}
               className={cn(
                 'min-h-[34px] rounded-full px-3 text-xs font-semibold transition-colors',
@@ -209,7 +135,6 @@ export function HomeScreen({
               onClick={() => {
                 setHomeTab('clubs');
                 setFilterOpen(false);
-                setHint('');
               }}
               className={cn(
                 'min-h-[34px] rounded-full px-3 text-xs font-semibold transition-colors',
@@ -225,7 +150,7 @@ export function HomeScreen({
         }
       />
 
-      {/* Fixed date-filter overlay: positioned inside top-right corner of event card */}
+      {/* Фильтр по дате (только для ивентов) */}
       {homeTab === 'events' ? (
         <div
           className="fixed z-fixed pointer-events-none"
@@ -246,7 +171,7 @@ export function HomeScreen({
               aria-expanded={filterOpen}
             >
               <SlidersHorizontal className="h-3.5 w-3.5" aria-hidden="true" />
-              {selectedDayFilterShort}
+              {filter.selectedDayFilterShort}
               <ChevronRight
                 className={cn(
                   'h-3.5 w-3.5 rotate-90 transition-transform',
@@ -269,12 +194,12 @@ export function HomeScreen({
                     type="button"
                     className={cn(
                       'block w-full px-3 py-2 text-left text-xs font-medium transition-colors',
-                      dayFilter === option.id
+                      filter.dayFilter === option.id
                         ? 'bg-neutral-100 text-neutral-900'
                         : 'text-neutral-700 hover:bg-neutral-50',
                     )}
                     onClick={() => {
-                      setDayFilter(option.id);
+                      filter.setDayFilter(option.id);
                       setFilterOpen(false);
                     }}
                   >
@@ -291,10 +216,11 @@ export function HomeScreen({
         className="relative overflow-hidden bg-[#f2f2f5]"
         style={FEED_MIN_HEIGHT_STYLE}
       >
+        {/* Лента с карточками */}
         {!loading &&
         !error &&
         (homeTab === 'events'
-          ? eventItems.length > 0
+          ? filter.eventItems.length > 0
           : clubsItems.length > 0) ? (
           <div
             ref={feedScrollRef}
@@ -303,30 +229,15 @@ export function HomeScreen({
             style={FEED_SCROLL_CONTAINER_STYLE}
           >
             {homeTab === 'events'
-              ? eventItems.map((event) => (
+              ? filter.eventItems.map((event) => (
                   <EventFeedCard
                     key={event.id}
                     event={event}
-                    joined={joinedEventIds[event.id] ?? event.joinedByMe}
-                    joinLoading={joinEventState.isLoading}
-                    onJoin={(eventId) => {
-                      void joinEvent({ eventId })
-                        .unwrap()
-                        .then(() => {
-                          setJoinedEventIds((prev) => ({
-                            ...prev,
-                            [eventId]: true,
-                          }));
-                        })
-                        .catch((error) =>
-                          setHint(
-                            appErrorText(
-                              error,
-                              'Не удалось присоединиться к ивенту',
-                            ),
-                          ),
-                        );
-                    }}
+                    joined={
+                      feedActions.joinedEventIds[event.id] ?? event.joinedByMe
+                    }
+                    joinLoading={feedActions.joinEventLoading}
+                    onJoin={feedActions.handleJoinEvent}
                     onOpenEvent={onOpenEvent}
                     cardStyle={FEED_CARD_STYLE}
                   />
@@ -336,42 +247,22 @@ export function HomeScreen({
                     key={club.id}
                     club={club}
                     onOpenClub={onOpenClub}
-                    onJoin={(clubId) => {
-                      void joinClub({ clubId })
-                        .unwrap()
-                        .then(() => {
-                          setJoinedClubIds((prev) => ({
-                            ...prev,
-                            [clubId]: true,
-                          }));
-                          void clubs.refetch();
-                        })
-                        .catch((error) =>
-                          setHint(
-                            appErrorText(error, 'Не удалось вступить в клуб'),
-                          ),
-                        );
-                    }}
-                    joinLoading={joinClubState.isLoading}
-                    joinedOverride={joinedClubIds[club.id]}
-                    onToggleSaved={(clubId) => {
-                      setSavedClubIds((prev) =>
-                        prev.includes(clubId)
-                          ? prev.filter((id) => id !== clubId)
-                          : [...prev, clubId],
-                      );
-                    }}
-                    saved={savedClubIds.includes(club.id)}
+                    onJoin={feedActions.handleJoinClub}
+                    joinLoading={feedActions.joinClubLoading}
+                    joinedOverride={feedActions.joinedClubIds[club.id]}
+                    onToggleSaved={feedActions.handleToggleSavedClub}
+                    saved={feedActions.savedClubIds.includes(club.id)}
                     cardStyle={FEED_CARD_STYLE}
                   />
                 ))}
           </div>
         ) : null}
 
+        {/* Пустое состояние ивентов */}
         {homeTab === 'events' &&
         !loading &&
         !error &&
-        eventItems.length === 0 ? (
+        filter.eventItems.length === 0 ? (
           <div
             ref={feedScrollRef}
             data-home-feed-scroll="true"
@@ -400,6 +291,8 @@ export function HomeScreen({
             </div>
           </div>
         ) : null}
+
+        {/* Пустое состояние клубов */}
         {homeTab === 'clubs' &&
         !loading &&
         !error &&
@@ -426,7 +319,7 @@ export function HomeScreen({
           </div>
         ) : null}
 
-        {/* Loading state */}
+        {/* Загрузка */}
         {loading ? (
           <div
             ref={feedScrollRef}
@@ -438,7 +331,7 @@ export function HomeScreen({
           </div>
         ) : null}
 
-        {/* Error state */}
+        {/* Ошибка */}
         {error ? (
           <div
             ref={feedScrollRef}
@@ -460,9 +353,9 @@ export function HomeScreen({
         ) : null}
       </div>
 
-      {hint ? (
+      {feedActions.hint ? (
         <p className="absolute bottom-24 left-4 text-sm text-zinc-900">
-          {hint}
+          {feedActions.hint}
         </p>
       ) : null}
     </div>

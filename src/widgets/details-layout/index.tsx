@@ -14,6 +14,9 @@ import { cn } from '@/shared/lib/utils';
 
 import './styles/details-layout.css';
 
+// Высота hero-зоны карточки; после прокрутки за этот порог показывается компактный заголовок
+const COMPACT_HEADER_THRESHOLD_PX = 170;
+
 function stableBackdrop(key: string): string {
   const variants = [
     'linear-gradient(180deg, #4c5f7f 0%, #2b3c5b 58%, #0f172a 100%)',
@@ -134,7 +137,7 @@ export function DetailsPage({
   const [showCompactHeader, setShowCompactHeader] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setShowCompactHeader(window.scrollY > 170);
+    const onScroll = () => setShowCompactHeader(window.scrollY > COMPACT_HEADER_THRESHOLD_PX);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);

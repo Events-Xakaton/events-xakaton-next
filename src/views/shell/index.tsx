@@ -9,6 +9,7 @@ import { AuthScreen } from '@/features/auth/ui/auth-screen';
 
 import { loadAuthSession } from '@/shared/lib/auth-session';
 import { initTelegramWebApp } from '@/shared/lib/telegram';
+import { useNotificationBadge } from '@/shared/lib/useNotificationBadge';
 import { useAppDispatch, useAppSelector } from '@/shared/store/hooks';
 import type { MainTab } from '@/shared/types/navigation';
 
@@ -41,6 +42,7 @@ export default function MiniAppShell() {
   const dispatch = useAppDispatch();
   const isVerified = useAppSelector((s) => s.auth.isVerified);
   const [tab, setTab] = useState<MainTab>('home');
+  const notificationBadge = useNotificationBadge();
   const [detail, setDetail] = useState<{
     kind: 'event' | 'club';
     id: string;
@@ -148,7 +150,16 @@ export default function MiniAppShell() {
         </Suspense>
       </div>
       {/* BottomNav показываем всегда на основных экранах, чтобы навигация была стабильной */}
-      {!detail ? <BottomNav tab={tab} onTab={setTab} /> : null}
+      {!detail ? (
+        <BottomNav
+          tab={tab}
+          onTab={(next) => {
+            if (next === 'notifications') notificationBadge.markSeen();
+            setTab(next);
+          }}
+          hasNewNotifications={notificationBadge.hasNewNotifications}
+        />
+      ) : null}
     </main>
   );
 }

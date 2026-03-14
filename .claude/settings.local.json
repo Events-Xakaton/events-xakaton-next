@@ -33,7 +33,8 @@
       "Bash(cd \"C:/Users/tahir/Проекты/Хакатон/events-xakaton-next\" && npm run build 2>&1 | grep -E \"Error|error|failed|Failed\" | head -20)",
       "Bash(cd \"C:/Users/tahir/Проекты/Хакатон/events-xakaton-next/src/shared/components/styles\" && for f in *.css; do sed -i \"s|@import '../lib/styles/theme.css'|@import '../../lib/styles/theme.css'|g\" \"$f\"; done && echo \"done\")",
       "Bash(cd \"C:/Users/tahir/Проекты/Хакатон/events-xakaton-next\" && npm run build 2>&1 | grep -E \"^Error|^✓|^Failed|Compiled|error TS|CssSyntax\" | head -20)",
-      "Bash(cd \"C:/Users/tahir/Проекты/Хакатон/events-xakaton-next\" && npm run build 2>&1 | grep -E \"^Error|^✓|^Failed|Compiled|CssSyntax|error TS\" | head -20)"
+      "Bash(cd \"C:/Users/tahir/Проекты/Хакатон/events-xakaton-next\" && npm run build 2>&1 | grep -E \"^Error|^✓|^Failed|Compiled|CssSyntax|error TS\" | head -20)",
+      "Bash(cd:*)"
     ]
   }
 }
