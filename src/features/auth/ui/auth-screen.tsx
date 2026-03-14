@@ -38,7 +38,7 @@ export const AuthScreen: FC = () => {
 
   return (
     <div
-      className="mx-auto flex w-full max-w-md items-center px-4 py-8"
+      className="mx-auto flex w-full max-w-md items-center px-4! py-8"
       style={{
         minHeight: ADAPTIVE_VIEWPORT_HEIGHT,
         paddingTop: SAFE_AREA_TOP,

@@ -2,6 +2,7 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 
 import { StateNameType } from '@/shared/redux';
+import { sessionExpired } from '@/shared/store/actions';
 
 type AuthState = {
   // true пока async-проверка CloudStorage ещё не завершилась
@@ -53,6 +54,13 @@ const authSlice = createSlice({
       state.reddyUserKey = '';
       state.verifiedAtMs = null;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(sessionExpired, (state) => {
+      state.isVerified = false;
+      state.reddyUserKey = '';
+      state.verifiedAtMs = null;
+    });
   },
 });
 

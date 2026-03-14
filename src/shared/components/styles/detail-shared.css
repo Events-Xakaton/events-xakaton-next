@@ -39,7 +39,7 @@
 }
 
 .sticky-actions {
-  @apply fixed inset-x-0 z-[20] px-4;
+  @apply fixed inset-x-0 z-[20] px-4!;
 
   &__panel {
     @apply mx-auto w-full max-w-md rounded-[26px] border border-neutral-200/80 bg-white/95 p-2 backdrop-blur;
@@ -76,7 +76,7 @@
   }
 
   &__item {
-    @apply block min-h-[44px] w-full px-4 py-3 text-left text-sm transition;
+    @apply block min-h-[44px] w-full px-4! py-3! text-left text-sm transition;
 
     &--default {
       @apply text-neutral-900 hover:bg-neutral-100;

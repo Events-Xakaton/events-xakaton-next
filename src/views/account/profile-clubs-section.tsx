@@ -1,7 +1,7 @@
 'use client';
 
 import { Plus } from 'lucide-react';
-import type { ReactElement} from 'react';
+import type { ReactElement } from 'react';
 import { useMemo, useState } from 'react';
 
 import { type ClubCard, useClubsQuery } from '@/entities/club/api';
@@ -100,7 +100,7 @@ export function ProfileClubsSection({
 
       {clubsQuery.isLoading ? (
         <div className="overflow-x-auto -mx-4 snap-x snap-mandatory scroll-pl-4">
-          <div className="flex gap-3 px-4">
+          <div className="flex gap-3 px-4!">
             {[1, 2, 3].map((i) => (
               <div
                 key={i}
@@ -118,7 +118,7 @@ export function ProfileClubsSection({
       ) : filteredClubs.length === 0 ? (
         activeTab === 'created' ? (
           <div className="overflow-x-auto -mx-4 snap-x snap-mandatory scroll-pl-4">
-            <div className="flex gap-3 px-4">
+            <div className="flex gap-3 px-4!">
               <CreatedClubsPlaceholderCard />
             </div>
           </div>
@@ -139,7 +139,7 @@ export function ProfileClubsSection({
         )
       ) : (
         <div className="overflow-x-auto -mx-4 snap-x snap-mandatory scroll-pl-4">
-          <div className="flex gap-3 px-4">
+          <div className="flex gap-3 px-4!">
             {filteredClubs.map((club) => (
               <div
                 key={club.id}

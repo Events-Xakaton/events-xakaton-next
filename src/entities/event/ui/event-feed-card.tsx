@@ -94,7 +94,7 @@ export function EventFeedCard({
                   onClick={() => onJoin(event.id)}
                   isLoading={joinLoading}
                   disabled={joined}
-                  className="rounded-full !border-emerald-300/30 !bg-emerald-500/75 px-6 !text-white hover:!bg-emerald-500/85 disabled:opacity-100"
+                  className="rounded-full !border-emerald-300/30 !bg-emerald-500/75 px-6! !text-white hover:!bg-emerald-500/85 disabled:opacity-100"
                 >
                   <Check className="h-4 w-4" aria-hidden="true" />
                   Вы участвуете
@@ -105,7 +105,7 @@ export function EventFeedCard({
                   size={ButtonSize.MD}
                   onClick={() => onJoin(event.id)}
                   isLoading={joinLoading}
-                  className="rounded-full px-7"
+                  className="rounded-full px-7!"
                 >
                   <Plus className="mr-2 h-5 w-5" aria-hidden="true" />
                   Участвовать
@@ -118,7 +118,7 @@ export function EventFeedCard({
             variant={ButtonVariant.SECONDARY}
             size={ButtonSize.MD}
             onClick={() => onOpenEvent(event.id)}
-            className="ml-auto rounded-full border-white/25 bg-white/90 px-5 py-2.5 text-[15px] font-semibold text-zinc-900 shadow-md hover:bg-white"
+            className="ml-auto rounded-full border-white/25 bg-white/90 px-5! py-2.5! text-[15px] font-semibold text-zinc-900 shadow-md hover:bg-white"
             aria-label={`Посмотреть детали ивента ${event.title}`}
           >
             Детали

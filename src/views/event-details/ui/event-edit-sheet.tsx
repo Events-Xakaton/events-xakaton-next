@@ -115,7 +115,7 @@ export const EventEditSheet: FC<Props> = ({
           >
             Закрыть
           </Button>
-          <p className="px-2 text-center text-sm font-semibold text-neutral-900">
+          <p className="px-2! text-center text-sm font-semibold text-neutral-900">
             Редактировать
           </p>
           <Button
@@ -124,7 +124,7 @@ export const EventEditSheet: FC<Props> = ({
             onClick={onSave}
             disabled={!canSubmit}
             isLoading={isSaving}
-            className="rounded-full px-4"
+            className="rounded-full px-4!"
           >
             Сохранить
           </Button>

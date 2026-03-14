@@ -1,7 +1,7 @@
 'use client';
 
 import { Plus } from 'lucide-react';
-import type { ReactElement} from 'react';
+import type { ReactElement } from 'react';
 import { useMemo, useState } from 'react';
 
 import { type EventCard, useEventsQuery } from '@/entities/event/api';
@@ -156,7 +156,7 @@ export function ProfileEventsSection({
 
       {eventsQuery.isLoading ? (
         <div className="overflow-x-auto -mx-4 snap-x snap-mandatory scroll-pl-4">
-          <div className="flex gap-3 px-4">
+          <div className="flex gap-3 px-4!">
             {[1, 2, 3].map((i) => (
               <div
                 key={i}
@@ -174,7 +174,7 @@ export function ProfileEventsSection({
       ) : filteredEvents.length === 0 ? (
         activeTab === 'past' ? (
           <div className="overflow-x-auto -mx-4 snap-x snap-mandatory scroll-pl-4">
-            <div className="flex gap-3 px-4">
+            <div className="flex gap-3 px-4!">
               <PastEventsPlaceholderCard />
             </div>
           </div>
@@ -197,7 +197,7 @@ export function ProfileEventsSection({
         )
       ) : (
         <div className="overflow-x-auto -mx-4 snap-x snap-mandatory scroll-pl-4">
-          <div className="flex gap-3 px-4">
+          <div className="flex gap-3 px-4!">
             {filteredEvents.map((event) => (
               <div
                 key={event.id}

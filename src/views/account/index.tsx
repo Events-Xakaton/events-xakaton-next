@@ -55,7 +55,7 @@ export function AccountScreen({
         title="Профиль"
       />
 
-      <div className="space-y-4 px-4">
+      <div className="space-y-4 px-4!">
         <section className={SECTION_CARD}>
           <div className="flex items-center gap-3">
             {profile.avatarUrl ? (

@@ -3,7 +3,7 @@
 import type { FC, RefObject } from 'react';
 
 const INPUT_BASE_CLASS =
-  'w-full resize-none rounded-xl border border-neutral-200 bg-white px-3 py-3 text-sm text-neutral-900 placeholder:text-neutral-500 outline-none focus:border-neutral-300 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0';
+  'w-full resize-none rounded-xl border border-neutral-200 bg-white px-3! py-3! text-sm text-neutral-900 placeholder:text-neutral-500 outline-none focus:border-neutral-300 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0';
 
 type Props = {
   value: string;

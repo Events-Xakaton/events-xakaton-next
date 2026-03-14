@@ -1,7 +1,7 @@
 'use client';
 
 import { CalendarDays, Plus, Users } from 'lucide-react';
-import type { ReactElement} from 'react';
+import type { ReactElement } from 'react';
 import { useMemo } from 'react';
 
 import { PeopleList } from '@/widgets/people-list';
@@ -77,7 +77,7 @@ export function ClubDetails({
 
   if (details.isLoading) {
     return (
-      <div className="px-4 pt-8">
+      <div className="px-4! pt-8">
         <p className="text-sm text-neutral-500">Загрузка клуба...</p>
       </div>
     );
@@ -182,7 +182,7 @@ export function ClubDetails({
           </div>
         </div>
 
-        <div className="px-4 mb-4">
+        <div className="px-4! mb-4!">
           <PreviewCard
             background={heroBackground}
             title={club.title}
@@ -195,7 +195,7 @@ export function ClubDetails({
           />
         </div>
 
-        <div className="space-y-4 px-4">
+        <div className="space-y-4 px-4!">
           <div className="space-y-2">
             <h3 className={SECTION_TITLE_CLASS}>Создатель</h3>
             <div className={SECTION_CARD}>

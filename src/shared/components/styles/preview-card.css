@@ -21,7 +21,7 @@
 
   &__change-bg-button {
     @apply inline-flex h-7 items-center gap-1.5 rounded-full;
-    @apply border border-white/45 bg-white/20 px-3.5;
+    @apply border border-white/45 bg-white/20 px-3.5!;
     @apply text-[11px] font-semibold tracking-[0.18em] text-white uppercase;
     @apply backdrop-blur-sm transition hover:bg-white/30;
   }

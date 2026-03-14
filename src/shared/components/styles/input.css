@@ -16,7 +16,7 @@
   }
 
   &__field {
-    @apply w-full px-4 py-2.5;
+    @apply w-full px-4! py-2.5!;
     @apply min-h-[44px];
     @apply border border-neutral-700 bg-neutral-900;
     @apply text-white placeholder:text-neutral-500;

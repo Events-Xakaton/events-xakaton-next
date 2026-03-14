@@ -14,7 +14,7 @@
   }
 
   &__option {
-    @apply flex w-full items-center gap-3 rounded-xl px-3 py-2.5;
+    @apply flex w-full items-center gap-3 rounded-xl px-3! py-2.5!;
     @apply min-h-[44px] text-left text-sm transition-colors;
 
     &--active {
@@ -40,7 +40,7 @@
   @apply inline-flex rounded-full border border-neutral-200 bg-white/90 p-1 shadow-sm;
 
   &__option {
-    @apply rounded-full px-2.5 py-1.5 text-[11px] font-semibold;
+    @apply rounded-full px-2.5! py-1.5! text-[11px] font-semibold;
     @apply min-h-[32px] whitespace-nowrap transition-all duration-200;
 
     &--active {

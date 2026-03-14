@@ -21,7 +21,7 @@
   }
 
   &__item {
-    @apply min-h-[44px] rounded-lg px-3 py-2 text-sm font-medium;
+    @apply min-h-[44px] rounded-lg px-3! py-2! text-sm font-medium;
     @apply transition-all duration-200;
     @apply focus-visible:ring-primary-500 focus-visible:ring-2;
 

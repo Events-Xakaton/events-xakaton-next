@@ -25,7 +25,7 @@
   }
 
   &__self-label {
-    @apply px-1 text-xs text-neutral-500;
+    @apply px-1! text-xs text-neutral-500;
   }
 
   &__show-all {

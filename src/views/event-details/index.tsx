@@ -9,7 +9,6 @@ import {
   Plus,
   Users,
 } from 'lucide-react';
-import { useState } from 'react';
 
 import { PeopleList } from '@/widgets/people-list';
 
@@ -76,7 +75,7 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
 
   if (details.isLoading) {
     return (
-      <div className="px-4 pt-8">
+      <div className="px-4! pt-8!">
         <p className="text-sm text-neutral-500">Загрузка события...</p>
       </div>
     );
