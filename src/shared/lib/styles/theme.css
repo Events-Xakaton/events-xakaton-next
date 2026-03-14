@@ -1,1 +1,22 @@
 @import 'tailwindcss';
+
+@theme {
+  /* Основная палитра — Фиолетовый */
+  --color-primary-300: #a78bda;
+  --color-primary-400: #8b6cd0;
+  --color-primary-500: #7c5cbf;
+  --color-primary-600: #6a4ea8;
+  --color-primary-700: #573f8e;
+
+  /* Акцент — Электрический синий */
+  --color-accent-300: #5bbfe8;
+  --color-accent-400: #2ea8d8;
+
+  /* Семантические */
+  --color-background: #f2f2f5;
+  --color-foreground: #111827;
+  --color-border: #404040;
+
+  /* Шрифты */
+  --font-display: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}

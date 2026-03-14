@@ -1,68 +1,17 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/**
- * Design System - Global Styles
- * Mobile-first, accessible, distinctive aesthetic
- */
-
-:root {
-  /* Deep Purple + Electric Blue Theme */
-  --background: 0 0% 0%; /* pure black — matches home screen bg-black */
-  --foreground: 0 0% 100%; /* white */
-
-  --card: 240 10% 10%; /* neutral-900 */
-  --card-foreground: 0 0% 100%;
-
-  --muted: 240 8% 16%; /* neutral-800 */
-  --muted-foreground: 240 4% 46%; /* neutral-500 */
-
-  /* Primary: Deep Purple */
-  --primary: 260 55% 55%;
-  --primary-foreground: 0 0% 100%;
-
-  /* Accent: Electric Blue */
-  --accent: 200 85% 50%;
-  --accent-foreground: 0 0% 100%;
-
-  /* Semantic Colors */
-  --destructive: 0 84% 60%;
-  --destructive-foreground: 0 0% 100%;
-  --success: 142 76% 45%;
-  --warning: 38 92% 50%;
-  --info: 200 85% 50%;
-
-  /* UI Elements */
-  --border: 240 6% 25%; /* neutral-700 */
-  --input: 240 6% 25%;
-  --ring: 260 55% 55%; /* primary */
-
-  /* Shadows */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
-  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
-}
+@import '../shared/lib/styles/theme.css';
 
 /* Base Resets */
-* {
-  @apply border-border;
-}
-
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
-/* Typography - System fonts for fast loading */
 html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  height: -webkit-fill-available;
 }
 
 html,
@@ -74,10 +23,10 @@ body {
 }
 
 body {
-  background: #f2f2f5;
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
 }
 
-/* Headings */
 h1,
 h2,
 h3,
@@ -91,7 +40,7 @@ h6 {
   line-height: 1.2;
 }
 
-/* Focus Visible - Accessibility */
+/* Accessibility: Focus Ring */
 *:focus-visible {
   @apply ring-primary-500 ring-offset-background ring-2 ring-offset-2 outline-none;
 }
@@ -110,8 +59,8 @@ button {
 
 /* Hide scrollbars globally while preserving scroll behavior */
 * {
-  -ms-overflow-style: none; /* IE/Edge legacy */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 *::-webkit-scrollbar {
@@ -146,68 +95,36 @@ button {
   }
 }
 
-/* Mobile Viewport Fix */
-html {
-  height: -webkit-fill-available;
+/* Utility Classes */
+.text-balance {
+  text-wrap: balance;
 }
 
-body {
-  min-height: 100vh;
-  min-height: -webkit-fill-available;
+.focus-ring {
+  @apply focus-visible:ring-primary-500 focus-visible:ring-offset-background focus-visible:ring-2 focus-visible:ring-offset-2;
 }
 
-/* Utilities */
-@layer utilities {
-  /* Text Balance (better typography) */
-  .text-balance {
-    text-wrap: balance;
-  }
-
-  /* Focus Ring Utilities */
-  .focus-ring {
-    @apply focus-visible:ring-primary-500 focus-visible:ring-offset-background focus-visible:ring-2 focus-visible:ring-offset-2;
-  }
-
-  /* Touch Target Helper */
-  .touch-target {
-    @apply min-h-[44px] min-w-[44px];
-  }
-
-  /* Skeleton Loading */
-  .skeleton {
-    @apply animate-pulse rounded bg-neutral-200;
-  }
-
-  /* Skeleton for dark backgrounds */
-  .skeleton-dark {
-    @apply animate-pulse rounded bg-neutral-800;
-  }
-
-  /* Gradient Text */
-  .gradient-text {
-    @apply from-primary-400 to-accent-400 bg-gradient-to-r bg-clip-text text-transparent;
-  }
-
-  /* Glass Morphism */
-  .glass {
-    @apply border border-white/10 bg-white/5 backdrop-blur-lg;
-  }
+.touch-target {
+  @apply min-h-[44px] min-w-[44px];
 }
 
-/* Component Overrides */
-@layer components {
-  /* Link Styles */
-  .link {
-    @apply text-accent-400 hover:text-accent-300 underline-offset-2 transition-colors hover:underline;
-  }
+.skeleton {
+  @apply animate-pulse rounded bg-neutral-200;
+}
 
-  /* Container */
-  .container {
-    @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
-  }
+.skeleton-dark {
+  @apply animate-pulse rounded bg-neutral-800;
+}
 
-  /* Section Spacing */
-  .section {
-    @apply py-12 sm:py-16 md:py-20;
-  }
+.gradient-text {
+  @apply from-primary-400 to-accent-400 bg-gradient-to-r bg-clip-text text-transparent;
+}
+
+.glass {
+  @apply border border-white/10 bg-white/5 backdrop-blur-lg;
+}
+
+/* Component Classes */
+.link {
+  @apply text-accent-400 hover:text-accent-300 underline-offset-2 transition-colors hover:underline;
 }

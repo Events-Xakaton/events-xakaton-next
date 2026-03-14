@@ -1,4 +1,4 @@
-@import '../lib/styles/theme.css';
+@import '../../lib/styles/theme.css';
 
 .pill-tabs {
   @apply flex items-center gap-2 overflow-x-auto pb-1;

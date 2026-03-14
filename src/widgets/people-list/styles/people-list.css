@@ -1,4 +1,4 @@
-@import '../../shared/lib/styles/theme.css';
+@import '../../../shared/lib/styles/theme.css';
 
 .people-list {
   @apply space-y-2;

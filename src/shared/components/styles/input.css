@@ -1,4 +1,4 @@
-@import '../lib/styles/theme.css';
+@import '../../lib/styles/theme.css';
 
 .form-input {
   @apply flex flex-col gap-1.5;

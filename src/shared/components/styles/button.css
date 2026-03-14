@@ -1,4 +1,4 @@
-@import '../lib/styles/theme.css';
+@import '../../lib/styles/theme.css';
 
 .button {
   @apply inline-flex items-center justify-center gap-2 font-medium rounded-xl;

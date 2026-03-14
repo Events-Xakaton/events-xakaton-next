@@ -1,4 +1,4 @@
-@import '../../shared/lib/styles/theme.css';
+@import '../../../shared/lib/styles/theme.css';
 
 .app-header {
   @apply z-[200] bg-[#f2f2f5];

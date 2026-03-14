@@ -1,18 +1,18 @@
-@import '../lib/styles/theme.css';
+@import '../../lib/styles/theme.css';
 
 .overflow-menu {
   @apply relative;
 
   &__trigger {
     @apply flex h-11 w-11 min-h-[44px] min-w-[44px] items-center justify-center;
-    @apply rounded-full glass text-lg text-white;
+    @apply rounded-full border border-white/10 bg-white/5 backdrop-blur-lg text-lg text-white;
     @apply transition-all duration-200 hover:bg-white/10;
     @apply focus-visible:ring-2 focus-visible:ring-primary-500;
   }
 
   &__dropdown {
-    @apply absolute right-0 z-dropdown mt-1 min-w-40 rounded-xl;
-    @apply glass border border-neutral-700 p-1 shadow-xl;
+    @apply absolute right-0 z-30 mt-1 min-w-40 rounded-xl;
+    @apply border border-neutral-700 bg-white/5 backdrop-blur-lg p-1 shadow-xl;
   }
 
   &__item {

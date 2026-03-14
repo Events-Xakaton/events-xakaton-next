@@ -1,4 +1,4 @@
-@import '../lib/styles/theme.css';
+@import '../../lib/styles/theme.css';
 
 .card {
   @apply rounded-xl transition-all duration-200;

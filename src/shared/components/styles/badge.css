@@ -1,4 +1,4 @@
-@import '../lib/styles/theme.css';
+@import '../../lib/styles/theme.css';
 
 .badge {
   @apply inline-flex items-center justify-center font-medium rounded-full;

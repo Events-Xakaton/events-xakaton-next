@@ -1,7 +1,7 @@
-@import '../../shared/lib/styles/theme.css';
+@import '../../../shared/lib/styles/theme.css';
 
 .bottom-nav {
-  @apply fixed bottom-0 left-0 right-0 z-fixed bg-[#f2f2f5] pt-2;
+  @apply fixed bottom-0 left-0 right-0 z-50 bg-[#f2f2f5] pt-2;
 
   &__inner {
     @apply mx-auto max-w-md px-4;
