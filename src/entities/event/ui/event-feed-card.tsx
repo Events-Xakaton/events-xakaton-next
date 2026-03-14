@@ -55,7 +55,6 @@ export function EventFeedCard({
     >
       {/* Scrim overlay для защиты текста */}
       <div className="event-feed-card__scrim" />
-
       <div className="event-feed-card__body">
         <div className="event-feed-card__meta">
           <div className="event-feed-card__badge">

@@ -1,4 +1,4 @@
-import { initDataRaw, initDataUser } from '@telegram-apps/sdk';
+import { initDataUser, retrieveRawInitData } from '@telegram-apps/sdk';
 
 export type TelegramProfile = {
   telegramUserId: string;
@@ -14,7 +14,17 @@ const DEMO_TELEGRAM_USER_ID = '900000001';
  * Используется в заголовке x-telegram-init-data для аутентификации на бэкенде.
  */
 export function getTelegramInitData(): string | null {
-  const raw = initDataRaw() ?? null;
+  let raw: string | undefined;
+
+  try {
+    raw =
+      process.env['NEXT_PUBLIC_ENV'] === 'development'
+        ? process.env['NEXT_PUBLIC_INIT_DATA']
+        : retrieveRawInitData();
+  } catch {
+    // SDK не инициализирован или запуск вне Telegram — fallback на userId
+    raw = undefined;
+  }
 
   if (typeof window !== 'undefined') {
     console.group('[TG initData]');
@@ -23,7 +33,7 @@ export function getTelegramInitData(): string | null {
     console.groupEnd();
   }
 
-  return raw;
+  return raw ?? null;
 }
 
 /**

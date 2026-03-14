@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronRight, SlidersHorizontal, Sparkles } from 'lucide-react';
+import { ChevronRight, SlidersHorizontal } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { AppHeader } from '@/widgets/app-header';
@@ -26,6 +26,7 @@ import type { HomeTab } from '@/shared/types/navigation';
 import { DAY_FILTERS, useEventFilter } from './model/use-event-filter';
 import { useFeedActions } from './model/use-feed-actions';
 import { useLuckyTrigger } from './model/use-lucky-trigger';
+import { EasterEggButton } from './ui/easter-egg-button';
 
 const FEED_CARD_HORIZONTAL_PADDING_PX = 8;
 const CARD_CONTENT_HORIZONTAL_PADDING_PX = 20;
@@ -376,22 +377,13 @@ export function HomeScreen({
         </p>
       ) : null}
 
-      {/* Секретная кнопка «Мне повезёт» — появляется после быстрого скролла 9+ ивентов за 3 сек */}
-      {isLuckyTriggered && homeTab === 'events' ? (
-        <div className="pointer-events-none absolute inset-x-0 bottom-24 flex justify-center">
-          <button
-            type="button"
-            className="pointer-events-auto inline-flex items-center gap-2 rounded-full border border-violet-300/40 bg-gradient-to-br from-violet-500 to-purple-600 px-6 py-3 text-sm font-semibold text-white shadow-[0_8px_32px_rgba(124,58,237,0.45)] transition-all duration-200 active:scale-95"
-            onClick={() => {
-              resetLucky();
-              onOpenLuckyWheel();
-            }}
-          >
-            <Sparkles className="h-4 w-4" aria-hidden="true" />
-            Мне повезёт
-          </button>
-        </div>
-      ) : null}
+      <EasterEggButton
+        visible={isLuckyTriggered && homeTab === 'events'}
+        onClick={() => {
+          resetLucky();
+          onOpenLuckyWheel();
+        }}
+      />
     </div>
   );
 }

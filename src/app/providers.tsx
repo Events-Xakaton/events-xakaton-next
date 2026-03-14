@@ -4,12 +4,12 @@ import {
   disableVerticalSwipes,
   expandViewport,
   init,
-  initDataRaw,
   miniAppReady,
   mountMiniAppSync,
   mountSwipeBehavior,
   mountViewport,
   requestFullscreen,
+  retrieveRawInitData,
   setMiniAppBackgroundColor,
   setMiniAppHeaderColor,
   viewportStableHeight,
@@ -37,8 +37,18 @@ const TelegramViewportSync: FC = () => {
   const stableHeight = useSignal(viewportStableHeight);
 
   useEffect(() => {
-    const vh = stableHeight ?? window.innerHeight;
-    document.documentElement.style.setProperty('--app-vh', `${vh}px`);
+    const update = (): void => {
+      // stableHeight из Telegram SDK может вернуть 0 или некорректное значение
+      // при запуске вне Telegram (dev-режим, браузер). Берём максимум из значения
+      // SDK и реальной высоты окна — это также корректно обрабатывает открытие
+      // клавиатуры (stableHeight не меняется, window.innerHeight уменьшается).
+      const vh = Math.max(stableHeight ?? 0, window.innerHeight);
+      document.documentElement.style.setProperty('--app-vh', `${vh}px`);
+    };
+
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
   }, [stableHeight]);
 
   return null;
@@ -49,17 +59,29 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
     try {
       init();
 
-      const raw = initDataRaw();
-      console.group('[TG SDK init]');
-      console.log(
-        'initDataRaw после init():',
-        raw ? `${raw.slice(0, 80)}…` : null,
-      );
-      console.log('window.location.hash:', window.location.hash.slice(0, 120));
-      console.groupEnd();
-
       if (mountMiniAppSync.isAvailable()) mountMiniAppSync();
       if (miniAppReady.isAvailable()) miniAppReady();
+
+      // Логирование — только после критических вызовов, чтобы ошибка здесь
+      // не помешала miniAppReady() и не оставила Telegram-оверлей висеть поверх приложения
+      try {
+        const raw =
+          process.env['NEXT_PUBLIC_ENV'] === 'development'
+            ? process.env['NEXT_PUBLIC_INIT_DATA']
+            : retrieveRawInitData();
+        console.group('[TG SDK init]');
+        console.log(
+          'initDataRaw после init():',
+          raw ? `${raw.slice(0, 80)}…` : null,
+        );
+        console.log(
+          'window.location.hash:',
+          window.location.hash.slice(0, 120),
+        );
+        console.groupEnd();
+      } catch {
+        // Логирование не критично
+      }
 
       // Сначала монтируем viewport, затем разворачиваем и запрашиваем fullscreen
       const viewportReady = mountViewport.isAvailable()
