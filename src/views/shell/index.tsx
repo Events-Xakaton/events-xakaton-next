@@ -17,6 +17,7 @@ import { NotificationsScreen } from '@/views/notifications';
 import { PointsScreen } from '@/views/points';
 
 import { loadAuthSession } from '@/shared/lib/auth-session';
+import { usePortraitGuard } from '@/shared/lib/telegram/usePortraitGuard';
 import { useNotificationBadge } from '@/shared/lib/useNotificationBadge';
 import { useAppDispatch, useAppSelector } from '@/shared/store/hooks';
 import type { MainTab } from '@/shared/types/navigation';
@@ -32,6 +33,7 @@ export default function MiniAppShell() {
   const dispatch = useAppDispatch();
   const isVerified = useAppSelector((s) => s.auth.isVerified);
   const isInitializing = useAppSelector((s) => s.auth.isInitializing);
+  const { isLandscapeBlocked } = usePortraitGuard();
   const [tab, setTab] = useState<MainTab>('home');
   const notificationBadge = useNotificationBadge();
   const [detail, setDetail] = useState<{
@@ -44,6 +46,23 @@ export default function MiniAppShell() {
       dispatch(setInitialized(session ?? null));
     });
   }, [dispatch]);
+
+  if (isLandscapeBlocked) {
+    return (
+      <main
+        className="flex items-center justify-center bg-[#f2f2f5] px-6 text-center text-zinc-900"
+        style={{ minHeight: 'var(--app-vh, 100dvh)' }}
+      >
+        <div className="max-w-xs rounded-3xl border border-neutral-200 bg-white px-6 py-7 shadow-sm">
+          <h1 className="text-base font-semibold">Поверните устройство</h1>
+          <p className="mt-2 text-sm text-neutral-600">
+            Чтобы продолжить, откройте мини-приложение в вертикальной
+            ориентации.
+          </p>
+        </div>
+      </main>
+    );
+  }
 
   if (isInitializing) {
     return <LoadingFallback />;
@@ -124,7 +143,7 @@ export default function MiniAppShell() {
                 setDetail({ kind: 'event', id: eventId })
               }
               onOpenClub={(clubId) => setDetail({ kind: 'club', id: clubId })}
-              onNavigateToCreate={(type) => setTab('create')}
+              onNavigateToCreate={() => setTab('create')}
             />
           ) : null}
       </div>
