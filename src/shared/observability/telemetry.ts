@@ -47,3 +47,18 @@ export function trackApiError(payload: ApiErrorTelemetry): void {
 export function trackWebVital(payload: WebVitalTelemetry): void {
   emit('frontend.web_vital', payload);
 }
+
+/** Пользователь выполнил секретный быстрый скролл и увидел кнопку «Мне повезёт» */
+export function trackLuckyReveal(): void {
+  emit('lucky.reveal', {});
+}
+
+/** Фазы жизненного цикла колеса фортуны */
+export type LuckySpinPhase = 'start' | 'result' | 'open_event';
+
+export function trackLuckySpin(
+  phase: LuckySpinPhase,
+  payload?: Record<string, unknown>,
+): void {
+  emit(`lucky.spin_${phase}`, payload ?? {});
+}

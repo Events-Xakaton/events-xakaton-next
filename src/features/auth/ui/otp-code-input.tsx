@@ -1,6 +1,6 @@
 'use client';
 
-import type { FC} from 'react';
+import type { FC } from 'react';
 import { useEffect, useRef, useState } from 'react';
 
 const OTP_LENGTH = 6;

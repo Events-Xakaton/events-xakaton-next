@@ -3,18 +3,19 @@
 import type { FC } from 'react';
 import { useEffect, useState } from 'react';
 
-import { BottomNav } from '@/widgets/bottom-nav';
-
-import { setInitialized } from '@/features/auth/model/auth-slice';
-import { AuthScreen } from '@/features/auth/ui/auth-screen';
-
 import { AccountScreen } from '@/views/account';
 import { ClubDetails } from '@/views/club-details';
 import { CreateScreen } from '@/views/create';
 import { EventDetails } from '@/views/event-details';
 import { HomeScreen } from '@/views/home';
+import { LuckyWheelScreen } from '@/views/lucky-wheel';
 import { NotificationsScreen } from '@/views/notifications';
 import { PointsScreen } from '@/views/points';
+
+import { BottomNav } from '@/widgets/bottom-nav';
+
+import { setInitialized } from '@/features/auth/model/auth-slice';
+import { AuthScreen } from '@/features/auth/ui/auth-screen';
 
 import { loadAuthSession } from '@/shared/lib/auth-session';
 import { useNotificationBadge } from '@/shared/lib/useNotificationBadge';
@@ -34,6 +35,7 @@ export default function MiniAppShell() {
   const isInitializing = useAppSelector((s) => s.auth.isInitializing);
   const [tab, setTab] = useState<MainTab>('home');
   const notificationBadge = useNotificationBadge();
+  const [luckyWheelOpen, setLuckyWheelOpen] = useState(false);
   const [detail, setDetail] = useState<{
     kind: 'event' | 'club';
     id: string;
@@ -53,12 +55,13 @@ export default function MiniAppShell() {
     return <AuthScreen />;
   }
 
-  const homeNoDetail = !detail && tab === 'home';
-  const createNoDetail = !detail && tab === 'create';
-  const notificationsNoDetail = !detail && tab === 'notifications';
-  const pointsNoDetail = !detail && tab === 'points';
-  const accountNoDetail = !detail && tab === 'account';
-  const inDetail = Boolean(detail);
+  const homeNoDetail = !detail && !luckyWheelOpen && tab === 'home';
+  const createNoDetail = !detail && !luckyWheelOpen && tab === 'create';
+  const notificationsNoDetail =
+    !detail && !luckyWheelOpen && tab === 'notifications';
+  const pointsNoDetail = !detail && !luckyWheelOpen && tab === 'points';
+  const accountNoDetail = !detail && !luckyWheelOpen && tab === 'account';
+  const inDetail = Boolean(detail) || luckyWheelOpen;
   const shellBgClass = 'bg-[#f2f2f5]';
 
   return (
@@ -89,47 +92,52 @@ export default function MiniAppShell() {
             : undefined
         }
       >
-        {detail?.kind === 'event' ? (
-            <EventDetails
-              id={detail.id}
-              onBack={() => setDetail(null)}
-              onOpenClub={(clubId) => setDetail({ kind: 'club', id: clubId })}
-            />
-          ) : null}
-          {detail?.kind === 'club' ? (
-            <ClubDetails
-              id={detail.id}
-              onBack={() => setDetail(null)}
-              onOpenEvent={(eventId) =>
-                setDetail({ kind: 'event', id: eventId })
-              }
-            />
-          ) : null}
+        {luckyWheelOpen ? (
+          <LuckyWheelScreen
+            onBack={() => setLuckyWheelOpen(false)}
+            onOpenEvent={(eventId) => {
+              setLuckyWheelOpen(false);
+              setDetail({ kind: 'event', id: eventId });
+            }}
+          />
+        ) : null}
 
-          {!detail && tab === 'home' ? (
-            <HomeScreen
-              onOpenEvent={(eventId) =>
-                setDetail({ kind: 'event', id: eventId })
-              }
-              onOpenClub={(clubId) => setDetail({ kind: 'club', id: clubId })}
-              onNavigateToCreate={() => setTab('create')}
-            />
-          ) : null}
-          {!detail && tab === 'create' ? <CreateScreen /> : null}
-          {!detail && tab === 'notifications' ? <NotificationsScreen /> : null}
-          {!detail && tab === 'points' ? <PointsScreen /> : null}
-          {!detail && tab === 'account' ? (
-            <AccountScreen
-              onOpenEvent={(eventId) =>
-                setDetail({ kind: 'event', id: eventId })
-              }
-              onOpenClub={(clubId) => setDetail({ kind: 'club', id: clubId })}
-              onNavigateToCreate={(type) => setTab('create')}
-            />
-          ) : null}
+        {detail?.kind === 'event' ? (
+          <EventDetails
+            id={detail.id}
+            onBack={() => setDetail(null)}
+            onOpenClub={(clubId) => setDetail({ kind: 'club', id: clubId })}
+          />
+        ) : null}
+        {detail?.kind === 'club' ? (
+          <ClubDetails
+            id={detail.id}
+            onBack={() => setDetail(null)}
+            onOpenEvent={(eventId) => setDetail({ kind: 'event', id: eventId })}
+          />
+        ) : null}
+
+        {!detail && !luckyWheelOpen && tab === 'home' ? (
+          <HomeScreen
+            onOpenEvent={(eventId) => setDetail({ kind: 'event', id: eventId })}
+            onOpenClub={(clubId) => setDetail({ kind: 'club', id: clubId })}
+            onNavigateToCreate={() => setTab('create')}
+            onOpenLuckyWheel={() => setLuckyWheelOpen(true)}
+          />
+        ) : null}
+        {!detail && tab === 'create' ? <CreateScreen /> : null}
+        {!detail && tab === 'notifications' ? <NotificationsScreen /> : null}
+        {!detail && tab === 'points' ? <PointsScreen /> : null}
+        {!detail && tab === 'account' ? (
+          <AccountScreen
+            onOpenEvent={(eventId) => setDetail({ kind: 'event', id: eventId })}
+            onOpenClub={(clubId) => setDetail({ kind: 'club', id: clubId })}
+            onNavigateToCreate={(type) => setTab('create')}
+          />
+        ) : null}
       </div>
-      {/* BottomNav показываем всегда на основных экранах, чтобы навигация была стабильной */}
-      {!detail ? (
+      {/* BottomNav показываем только на основных экранах (без detail и без lucky wheel) */}
+      {!detail && !luckyWheelOpen ? (
         <BottomNav
           tab={tab}
           onTab={(next) => {

@@ -17,11 +17,15 @@ const rawBaseQuery = fetchBaseQuery({
       const initData = getTelegramInitData();
       if (initData) {
         headers.set('x-telegram-init-data', initData);
-        console.log(`[API headers] endpoint="${endpoint}" → x-telegram-init-data присутствует (${initData.length} chars)`);
+        console.log(
+          `[API headers] endpoint="${endpoint}" → x-telegram-init-data присутствует (${initData.length} chars)`,
+        );
       } else {
         const fallbackId = getTelegramUserIdFallback();
         headers.set('x-telegram-user-id', fallbackId);
-        console.warn(`[API headers] endpoint="${endpoint}" → initData отсутствует, fallback x-telegram-user-id="${fallbackId}"`);
+        console.warn(
+          `[API headers] endpoint="${endpoint}" → initData отсутствует, fallback x-telegram-user-id="${fallbackId}"`,
+        );
       }
     }
     return headers;

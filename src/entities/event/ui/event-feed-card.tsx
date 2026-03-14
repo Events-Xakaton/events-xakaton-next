@@ -51,6 +51,7 @@ export function EventFeedCard({
       role="article"
       aria-label={`Событие: ${event.title}`}
       data-feed-card="event"
+      data-event-id={event.id}
     >
       {/* Scrim overlay для защиты текста */}
       <div className="event-feed-card__scrim" />

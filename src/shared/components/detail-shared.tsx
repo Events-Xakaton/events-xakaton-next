@@ -1,7 +1,7 @@
 'use client';
 
 import { Ellipsis } from 'lucide-react';
-import type { FC, ReactNode} from 'react';
+import type { FC, ReactNode } from 'react';
 import { useState } from 'react';
 
 import {

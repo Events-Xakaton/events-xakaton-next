@@ -14,6 +14,17 @@ import type { ClubEventListItem, EventCard, EventDetails } from './types';
 // Re-export types so consumers can import from a single entry point
 export type { EventCard, EventDetails, ClubEventListItem } from './types';
 
+/** Машинно-читаемые коды ошибок random endpoint согласно контракту lucky-wheel */
+export enum LuckyWheelErrorCode {
+  NO_ELIGIBLE_EVENTS = 'NO_ELIGIBLE_EVENTS',
+  DAILY_LIMIT_REACHED = 'DAILY_LIMIT_REACHED',
+}
+
+export type LuckyWheelErrorResponse = {
+  message: string;
+  code: LuckyWheelErrorCode;
+};
+
 export type ClubEventBucket = 'upcoming' | 'ongoing' | 'past';
 
 export type ClubEventsPage = {

@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronRight, SlidersHorizontal } from 'lucide-react';
+import { ChevronRight, SlidersHorizontal, Sparkles } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { AppHeader } from '@/widgets/app-header';
@@ -20,10 +20,12 @@ import {
   getHomeFeedLayout,
 } from '@/shared/lib/ui-styles';
 import { cn } from '@/shared/lib/utils';
+import { trackLuckyReveal } from '@/shared/observability/telemetry';
 import type { HomeTab } from '@/shared/types/navigation';
 
 import { DAY_FILTERS, useEventFilter } from './model/use-event-filter';
 import { useFeedActions } from './model/use-feed-actions';
+import { useLuckyTrigger } from './model/use-lucky-trigger';
 
 const FEED_CARD_HORIZONTAL_PADDING_PX = 8;
 const CARD_CONTENT_HORIZONTAL_PADDING_PX = 20;
@@ -33,16 +35,24 @@ export function HomeScreen({
   onOpenEvent,
   onOpenClub,
   onNavigateToCreate,
+  onOpenLuckyWheel,
 }: {
   onOpenEvent: (eventId: string) => void;
   onOpenClub: (clubId: string) => void;
   onNavigateToCreate: () => void;
+  onOpenLuckyWheel: () => void;
 }) {
   const mode = useViewportMode();
   const [homeTab, setHomeTab] = useState<HomeTab>('events');
   const [filterOpen, setFilterOpen] = useState(false);
-  const feedScrollRef = useRef<HTMLDivElement>(null);
   const filterRef = useRef<HTMLDivElement>(null);
+
+  const {
+    isTriggered: isLuckyTriggered,
+    setScrollContainer,
+    scrollContainerRef: feedScrollRef,
+    reset: resetLucky,
+  } = useLuckyTrigger();
 
   const events = useEventsQuery();
   const clubs = useClubsQuery();
@@ -100,6 +110,16 @@ export function HomeScreen({
   useEffect(() => {
     feedScrollRef.current?.scrollTo({ top: 0, behavior: 'auto' });
   }, [homeTab, filter.dayFilter, filter.sortByDate]);
+
+  // Сброс триггера при уходе со вкладки Events
+  useEffect(() => {
+    if (homeTab !== 'events') resetLucky();
+  }, [homeTab, resetLucky]);
+
+  // Телеметрия раскрытия секрета
+  useEffect(() => {
+    if (isLuckyTriggered) trackLuckyReveal();
+  }, [isLuckyTriggered]);
 
   return (
     <div className="relative bg-[#f2f2f5]" style={FEED_MIN_HEIGHT_STYLE}>
@@ -220,7 +240,7 @@ export function HomeScreen({
           ? filter.eventItems.length > 0
           : clubsItems.length > 0) ? (
           <div
-            ref={feedScrollRef}
+            ref={setScrollContainer}
             data-home-feed-scroll="true"
             className="snap-y snap-mandatory overflow-y-auto overscroll-contain px-2"
             style={FEED_SCROLL_CONTAINER_STYLE}
@@ -261,7 +281,7 @@ export function HomeScreen({
         !error &&
         filter.eventItems.length === 0 ? (
           <div
-            ref={feedScrollRef}
+            ref={setScrollContainer}
             data-home-feed-scroll="true"
             className="px-2"
             style={FEED_STATE_CONTAINER_STYLE}
@@ -295,7 +315,7 @@ export function HomeScreen({
         !error &&
         clubsItems.length === 0 ? (
           <div
-            ref={feedScrollRef}
+            ref={setScrollContainer}
             data-home-feed-scroll="true"
             className="px-2!"
             style={FEED_STATE_CONTAINER_STYLE}
@@ -319,7 +339,7 @@ export function HomeScreen({
         {/* Загрузка */}
         {loading ? (
           <div
-            ref={feedScrollRef}
+            ref={setScrollContainer}
             data-home-feed-scroll="true"
             className="flex items-center justify-center px-2"
             style={FEED_STATE_CONTAINER_STYLE}
@@ -331,7 +351,7 @@ export function HomeScreen({
         {/* Ошибка */}
         {error ? (
           <div
-            ref={feedScrollRef}
+            ref={setScrollContainer}
             data-home-feed-scroll="true"
             className="px-2"
             style={FEED_STATE_CONTAINER_STYLE}
@@ -354,6 +374,23 @@ export function HomeScreen({
         <p className="absolute bottom-24 left-4 text-sm text-zinc-900">
           {feedActions.hint}
         </p>
+      ) : null}
+
+      {/* Секретная кнопка «Мне повезёт» — появляется после быстрого скролла 9+ ивентов за 3 сек */}
+      {isLuckyTriggered && homeTab === 'events' ? (
+        <div className="pointer-events-none absolute inset-x-0 bottom-24 flex justify-center">
+          <button
+            type="button"
+            className="pointer-events-auto inline-flex items-center gap-2 rounded-full border border-violet-300/40 bg-gradient-to-br from-violet-500 to-purple-600 px-6 py-3 text-sm font-semibold text-white shadow-[0_8px_32px_rgba(124,58,237,0.45)] transition-all duration-200 active:scale-95"
+            onClick={() => {
+              resetLucky();
+              onOpenLuckyWheel();
+            }}
+          >
+            <Sparkles className="h-4 w-4" aria-hidden="true" />
+            Мне повезёт
+          </button>
+        </div>
       ) : null}
     </div>
   );

@@ -1,0 +1,151 @@
+@import '../../../shared/lib/styles/theme.css';
+
+.lucky-wheel {
+  @apply flex flex-col items-center;
+  min-height: var(--app-vh, 100dvh);
+  background: linear-gradient(160deg, #1e1333 0%, #0f0920 60%, #160b2e 100%);
+  padding-top: calc(env(safe-area-inset-top, 0px) + 1rem);
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 1.5rem);
+
+  &__header {
+    @apply flex w-full max-w-md items-center justify-between px-4 pb-4;
+  }
+
+  &__back-btn {
+    @apply inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full text-white/60 transition-colors hover:text-white;
+  }
+
+  &__title {
+    @apply text-lg font-semibold text-white;
+  }
+
+  &__stage {
+    @apply relative flex items-center justify-center;
+    width: 300px;
+    height: 300px;
+  }
+
+  &__disk-wrapper {
+    @apply absolute inset-0;
+    transform-origin: 150px 150px;
+    will-change: transform;
+  }
+
+  &__indicator {
+    @apply absolute top-0 left-1/2 z-10 -translate-x-1/2 -translate-y-2;
+  }
+
+  &__center-gem {
+    @apply absolute top-1/2 left-1/2 z-10 -translate-x-1/2 -translate-y-1/2;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle at 38% 38%,
+      #fff 0%,
+      #e0d4ff 40%,
+      #7c3aed 100%
+    );
+    box-shadow:
+      0 0 20px rgba(124, 58, 237, 0.8),
+      0 0 40px rgba(124, 58, 237, 0.4);
+  }
+
+  &__controls {
+    @apply mt-8 flex w-full max-w-md flex-col items-center gap-4 px-6;
+  }
+
+  &__spin-btn {
+    @apply w-full rounded-2xl py-4 text-lg font-bold tracking-wide;
+    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #7c3aed 100%);
+    color: white;
+    box-shadow: 0 8px 32px rgba(124, 58, 237, 0.5);
+    transition: all 0.2s ease;
+    min-height: 56px;
+
+    &:active:not(:disabled) {
+      transform: scale(0.97);
+      box-shadow: 0 4px 16px rgba(124, 58, 237, 0.4);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  &__result-card {
+    @apply w-full rounded-2xl p-5;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(12px);
+    animation: luckyFadeIn 0.4s ease forwards;
+  }
+
+  &__result-label {
+    @apply mb-2 text-xs font-medium tracking-widest text-violet-300 uppercase;
+  }
+
+  &__result-title {
+    @apply text-base font-semibold text-white;
+  }
+
+  &__result-meta {
+    @apply mt-1 text-sm text-white/60;
+  }
+
+  &__open-btn {
+    @apply mt-4 w-full rounded-xl py-3 text-sm font-semibold;
+    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+    color: white;
+    min-height: 48px;
+    transition: all 0.2s ease;
+
+    &:active {
+      transform: scale(0.97);
+    }
+  }
+
+  &__fallback {
+    @apply mt-4 flex w-full max-w-md flex-col items-center gap-3 rounded-2xl px-6 py-5 text-center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    animation: luckyFadeIn 0.3s ease forwards;
+  }
+
+  &__fallback-icon {
+    @apply text-4xl;
+  }
+
+  &__fallback-title {
+    @apply text-base font-semibold text-white;
+  }
+
+  &__fallback-desc {
+    @apply text-sm text-white/60;
+  }
+
+  &__back-cta {
+    @apply mt-1 rounded-xl px-6 py-2.5 text-sm font-semibold;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: white;
+    min-height: 44px;
+    transition: background 0.2s;
+
+    &:active {
+      background: rgba(255, 255, 255, 0.15);
+    }
+  }
+}
+
+@keyframes luckyFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

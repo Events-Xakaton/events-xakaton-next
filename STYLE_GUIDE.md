@@ -85,7 +85,9 @@ var counter = 0;
 
 ```typescript
 const x: unknown = something;
-if (typeof x === 'string') { /* ... */ }
+if (typeof x === 'string') {
+  /* ... */
+}
 const el = document.getElementById('id');
 if (!el) return;
 let counter = 0;
@@ -271,16 +273,28 @@ button/
   @apply rounded-[30px] border-[1px] transition-all;
 
   /* BEM: модификатор блока */
-  &--extra-small { @apply h-[30px] text-[12px]; }
-  &--small       { @apply h-[40px] text-[14px]; }
-  &--medium      { @apply h-[50px] text-[16px]; }
-  &--large       { @apply h-[60px] text-[18px]; }
+  &--extra-small {
+    @apply h-[30px] text-[12px];
+  }
+  &--small {
+    @apply h-[40px] text-[14px];
+  }
+  &--medium {
+    @apply h-[50px] text-[16px];
+  }
+  &--large {
+    @apply h-[60px] text-[18px];
+  }
 
   /* BEM: элемент */
-  &__icon { @apply shrink-0; }
+  &__icon {
+    @apply shrink-0;
+  }
 
   /* BEM: элемент с модификатором */
-  &__text--golden { @apply text-golden; }
+  &__text--golden {
+    @apply text-golden;
+  }
 }
 ```
 
@@ -395,7 +409,8 @@ export enum ApiTag {
 
 ```typescript
 // shared/redux/model/auth/auth.slice.ts
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+
 import { StateNameType } from '../../enums';
 
 type AuthState = {
@@ -518,30 +533,30 @@ export const useWithdrawalForm = (
 
 ### Файлы
 
-| Тип файла | Конвенция | Пример |
-|-----------|-----------|--------|
-| Компоненты | `kebab-case.tsx` | `bottom-menu.tsx` |
-| Хуки | `use-*.ts` | `use-auth.ts` |
-| API | `*.api.ts` | `user.api.ts` |
-| Слайсы | `*.slice.ts` | `auth.slice.ts` |
-| Типы | `*.ts` | `spin.ts`, `profile.ts` |
-| Enum-файлы | `kebab-case.ts` | `button-size.ts`, `api-tag.ts` |
-| Функции | `get-*.ts` / `*.ts` | `get-init-data.ts` |
-| Стили | `styles.css` | всегда `styles.css` |
-| Barrel | `index.ts` | всегда `index.ts` |
+| Тип файла  | Конвенция           | Пример                         |
+| ---------- | ------------------- | ------------------------------ |
+| Компоненты | `kebab-case.tsx`    | `bottom-menu.tsx`              |
+| Хуки       | `use-*.ts`          | `use-auth.ts`                  |
+| API        | `*.api.ts`          | `user.api.ts`                  |
+| Слайсы     | `*.slice.ts`        | `auth.slice.ts`                |
+| Типы       | `*.ts`              | `spin.ts`, `profile.ts`        |
+| Enum-файлы | `kebab-case.ts`     | `button-size.ts`, `api-tag.ts` |
+| Функции    | `get-*.ts` / `*.ts` | `get-init-data.ts`             |
+| Стили      | `styles.css`        | всегда `styles.css`            |
+| Barrel     | `index.ts`          | всегда `index.ts`              |
 
 ### Код
 
-| Сущность | Конвенция | Пример |
-|----------|-----------|--------|
-| Переменные | `camelCase` | `isLoading`, `spinList` |
-| Функции | `camelCase` | `getInitData`, `transformCode` |
-| Компоненты | `PascalCase` | `Button`, `BottomMenu` |
-| Типы / Interfaces | `PascalCase` | `SpinType`, `BaseResponse` |
-| Enum | `PascalCase` | `ButtonSize`, `ApiTag` |
-| Enum-значения | `UPPER_SNAKE_CASE` | `EXTRA_SMALL`, `AUTH_JWT_TOKEN` |
-| CSS-классы | `kebab-case` (BEM) | `button__text--golden` |
-| Props-тип | `Props` | всегда `Props` |
+| Сущность          | Конвенция          | Пример                          |
+| ----------------- | ------------------ | ------------------------------- |
+| Переменные        | `camelCase`        | `isLoading`, `spinList`         |
+| Функции           | `camelCase`        | `getInitData`, `transformCode`  |
+| Компоненты        | `PascalCase`       | `Button`, `BottomMenu`          |
+| Типы / Interfaces | `PascalCase`       | `SpinType`, `BaseResponse`      |
+| Enum              | `PascalCase`       | `ButtonSize`, `ApiTag`          |
+| Enum-значения     | `UPPER_SNAKE_CASE` | `EXTRA_SMALL`, `AUTH_JWT_TOKEN` |
+| CSS-классы        | `kebab-case` (BEM) | `button__text--golden`          |
+| Props-тип         | `Props`            | всегда `Props`                  |
 
 ---
 
@@ -551,6 +566,8 @@ export const useWithdrawalForm = (
 
 ```typescript
 // 1. Сторонние библиотеки
+// 8. @/public (ресурсы)
+import SpinIcon from '@/public/icons/spin.svg';
 import { FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -571,9 +588,6 @@ import { useGetProfileQuery } from '@/entities/user';
 
 // 7. @/shared
 import { Button, useAppSelector } from '@/shared';
-
-// 8. @/public (ресурсы)
-import SpinIcon from '@/public/icons/spin.svg';
 
 // 9. Относительные импорты
 import { styles } from './styles.css';
@@ -599,14 +613,14 @@ import { Button } from '../../shared/components/button';
 
 ```typescript
 // entities/user/index.ts
-export * from './api';          // useGetProfileQuery, useUpdateProfileMutation
-export * from './lib';          // типы, хуки, функции
+export * from './api'; // useGetProfileQuery, useUpdateProfileMutation
+export * from './lib'; // типы, хуки, функции
 ```
 
 ```typescript
 // shared/components/button/index.ts
-export * from './lib';          // ButtonSize, ButtonVariant (enums и типы)
-export { Button } from './ui';  // компонент
+export * from './lib'; // ButtonSize, ButtonVariant (enums и типы)
+export { Button } from './ui'; // компонент
 ```
 
 ```typescript

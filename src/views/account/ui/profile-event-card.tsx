@@ -1,7 +1,7 @@
 'use client';
 
 import { ChevronRight, Clock, Users } from 'lucide-react';
-import type { FC} from 'react';
+import type { FC } from 'react';
 import { useMemo } from 'react';
 
 import { type EventCard } from '@/entities/event/api';

@@ -1,7 +1,7 @@
 'use client';
 
 import { ChevronRight, Users } from 'lucide-react';
-import type { FC} from 'react';
+import type { FC } from 'react';
 import { useMemo } from 'react';
 
 import { type ClubCard } from '@/entities/club/api';
