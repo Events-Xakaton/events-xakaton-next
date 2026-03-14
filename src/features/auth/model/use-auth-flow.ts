@@ -9,7 +9,7 @@ import {
 import { setVerified } from '@/features/auth/model/auth-slice';
 
 import { saveAuthSession } from '@/shared/lib/auth-session';
-import { appErrorText } from '@/shared/lib/utils';
+import { httpErrorText } from '@/shared/lib/utils';
 import { useAppDispatch } from '@/shared/store/hooks';
 
 const OTP_LENGTH = 6;
@@ -66,18 +66,23 @@ export function useAuthFlow() {
   }
 
   async function handleRequestCode(): Promise<void> {
-    setError('');
+    // Сбрасываем только success — ошибку не трогаем до ответа сервера,
+    // чтобы не было layout shift от исчезновения текста под полем
     setSuccess('');
     try {
       const result = await requestCode({ reddyUserKey }).unwrap();
+      setError('');
       setStep(2);
       setResendLeftSec(result.ttlSec || 60);
     } catch (err) {
       setError(
-        appErrorText(
-          err,
-          'Сервис временно недоступен. Повторите через минуту.',
-        ),
+        httpErrorText(err, {
+          400: 'Неверный формат ID. Проверьте введённые данные.',
+          404: 'Пользователь с таким ID не найден в мессенджере.',
+          429: 'Слишком много попыток. Подождите немного.',
+          500: 'Сервис временно недоступен. Повторите через минуту.',
+          503: 'Сервис временно недоступен. Повторите через минуту.',
+        }, 'Сервис временно недоступен. Повторите через минуту.'),
       );
     }
   }
@@ -94,7 +99,11 @@ export function useAuthFlow() {
       setResendLeftSec(result.ttlSec || 60);
       setSuccess('Код отправлен повторно.');
     } catch (err) {
-      setError(appErrorText(err, 'Не удалось отправить код повторно'));
+      setError(
+        httpErrorText(err, {
+          429: 'Слишком много попыток. Подождите немного.',
+        }, 'Не удалось отправить код повторно.'),
+      );
     }
   }
 

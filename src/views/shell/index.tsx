@@ -1,42 +1,25 @@
 'use client';
 
-import type { FC} from 'react';
-import { Suspense, lazy, useEffect, useState } from 'react';
+import type { FC } from 'react';
+import { useEffect, useState } from 'react';
 
 import { BottomNav } from '@/widgets/bottom-nav';
 
-import { setVerified } from '@/features/auth/model/auth-slice';
+import { setInitialized } from '@/features/auth/model/auth-slice';
 import { AuthScreen } from '@/features/auth/ui/auth-screen';
+
+import { AccountScreen } from '@/views/account';
+import { ClubDetails } from '@/views/club-details';
+import { CreateScreen } from '@/views/create';
+import { EventDetails } from '@/views/event-details';
+import { HomeScreen } from '@/views/home';
+import { NotificationsScreen } from '@/views/notifications';
+import { PointsScreen } from '@/views/points';
 
 import { loadAuthSession } from '@/shared/lib/auth-session';
 import { useNotificationBadge } from '@/shared/lib/useNotificationBadge';
 import { useAppDispatch, useAppSelector } from '@/shared/store/hooks';
 import type { MainTab } from '@/shared/types/navigation';
-
-// Lazy load heavy components for better initial load performance
-const HomeScreen = lazy(() =>
-  import('@/views/home').then((m) => ({ default: m.HomeScreen })),
-);
-const CreateScreen = lazy(() =>
-  import('@/views/create').then((m) => ({ default: m.CreateScreen })),
-);
-const NotificationsScreen = lazy(() =>
-  import('@/views/notifications').then((m) => ({
-    default: m.NotificationsScreen,
-  })),
-);
-const PointsScreen = lazy(() =>
-  import('@/views/points').then((m) => ({ default: m.PointsScreen })),
-);
-const AccountScreen = lazy(() =>
-  import('@/views/account').then((m) => ({ default: m.AccountScreen })),
-);
-const EventDetails = lazy(() =>
-  import('@/views/event-details').then((m) => ({ default: m.EventDetails })),
-);
-const ClubDetails = lazy(() =>
-  import('@/views/club-details').then((m) => ({ default: m.ClubDetails })),
-);
 
 // Simple loading fallback for lazy-loaded components
 const LoadingFallback: FC = () => (
@@ -48,6 +31,7 @@ const LoadingFallback: FC = () => (
 export default function MiniAppShell() {
   const dispatch = useAppDispatch();
   const isVerified = useAppSelector((s) => s.auth.isVerified);
+  const isInitializing = useAppSelector((s) => s.auth.isInitializing);
   const [tab, setTab] = useState<MainTab>('home');
   const notificationBadge = useNotificationBadge();
   const [detail, setDetail] = useState<{
@@ -56,16 +40,14 @@ export default function MiniAppShell() {
   } | null>(null);
 
   useEffect(() => {
-    const session = loadAuthSession();
-    if (session) {
-      dispatch(
-        setVerified({
-          reddyUserKey: session.reddyUserKey,
-          verifiedAtMs: session.verifiedAtMs,
-        }),
-      );
-    }
+    loadAuthSession().then((session) => {
+      dispatch(setInitialized(session ?? null));
+    });
   }, [dispatch]);
+
+  if (isInitializing) {
+    return <LoadingFallback />;
+  }
 
   if (!isVerified) {
     return <AuthScreen />;
@@ -107,8 +89,7 @@ export default function MiniAppShell() {
             : undefined
         }
       >
-        <Suspense fallback={<LoadingFallback />}>
-          {detail?.kind === 'event' ? (
+        {detail?.kind === 'event' ? (
             <EventDetails
               id={detail.id}
               onBack={() => setDetail(null)}
@@ -146,7 +127,6 @@ export default function MiniAppShell() {
               onNavigateToCreate={(type) => setTab('create')}
             />
           ) : null}
-        </Suspense>
       </div>
       {/* BottomNav показываем всегда на основных экранах, чтобы навигация была стабильной */}
       {!detail ? (

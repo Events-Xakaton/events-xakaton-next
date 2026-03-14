@@ -163,13 +163,24 @@ export function pluralize(
 }
 
 export type ApiError = {
+  status?: number | string;
   data?: { message?: string } | string;
   error?: string;
 };
 
+/**
+ * Возвращает человекочитаемый текст ошибки из RTK Query error-объекта.
+ *
+ * Приоритет:
+ * 1. `data.message` — структурированное сообщение от NestJS-бэкенда
+ * 2. `fallback` — переданный контекстный текст
+ *
+ * Намеренно НЕ возвращаем:
+ * - `data` как строку (сырые Express-ответы вроде "Cannot POST /...")
+ * - `error` (технические сообщения вроде "TypeError: Failed to fetch")
+ */
 export function appErrorText(error: unknown, fallback: string): string {
   const e = error as ApiError;
-  if (typeof e?.data === 'string' && e.data.trim()) return e.data;
   if (
     typeof e?.data === 'object' &&
     typeof e.data?.message === 'string' &&
@@ -177,7 +188,35 @@ export function appErrorText(error: unknown, fallback: string): string {
   ) {
     return e.data.message;
   }
-  if (typeof e?.error === 'string' && e.error.trim()) return e.error;
+  return fallback;
+}
+
+/**
+ * Расширенный вариант appErrorText с маппингом HTTP-статусов.
+ * Используется там, где важен контекст конкретного статус-кода.
+ */
+export function httpErrorText(
+  error: unknown,
+  statusMessages: Partial<Record<number, string>>,
+  fallback: string,
+): string {
+  const e = error as ApiError;
+
+  // Сначала явный маппинг — наши русские тексты всегда приоритетнее data.message,
+  // который может быть техническим ("Internal Server Error", "Bad Request" и т.п.)
+  if (typeof e?.status === 'number' && statusMessages[e.status]) {
+    return statusMessages[e.status] as string;
+  }
+
+  // Структурированное сообщение от бэкенда — только если статус не перекрыт выше
+  if (
+    typeof e?.data === 'object' &&
+    typeof e.data?.message === 'string' &&
+    e.data.message.trim()
+  ) {
+    return e.data.message;
+  }
+
   return fallback;
 }
 

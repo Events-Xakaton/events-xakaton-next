@@ -109,7 +109,7 @@ export const AuthScreen: FC = () => {
                 size={ButtonSize.LG}
                 fullWidth
                 isLoading={auth.requestLoading}
-                disabled={!auth.canRequestCode}
+                disabled={!auth.canRequestCode || auth.requestLoading}
                 className="rounded-lg"
               >
                 Получить код

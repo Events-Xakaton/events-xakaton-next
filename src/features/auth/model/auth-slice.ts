@@ -1,41 +1,45 @@
-import type { PayloadAction} from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 
-import { loadAuthSession } from '@/shared/lib/auth-session';
 import { StateNameType } from '@/shared/redux';
 
 type AuthState = {
+  // true пока async-проверка CloudStorage ещё не завершилась
+  isInitializing: boolean;
   isVerified: boolean;
   reddyUserKey: string;
   verifiedAtMs: number | null;
 };
 
-function getInitialState(): AuthState {
-  const base: AuthState = {
-    isVerified: false,
-    reddyUserKey: '',
-    verifiedAtMs: null,
-  };
-  if (typeof window === 'undefined') {
-    return base;
-  }
-  const session = loadAuthSession();
-  if (!session) {
-    return base;
-  }
-  return {
-    isVerified: true,
-    reddyUserKey: session.reddyUserKey,
-    verifiedAtMs: session.verifiedAtMs,
-  };
-}
-
-const initialState: AuthState = getInitialState();
+const initialState: AuthState = {
+  isInitializing: true,
+  isVerified: false,
+  reddyUserKey: '',
+  verifiedAtMs: null,
+};
 
 const authSlice = createSlice({
   name: StateNameType.AUTH,
   initialState,
   reducers: {
+    /**
+     * Вызывается после завершения async-загрузки сессии из CloudStorage/localStorage.
+     * session === null означает, что сессии нет.
+     */
+    setInitialized(
+      state,
+      action: PayloadAction<{
+        reddyUserKey: string;
+        verifiedAtMs: number;
+      } | null>,
+    ) {
+      state.isInitializing = false;
+      if (action.payload) {
+        state.isVerified = true;
+        state.reddyUserKey = action.payload.reddyUserKey;
+        state.verifiedAtMs = action.payload.verifiedAtMs;
+      }
+    },
     setVerified(
       state,
       action: PayloadAction<{ reddyUserKey: string; verifiedAtMs?: number }>,
@@ -52,5 +56,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { setVerified, resetAuth } = authSlice.actions;
+export const { setInitialized, setVerified, resetAuth } = authSlice.actions;
 export default authSlice.reducer;

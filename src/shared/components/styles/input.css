@@ -35,10 +35,11 @@
   }
 
   &__helper {
-    @apply mt-1.5 text-sm text-neutral-500;
+    /* min-h резервирует место под текст — предотвращает layout shift */
+    @apply mt-1.5 min-h-[1.25rem] text-sm text-neutral-500;
   }
 
   &__error {
-    @apply mt-1.5 text-sm text-red-400;
+    @apply mt-1.5 min-h-[1.25rem] text-sm text-red-400;
   }
 }

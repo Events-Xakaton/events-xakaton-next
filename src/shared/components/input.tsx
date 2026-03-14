@@ -50,16 +50,15 @@ export const Input: FC<Props> = ({
         }
         {...props}
       />
-      {error && (
-        <p id={`${inputId}-error`} className="form-input__error" role="alert">
-          {error}
-        </p>
-      )}
-      {helperText && !error && (
-        <p id={`${inputId}-helper`} className="form-input__helper">
-          {helperText}
-        </p>
-      )}
+      {/* Слот всегда в DOM — предотвращает layout shift при появлении/исчезновении ошибки */}
+      <p
+        id={error ? `${inputId}-error` : `${inputId}-helper`}
+        className={error ? 'form-input__error' : 'form-input__helper'}
+        role={error ? 'alert' : undefined}
+        aria-live={error ? undefined : 'polite'}
+      >
+        {error ?? helperText ?? ''}
+      </p>
     </div>
   );
 };
@@ -111,20 +110,14 @@ export const Textarea: FC<TextareaProps> = ({
         }
         {...props}
       />
-      {error && (
-        <p
-          id={`${textareaId}-error`}
-          className="form-input__error"
-          role="alert"
-        >
-          {error}
-        </p>
-      )}
-      {helperText && !error && (
-        <p id={`${textareaId}-helper`} className="form-input__helper">
-          {helperText}
-        </p>
-      )}
+      <p
+        id={error ? `${textareaId}-error` : `${textareaId}-helper`}
+        className={error ? 'form-input__error' : 'form-input__helper'}
+        role={error ? 'alert' : undefined}
+        aria-live={error ? undefined : 'polite'}
+      >
+        {error ?? helperText ?? ''}
+      </p>
     </div>
   );
 };
@@ -182,16 +175,14 @@ export const Select: FC<SelectProps> = ({
           </option>
         ))}
       </select>
-      {error && (
-        <p id={`${selectId}-error`} className="form-input__error" role="alert">
-          {error}
-        </p>
-      )}
-      {helperText && !error && (
-        <p id={`${selectId}-helper`} className="form-input__helper">
-          {helperText}
-        </p>
-      )}
+      <p
+        id={error ? `${selectId}-error` : `${selectId}-helper`}
+        className={error ? 'form-input__error' : 'form-input__helper'}
+        role={error ? 'alert' : undefined}
+        aria-live={error ? undefined : 'polite'}
+      >
+        {error ?? helperText ?? ''}
+      </p>
     </div>
   );
 };
