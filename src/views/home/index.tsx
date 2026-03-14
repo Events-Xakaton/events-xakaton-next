@@ -111,14 +111,14 @@ export function HomeScreen({
         rootStyle={{ paddingTop: feedLayout.headerTopPadding }}
         headerClassName="h-auto px-3 pb-2"
         center={
-          <div className="inline-flex min-h-[44px] items-center rounded-full border border-neutral-300 bg-white p-1 shadow-sm">
+          <div className="inline-flex min-h-[44px] items-center rounded-full border border-neutral-300 bg-white p-1! shadow-sm">
             <button
               type="button"
               onClick={() => {
                 setHomeTab('events');
               }}
               className={cn(
-                'min-h-[34px] rounded-full px-3 text-xs font-semibold transition-colors',
+                'min-h-[34px] rounded-full px-3! text-xs font-semibold transition-colors',
                 homeTab === 'events'
                   ? 'bg-gradient-to-br from-primary-500 to-primary-600 text-white shadow-lg'
                   : 'text-neutral-700 hover:bg-neutral-100',
@@ -134,7 +134,7 @@ export function HomeScreen({
                 setFilterOpen(false);
               }}
               className={cn(
-                'min-h-[34px] rounded-full px-3 text-xs font-semibold transition-colors',
+                'min-h-[34px] rounded-full px-3! text-xs font-semibold transition-colors',
                 homeTab === 'clubs'
                   ? 'bg-gradient-to-br from-primary-500 to-primary-600 text-white shadow-lg'
                   : 'text-neutral-700 hover:bg-neutral-100',
@@ -161,7 +161,7 @@ export function HomeScreen({
               type="button"
               onClick={() => setFilterOpen((v) => !v)}
               className={cn(
-                'inline-flex min-h-[44px] items-center gap-1.5 rounded-full border border-neutral-300 bg-white/95 backdrop-blur-sm px-3 text-xs font-semibold text-neutral-900 focus-visible:outline-none focus-visible:ring-0',
+                'inline-flex min-h-[44px] items-center gap-1.5 rounded-full border border-neutral-300 bg-white/95 backdrop-blur-sm px-3! text-xs font-semibold text-neutral-900 focus-visible:outline-none focus-visible:ring-0',
                 APP_FLOAT_SHADOW_CLASS,
               )}
               aria-label="Фильтр по дате"
@@ -190,7 +190,7 @@ export function HomeScreen({
                     key={option.id}
                     type="button"
                     className={cn(
-                      'block w-full px-3 py-2 text-left text-xs font-medium transition-colors',
+                      'block w-full px-3! py-2! text-left text-xs font-medium transition-colors',
                       filter.dayFilter === option.id
                         ? 'bg-neutral-100 text-neutral-900'
                         : 'text-neutral-700 hover:bg-neutral-50',
@@ -297,7 +297,7 @@ export function HomeScreen({
           <div
             ref={feedScrollRef}
             data-home-feed-scroll="true"
-            className="px-2"
+            className="px-2!"
             style={FEED_STATE_CONTAINER_STYLE}
           >
             <div

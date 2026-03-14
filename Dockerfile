@@ -14,10 +14,6 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# NEXT_PUBLIC_* встраиваются в JS на этапе сборки — передаём как ARG
-ARG NEXT_PUBLIC_API_BASE_URL=http://localhost:4000/api
-ENV NEXT_PUBLIC_API_BASE_URL=$NEXT_PUBLIC_API_BASE_URL
-
 RUN npm run build
 
 # ─── Stage 3: Runtime ──────────────────────────────────────────────────────
