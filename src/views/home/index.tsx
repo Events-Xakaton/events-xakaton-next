@@ -22,10 +22,7 @@ import {
 import { cn } from '@/shared/lib/utils';
 import { HomeTab } from '@/shared/types/navigation';
 
-import {
-  DAY_FILTERS,
-  useEventFilter,
-} from './model/use-event-filter';
+import { DAY_FILTERS, useEventFilter } from './model/use-event-filter';
 import { useFeedActions } from './model/use-feed-actions';
 
 const FEED_CARD_HORIZONTAL_PADDING_PX = 8;

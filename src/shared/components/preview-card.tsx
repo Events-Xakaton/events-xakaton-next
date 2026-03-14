@@ -68,7 +68,9 @@ export const PreviewCard: FC<Props> = ({
             </button>
           </div>
         ) : null}
-        {extraActions ? <div className="preview-card__top-right">{extraActions}</div> : null}
+        {extraActions ? (
+          <div className="preview-card__top-right">{extraActions}</div>
+        ) : null}
         <div className="preview-card__content">
           <div className="preview-card__title-wrapper">
             {titleEditing ? (
@@ -87,7 +89,9 @@ export const PreviewCard: FC<Props> = ({
               </div>
             )}
             {titleHint ?? null}
-            {subtitle ? <p className="preview-card__subtitle">{subtitle}</p> : null}
+            {subtitle ? (
+              <p className="preview-card__subtitle">{subtitle}</p>
+            ) : null}
           </div>
         </div>
       </div>

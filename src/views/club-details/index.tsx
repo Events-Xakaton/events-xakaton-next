@@ -5,10 +5,7 @@ import { ReactElement, useMemo } from 'react';
 
 import { PeopleList } from '@/widgets/people-list';
 
-import {
-  useClubDetailsQuery,
-  useClubMembersQuery,
-} from '@/entities/club/api';
+import { useClubDetailsQuery, useClubMembersQuery } from '@/entities/club/api';
 
 import { Button, ButtonSize, ButtonVariant } from '@/shared/components/button';
 import { ConfirmDialog } from '@/shared/components/confirm-dialog';
@@ -23,7 +20,6 @@ import { ErrorState } from '@/shared/components/error-state';
 import { PreviewCard } from '@/shared/components/preview-card';
 import { buildGradient } from '@/shared/lib/gradient';
 import { useTelegramBackButton } from '@/shared/lib/telegram/useTelegramButtons';
-import { useCompactHeader } from '@/shared/lib/useCompactHeader';
 import {
   ADAPTIVE_VIEWPORT_HEIGHT,
   APP_FLOAT_SHADOW_CLASS,
@@ -31,6 +27,7 @@ import {
   SAFE_AREA_TOP,
   getBottomPadding,
 } from '@/shared/lib/ui-styles';
+import { useCompactHeader } from '@/shared/lib/useCompactHeader';
 import { cn } from '@/shared/lib/utils';
 
 import { useClubActions } from './model/use-club-actions';
@@ -55,7 +52,11 @@ export type ClubDetailsProps = {
   onOpenEvent?: (eventId: string) => void;
 };
 
-export function ClubDetails({ id, onBack, onOpenEvent }: ClubDetailsProps): ReactElement {
+export function ClubDetails({
+  id,
+  onBack,
+  onOpenEvent,
+}: ClubDetailsProps): ReactElement {
   const details = useClubDetailsQuery({ clubId: id });
   const members = useClubMembersQuery({ clubId: id });
 
@@ -277,24 +278,26 @@ export function ClubDetails({ id, onBack, onOpenEvent }: ClubDetailsProps): Reac
 
               {eventsCache.eventsCache[eventsCache.eventsBucket].length > 0 && (
                 <div className="space-y-2 mt-3">
-                  {eventsCache.eventsCache[eventsCache.eventsBucket].map((event) => (
-                    <button
-                      key={event.id}
-                      type="button"
-                      className="w-full rounded-2xl border border-neutral-200 bg-white p-3 text-left hover:bg-neutral-50 transition min-h-[64px]"
-                      onClick={() => onOpenEvent?.(event.id)}
-                    >
-                      <p className="font-semibold text-neutral-900 text-[15px]">
-                        {event.title}
-                      </p>
-                      <div className="mt-2 flex items-center gap-2 text-xs text-neutral-500">
-                        <CalendarDays className="h-4 w-4" />
-                        <span>{formatEventTime(event.startsAtUtc)}</span>
-                        <span>•</span>
-                        <span>{event.participantsCount} участников</span>
-                      </div>
-                    </button>
-                  ))}
+                  {eventsCache.eventsCache[eventsCache.eventsBucket].map(
+                    (event) => (
+                      <button
+                        key={event.id}
+                        type="button"
+                        className="w-full rounded-2xl border border-neutral-200 bg-white p-3 text-left hover:bg-neutral-50 transition min-h-[64px]"
+                        onClick={() => onOpenEvent?.(event.id)}
+                      >
+                        <p className="font-semibold text-neutral-900 text-[15px]">
+                          {event.title}
+                        </p>
+                        <div className="mt-2 flex items-center gap-2 text-xs text-neutral-500">
+                          <CalendarDays className="h-4 w-4" />
+                          <span>{formatEventTime(event.startsAtUtc)}</span>
+                          <span>•</span>
+                          <span>{event.participantsCount} участников</span>
+                        </div>
+                      </button>
+                    ),
+                  )}
                 </div>
               )}
 
@@ -304,7 +307,9 @@ export function ClubDetails({ id, onBack, onOpenEvent }: ClubDetailsProps): Reac
                   size={ButtonSize.MD}
                   fullWidth
                   onClick={eventsCache.loadNextPage}
-                  isLoading={eventsCache.isLoading && !eventsCache.isFirstPageLoading}
+                  isLoading={
+                    eventsCache.isLoading && !eventsCache.isFirstPageLoading
+                  }
                   className="mt-3 rounded-full"
                 >
                   Показать еще

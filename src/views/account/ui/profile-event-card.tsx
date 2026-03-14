@@ -4,7 +4,16 @@ import { ChevronRight, Clock, Users } from 'lucide-react';
 import { FC, useMemo } from 'react';
 
 import { type EventCard } from '@/entities/event/api';
-import { Badge, BadgeSize, BadgeVariant, Button, ButtonSize, ButtonVariant, pluralize } from '@/shared/components';
+
+import {
+  Badge,
+  BadgeSize,
+  BadgeVariant,
+  Button,
+  ButtonSize,
+  ButtonVariant,
+  pluralize,
+} from '@/shared/components';
 import { buildGradient } from '@/shared/lib/gradient';
 import { formatLocalDateTime } from '@/shared/lib/time';
 import { APP_FEED_SCRIM_CLASS, getEventGradient } from '@/shared/lib/ui-styles';

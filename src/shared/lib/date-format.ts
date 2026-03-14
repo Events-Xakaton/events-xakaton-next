@@ -8,7 +8,9 @@ export function toLocalDateTimeInputValue(input: Date | string): string {
   if (typeof input === 'string' && !input) return '';
   const date = input instanceof Date ? input : new Date(input);
   if (Number.isNaN(date.getTime())) return '';
-  const local = new Date(date.getTime() - date.getTimezoneOffset() * MS_PER_MINUTE);
+  const local = new Date(
+    date.getTime() - date.getTimezoneOffset() * MS_PER_MINUTE,
+  );
   return local.toISOString().slice(0, 16);
 }
 

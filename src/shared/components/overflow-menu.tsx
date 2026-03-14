@@ -65,7 +65,9 @@ export const OverflowMenu: FC<Props> = ({ items }) => {
               role="menuitem"
               className={cn(
                 'overflow-menu__item',
-                item.danger ? 'overflow-menu__item--danger' : 'overflow-menu__item--default',
+                item.danger
+                  ? 'overflow-menu__item--danger'
+                  : 'overflow-menu__item--default',
               )}
               onClick={() => {
                 setOpen(false);

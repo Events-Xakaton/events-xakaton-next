@@ -70,9 +70,7 @@ export function AppHeader({
             </div>
             <div className="app-header__slot-center">
               {center ??
-                (title ? (
-                  <p className="app-header__title">{title}</p>
-                ) : null)}
+                (title ? <p className="app-header__title">{title}</p> : null)}
             </div>
             <div className="app-header__slot-right">
               {right ?? <span className="h-6 w-6" aria-hidden />}

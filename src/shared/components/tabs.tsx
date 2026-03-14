@@ -12,7 +12,11 @@ type Props<T extends string> = {
   items: Array<{ value: T; label: string }>;
 };
 
-export const Tabs = <T extends string>({ value, onChange, items }: Props<T>): ReturnType<FC> => {
+export const Tabs = <T extends string>({
+  value,
+  onChange,
+  items,
+}: Props<T>): ReturnType<FC> => {
   const colCount = Math.min(items.length, 4) as 1 | 2 | 3 | 4;
 
   return (
@@ -25,7 +29,9 @@ export const Tabs = <T extends string>({ value, onChange, items }: Props<T>): Re
             onClick={() => onChange(item.value)}
             className={cn(
               'tabs__item',
-              value === item.value ? 'tabs__item--active' : 'tabs__item--inactive',
+              value === item.value
+                ? 'tabs__item--active'
+                : 'tabs__item--inactive',
             )}
             aria-selected={value === item.value}
             role="tab"

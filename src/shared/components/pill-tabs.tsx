@@ -32,7 +32,11 @@ export const PillTabs = <T extends string>({
 
     const button = buttonRefs.current.get(itemValue);
     if (button) {
-      button.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      button.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center',
+      });
     }
   };
 
@@ -54,7 +58,9 @@ export const PillTabs = <T extends string>({
             onClick={() => handleClick(item.value)}
             className={cn(
               'pill-tabs__item',
-              isActive ? 'pill-tabs__item--active' : 'pill-tabs__item--inactive',
+              isActive
+                ? 'pill-tabs__item--active'
+                : 'pill-tabs__item--inactive',
             )}
             type="button"
           >
@@ -63,7 +69,9 @@ export const PillTabs = <T extends string>({
               <span
                 className={cn(
                   'pill-tabs__count',
-                  isActive ? 'pill-tabs__count--active' : 'pill-tabs__count--inactive',
+                  isActive
+                    ? 'pill-tabs__count--active'
+                    : 'pill-tabs__count--inactive',
                 )}
               >
                 {item.count}

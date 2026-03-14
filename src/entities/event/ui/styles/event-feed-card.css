@@ -20,7 +20,7 @@
   }
 
   &__title {
-    @apply font-display text-4xl leading-[0.98] tracking-tight text-white drop-shadow-lg line-clamp-2;
+    @apply font-display line-clamp-2 text-4xl leading-[0.98] tracking-tight text-white drop-shadow-lg;
   }
 
   &__participants {

@@ -358,7 +358,9 @@ export function CreateScreen() {
           <div className={SECTION_CARD}>
             <ClubSelector
               createFromClub={eventForm.createFromClub}
-              onToggle={() => eventForm.setCreateFromClub(!eventForm.createFromClub)}
+              onToggle={() =>
+                eventForm.setCreateFromClub(!eventForm.createFromClub)
+              }
               selectedClubId={eventForm.selectedClubId}
               onSelectClub={eventForm.setSelectedClubId}
               clubs={eventForm.ownedClubs}

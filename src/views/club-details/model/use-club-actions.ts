@@ -7,6 +7,7 @@ import {
   useJoinClubMutation,
   useLeaveClubMutation,
 } from '@/entities/club/api';
+
 import { appErrorText } from '@/shared/lib/utils';
 
 type UseClubActionsResult = {

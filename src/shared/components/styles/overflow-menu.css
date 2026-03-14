@@ -4,22 +4,22 @@
   @apply relative;
 
   &__trigger {
-    @apply flex h-11 w-11 min-h-[44px] min-w-[44px] items-center justify-center;
-    @apply rounded-full border border-white/10 bg-white/5 backdrop-blur-lg text-lg text-white;
+    @apply flex h-11 min-h-[44px] w-11 min-w-[44px] items-center justify-center;
+    @apply rounded-full border border-white/10 bg-white/5 text-lg text-white backdrop-blur-lg;
     @apply transition-all duration-200 hover:bg-white/10;
-    @apply focus-visible:ring-2 focus-visible:ring-primary-500;
+    @apply focus-visible:ring-primary-500 focus-visible:ring-2;
   }
 
   &__dropdown {
     @apply absolute right-0 z-30 mt-1 min-w-40 rounded-xl;
-    @apply border border-neutral-700 bg-white/5 backdrop-blur-lg p-1 shadow-xl;
+    @apply border border-neutral-700 bg-white/5 p-1 shadow-xl backdrop-blur-lg;
   }
 
   &__item {
-    @apply block w-full min-h-[44px] cursor-pointer rounded-lg px-3 py-2;
+    @apply block min-h-[44px] w-full cursor-pointer rounded-lg px-3 py-2;
     @apply text-left text-sm;
     @apply transition-colors duration-200;
-    @apply focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-inset;
+    @apply focus-visible:ring-primary-500 focus-visible:ring-2 focus-visible:ring-inset;
 
     &--default {
       @apply text-neutral-200 hover:bg-white/5;

@@ -3,9 +3,7 @@
 import { Check, ChevronDown } from 'lucide-react';
 import { FC, useEffect, useRef, useState } from 'react';
 
-import {
-  TOGGLE_BUTTON_INACTIVE_CLASS,
-} from '@/shared/lib/ui-styles';
+import { TOGGLE_BUTTON_INACTIVE_CLASS } from '@/shared/lib/ui-styles';
 import { cn } from '@/shared/lib/utils';
 
 import './styles/date-filter.css';
@@ -68,7 +66,7 @@ const NativeSelectVariant: FC<Omit<DateFilterProps, 'variant'>> = ({
       ))}
     </select>
   );
-}
+};
 
 /**
  * ВАРИАНТ 2: Custom Popover с радио-кнопками
@@ -162,7 +160,7 @@ const PopoverVariant: FC<Omit<DateFilterProps, 'variant'>> = ({
       )}
     </div>
   );
-}
+};
 
 /**
  * ВАРИАНТ 3: Inline Button Group
@@ -205,7 +203,7 @@ const ButtonsVariant: FC<Omit<DateFilterProps, 'variant'>> = ({
       })}
     </div>
   );
-}
+};
 
 /**
  * DateFilter Component
@@ -215,7 +213,10 @@ const ButtonsVariant: FC<Omit<DateFilterProps, 'variant'>> = ({
  * - popover: Кастомный dropdown с радио-кнопками (современный, кастомизируемый)
  * - buttons: Inline button group (компактный, быстрый выбор)
  */
-export const DateFilter: FC<DateFilterProps> = ({ variant = 'native', ...props }) => {
+export const DateFilter: FC<DateFilterProps> = ({
+  variant = 'native',
+  ...props
+}) => {
   if (variant === 'popover') {
     return <PopoverVariant {...props} />;
   }
@@ -225,4 +226,4 @@ export const DateFilter: FC<DateFilterProps> = ({ variant = 'native', ...props }
   }
 
   return <NativeSelectVariant {...props} />;
-}
+};

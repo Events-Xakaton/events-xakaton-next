@@ -29,7 +29,9 @@ export const Input: FC<Props> = ({
       {label && (
         <label htmlFor={inputId} className="form-input__label">
           {label}
-          {props.required && <span className="form-input__required-mark">*</span>}
+          {props.required && (
+            <span className="form-input__required-mark">*</span>
+          )}
         </label>
       )}
       <input
@@ -86,7 +88,9 @@ export const Textarea: FC<TextareaProps> = ({
       {label && (
         <label htmlFor={textareaId} className="form-input__label">
           {label}
-          {props.required && <span className="form-input__required-mark">*</span>}
+          {props.required && (
+            <span className="form-input__required-mark">*</span>
+          )}
         </label>
       )}
       <textarea
@@ -108,7 +112,11 @@ export const Textarea: FC<TextareaProps> = ({
         {...props}
       />
       {error && (
-        <p id={`${textareaId}-error`} className="form-input__error" role="alert">
+        <p
+          id={`${textareaId}-error`}
+          className="form-input__error"
+          role="alert"
+        >
           {error}
         </p>
       )}
@@ -146,7 +154,9 @@ export const Select: FC<SelectProps> = ({
       {label && (
         <label htmlFor={selectId} className="form-input__label">
           {label}
-          {props.required && <span className="form-input__required-mark">*</span>}
+          {props.required && (
+            <span className="form-input__required-mark">*</span>
+          )}
         </label>
       )}
       <select

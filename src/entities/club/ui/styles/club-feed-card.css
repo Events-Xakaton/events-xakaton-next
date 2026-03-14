@@ -8,7 +8,7 @@
   }
 
   &__body {
-    @apply relative flex h-full flex-col p-5 pb-7 pr-6;
+    @apply relative flex h-full flex-col p-5 pr-6 pb-7;
   }
 
   &__meta {
@@ -24,11 +24,11 @@
   }
 
   &__title {
-    @apply font-display text-4xl leading-[0.98] tracking-tight text-white drop-shadow-lg line-clamp-2;
+    @apply font-display line-clamp-2 text-4xl leading-[0.98] tracking-tight text-white drop-shadow-lg;
   }
 
   &__description {
-    @apply mt-2 max-w-[85%] text-sm text-white/90 drop-shadow line-clamp-2;
+    @apply mt-2 line-clamp-2 max-w-[85%] text-sm text-white/90 drop-shadow;
   }
 
   &__actions {

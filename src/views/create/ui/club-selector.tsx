@@ -4,7 +4,8 @@ import { Check } from 'lucide-react';
 import { FC } from 'react';
 
 import { type ClubEventAuthoring } from '@/entities/club/api';
-import { getInitials, cn } from '@/shared/lib/utils';
+
+import { cn, getInitials } from '@/shared/lib/utils';
 
 import { stableColor } from '../lib/create-utils';
 
@@ -37,7 +38,9 @@ export const ClubSelector: FC<Props> = ({
     <div>
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1 min-w-0">
-          <p className="text-lg font-semibold text-neutral-900">Ивент от клуба</p>
+          <p className="text-lg font-semibold text-neutral-900">
+            Ивент от клуба
+          </p>
           {createFromClub && (
             <p className="text-xs text-neutral-500 leading-relaxed mt-1.5 mb-1">
               Ивент будет опубликован в выбранном клубе
@@ -67,7 +70,9 @@ export const ClubSelector: FC<Props> = ({
         <>
           {isLoading ? (
             <div className="rounded-2xl bg-neutral-200 p-4 mt-4">
-              <p className="text-sm text-neutral-600">Загружаем ваши клубы...</p>
+              <p className="text-sm text-neutral-600">
+                Загружаем ваши клубы...
+              </p>
             </div>
           ) : null}
 

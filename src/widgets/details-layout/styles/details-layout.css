@@ -16,7 +16,7 @@
   }
 
   &__compact-header-inner {
-    @apply mx-auto relative flex w-full max-w-md items-center justify-between;
+    @apply relative mx-auto flex w-full max-w-md items-center justify-between;
     @apply border-b border-white/15 bg-black/75 px-3 py-2;
     @apply shadow-[0_10px_28px_rgba(0,0,0,0.35)] backdrop-blur;
   }
@@ -47,8 +47,8 @@
   }
 
   &__avatar {
-    @apply mb-3 grid h-16 w-16 min-h-[64px] min-w-[64px] place-items-center overflow-hidden;
-    @apply rounded-full border-2 border-white/85 bg-primary-500;
+    @apply mb-3 grid h-16 min-h-[64px] w-16 min-w-[64px] place-items-center overflow-hidden;
+    @apply bg-primary-500 rounded-full border-2 border-white/85;
     @apply text-sm font-semibold text-white shadow-lg;
   }
 
@@ -61,7 +61,7 @@
   }
 
   &__title {
-    @apply mt-1 text-[26px]/[1.06] font-display font-semibold tracking-tight drop-shadow-md;
+    @apply font-display mt-1 text-[26px]/[1.06] font-semibold tracking-tight drop-shadow-md;
   }
 
   &__meta-line {
@@ -89,7 +89,7 @@
   @apply bg-neutral-900/75 backdrop-blur-sm;
 
   &__title {
-    @apply mb-4 text-[15px] font-display font-semibold tracking-tight text-neutral-100;
+    @apply font-display mb-4 text-[15px] font-semibold tracking-tight text-neutral-100;
   }
 }
 
@@ -101,7 +101,7 @@
   }
 
   &__title {
-    @apply text-[17px] font-medium leading-tight tracking-tight text-neutral-100;
+    @apply text-[17px] leading-tight font-medium tracking-tight text-neutral-100;
   }
 
   &__subtitle {

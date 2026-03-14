@@ -4,19 +4,19 @@
   @apply rounded-xl transition-all duration-200;
 
   &--default {
-    @apply bg-neutral-900/80 backdrop-blur-sm border border-white/10 shadow-lg;
+    @apply border border-white/10 bg-neutral-900/80 shadow-lg backdrop-blur-sm;
   }
 
   &--elevated {
-    @apply bg-neutral-900 border border-white/10 shadow-2xl;
+    @apply border border-white/10 bg-neutral-900 shadow-2xl;
   }
 
   &--outlined {
-    @apply bg-transparent border border-neutral-700;
+    @apply border border-neutral-700 bg-transparent;
   }
 
   &--ghost {
-    @apply bg-transparent border-none;
+    @apply border-none bg-transparent;
   }
 
   &--padding-sm {

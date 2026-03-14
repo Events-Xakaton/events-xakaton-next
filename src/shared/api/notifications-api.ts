@@ -1,5 +1,6 @@
-import { apiBase } from './base-api';
 import { ApiTag } from '@/shared/redux';
+
+import { apiBase } from './base-api';
 
 export type NotificationType = 'event_changed' | 'member_joined';
 export type NotificationTargetType = 'club' | 'event';

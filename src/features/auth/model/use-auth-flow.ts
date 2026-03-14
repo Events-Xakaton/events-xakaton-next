@@ -7,6 +7,7 @@ import {
   useVerifyCodeMutation,
 } from '@/features/auth/api';
 import { setVerified } from '@/features/auth/model/auth-slice';
+
 import { saveAuthSession } from '@/shared/lib/auth-session';
 import { appErrorText } from '@/shared/lib/utils';
 import { useAppDispatch } from '@/shared/store/hooks';
@@ -73,7 +74,10 @@ export function useAuthFlow() {
       setResendLeftSec(result.ttlSec || 60);
     } catch (err) {
       setError(
-        appErrorText(err, 'Сервис временно недоступен. Повторите через минуту.'),
+        appErrorText(
+          err,
+          'Сервис временно недоступен. Повторите через минуту.',
+        ),
       );
     }
   }

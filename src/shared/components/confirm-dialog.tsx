@@ -3,7 +3,13 @@
 import { FC, useEffect } from 'react';
 
 import { Button, ButtonVariant } from './button';
-import { Card, CardDescription, CardTitle, CardVariant, CardPadding } from './card';
+import {
+  Card,
+  CardDescription,
+  CardPadding,
+  CardTitle,
+  CardVariant,
+} from './card';
 import './styles/confirm-dialog.css';
 
 type Props = {
@@ -50,7 +56,11 @@ export const ConfirmDialog: FC<Props> = ({
       aria-labelledby="confirm-dialog-title"
       aria-describedby={description ? 'confirm-dialog-description' : undefined}
     >
-      <Card variant={CardVariant.ELEVATED} padding={CardPadding.LG} className="w-full max-w-sm">
+      <Card
+        variant={CardVariant.ELEVATED}
+        padding={CardPadding.LG}
+        className="w-full max-w-sm"
+      >
         <CardTitle id="confirm-dialog-title" className="text-base">
           {title}
         </CardTitle>

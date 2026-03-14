@@ -89,9 +89,7 @@ export function CommentsBlock({
 
   return (
     <Card className="comments-block">
-      <h3 className="comments-block__header">
-        Комментарии
-      </h3>
+      <h3 className="comments-block__header">Комментарии</h3>
 
       {!readOnly ? (
         <div className="comments-block__form">
@@ -142,10 +140,7 @@ export function CommentsBlock({
           const mine = item.authorTelegramUserId === me;
           const editing = editingId === item.id;
           return (
-            <div
-              key={item.id}
-              className="comments-block__item"
-            >
+            <div key={item.id} className="comments-block__item">
               <div className="comments-block__item-meta">
                 <span className="comments-block__item-author">
                   {item.authorName}

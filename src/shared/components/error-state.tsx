@@ -3,7 +3,7 @@
 import { FC } from 'react';
 
 import { Button, ButtonVariant } from './button';
-import { Card, CardVariant, CardPadding } from './card';
+import { Card, CardPadding, CardVariant } from './card';
 import './styles/error-state.css';
 
 type Props = {

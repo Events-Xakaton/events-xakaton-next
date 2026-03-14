@@ -53,7 +53,11 @@ export const Card: FC<Props> = ({
 
 type CardHeaderProps = HTMLAttributes<HTMLDivElement> & { children: ReactNode };
 
-export const CardHeader: FC<CardHeaderProps> = ({ children, className, ...props }) => {
+export const CardHeader: FC<CardHeaderProps> = ({
+  children,
+  className,
+  ...props
+}) => {
   return (
     <div className={cn('card__header', className)} {...props}>
       {children}
@@ -79,9 +83,15 @@ export const CardTitle: FC<CardTitleProps> = ({
   );
 };
 
-type CardDescriptionProps = HTMLAttributes<HTMLParagraphElement> & { children: ReactNode };
+type CardDescriptionProps = HTMLAttributes<HTMLParagraphElement> & {
+  children: ReactNode;
+};
 
-export const CardDescription: FC<CardDescriptionProps> = ({ children, className, ...props }) => {
+export const CardDescription: FC<CardDescriptionProps> = ({
+  children,
+  className,
+  ...props
+}) => {
   return (
     <p className={cn('card__description', className)} {...props}>
       {children}
@@ -89,9 +99,15 @@ export const CardDescription: FC<CardDescriptionProps> = ({ children, className,
   );
 };
 
-type CardContentProps = HTMLAttributes<HTMLDivElement> & { children: ReactNode };
+type CardContentProps = HTMLAttributes<HTMLDivElement> & {
+  children: ReactNode;
+};
 
-export const CardContent: FC<CardContentProps> = ({ children, className, ...props }) => {
+export const CardContent: FC<CardContentProps> = ({
+  children,
+  className,
+  ...props
+}) => {
   return (
     <div className={cn(className)} {...props}>
       {children}
@@ -101,7 +117,11 @@ export const CardContent: FC<CardContentProps> = ({ children, className, ...prop
 
 type CardFooterProps = HTMLAttributes<HTMLDivElement> & { children: ReactNode };
 
-export const CardFooter: FC<CardFooterProps> = ({ children, className, ...props }) => {
+export const CardFooter: FC<CardFooterProps> = ({
+  children,
+  className,
+  ...props
+}) => {
   return (
     <div className={cn('card__footer', className)} {...props}>
       {children}

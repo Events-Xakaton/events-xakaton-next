@@ -3,9 +3,7 @@
 import { Bell, Home, Plus, Star, User } from 'lucide-react';
 import { ReactElement } from 'react';
 
-import {
-  SAFE_AREA_BOTTOM,
-} from '@/shared/lib/ui-styles';
+import { SAFE_AREA_BOTTOM } from '@/shared/lib/ui-styles';
 import { cn } from '@/shared/lib/utils';
 import { MainTab } from '@/shared/types/navigation';
 
@@ -49,18 +47,20 @@ export function BottomNav({
                 aria-current={active ? 'page' : undefined}
                 className={cn(
                   'bottom-nav__item',
-                  active ? 'bottom-nav__item--active' : 'bottom-nav__item--inactive',
+                  active
+                    ? 'bottom-nav__item--active'
+                    : 'bottom-nav__item--inactive',
                 )}
               >
                 <Icon
-                  className={cn('bottom-nav__icon', active && 'bottom-nav__icon--active')}
+                  className={cn(
+                    'bottom-nav__icon',
+                    active && 'bottom-nav__icon--active',
+                  )}
                   aria-hidden="true"
                 />
                 {item.id === 'notifications' && hasNewNotifications ? (
-                  <span
-                    className="bottom-nav__dot"
-                    aria-hidden="true"
-                  />
+                  <span className="bottom-nav__dot" aria-hidden="true" />
                 ) : null}
               </button>
             );

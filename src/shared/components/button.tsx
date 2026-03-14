@@ -105,7 +105,12 @@ export const IconButton: FC<IconButtonProps> = ({
     <button
       aria-label={label}
       title={label}
-      className={cn('icon-button', `icon-button--${variant}`, `icon-button--${size}`, className)}
+      className={cn(
+        'icon-button',
+        `icon-button--${variant}`,
+        `icon-button--${size}`,
+        className,
+      )}
       {...props}
     >
       {icon}

@@ -75,7 +75,11 @@ export function ProfileEventsSection({
       (e) => e.joinedByMe && new Date(e.startsAtUtc) < new Date(),
     ).length;
 
-    return { upcoming: upcomingCount, organizing: organizingCount, past: pastCount };
+    return {
+      upcoming: upcomingCount,
+      organizing: organizingCount,
+      past: pastCount,
+    };
   }, [eventsQuery.data]);
 
   const filteredEvents = useMemo(() => {
@@ -92,13 +96,17 @@ export function ProfileEventsSection({
             new Date(e.startsAtUtc) > new Date(),
         );
         return filtered.sort(
-          (a, b) => new Date(a.startsAtUtc).getTime() - new Date(b.startsAtUtc).getTime(),
+          (a, b) =>
+            new Date(a.startsAtUtc).getTime() -
+            new Date(b.startsAtUtc).getTime(),
         );
 
       case 'organizing':
         filtered = eventsQuery.data.filter((e) => e.isOrganizer);
         return filtered.sort(
-          (a, b) => new Date(a.startsAtUtc).getTime() - new Date(b.startsAtUtc).getTime(),
+          (a, b) =>
+            new Date(a.startsAtUtc).getTime() -
+            new Date(b.startsAtUtc).getTime(),
         );
 
       case 'past':
@@ -106,7 +114,9 @@ export function ProfileEventsSection({
           (e) => e.joinedByMe && new Date(e.startsAtUtc) < new Date(),
         );
         return filtered.sort(
-          (a, b) => new Date(b.startsAtUtc).getTime() - new Date(a.startsAtUtc).getTime(),
+          (a, b) =>
+            new Date(b.startsAtUtc).getTime() -
+            new Date(a.startsAtUtc).getTime(),
         );
 
       default:
@@ -129,8 +139,16 @@ export function ProfileEventsSection({
         value={activeTab}
         onChange={setActiveTab}
         items={[
-          { value: 'upcoming', label: 'Предстоящие', count: eventCounts.upcoming },
-          { value: 'organizing', label: 'Организую', count: eventCounts.organizing },
+          {
+            value: 'upcoming',
+            label: 'Предстоящие',
+            count: eventCounts.upcoming,
+          },
+          {
+            value: 'organizing',
+            label: 'Организую',
+            count: eventCounts.organizing,
+          },
           { value: 'past', label: 'Прошедшие', count: eventCounts.past },
         ]}
       />

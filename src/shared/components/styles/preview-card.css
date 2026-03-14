@@ -12,17 +12,17 @@
   }
 
   &__top-left {
-    @apply absolute left-4 top-4 z-10;
+    @apply absolute top-4 left-4 z-10;
   }
 
   &__top-right {
-    @apply absolute right-4 top-4 z-10;
+    @apply absolute top-4 right-4 z-10;
   }
 
   &__change-bg-button {
     @apply inline-flex h-7 items-center gap-1.5 rounded-full;
     @apply border border-white/45 bg-white/20 px-3.5;
-    @apply text-[11px] font-semibold uppercase tracking-[0.18em] text-white;
+    @apply text-[11px] font-semibold tracking-[0.18em] text-white uppercase;
     @apply backdrop-blur-sm transition hover:bg-white/30;
   }
 
@@ -45,7 +45,7 @@
   }
 
   &__title {
-    @apply block pr-10 text-4xl font-bold leading-tight tracking-tight text-white drop-shadow-lg;
+    @apply block pr-10 text-4xl leading-tight font-bold tracking-tight text-white drop-shadow-lg;
 
     &--clickable {
       @apply cursor-pointer;

@@ -5,7 +5,7 @@
   @apply relative;
 
   &__dropdown {
-    @apply absolute right-0 top-full z-40 mt-2 w-52 origin-top-right;
+    @apply absolute top-full right-0 z-40 mt-2 w-52 origin-top-right;
     @apply rounded-2xl border border-neutral-200 bg-white shadow-xl;
   }
 
@@ -15,10 +15,10 @@
 
   &__option {
     @apply flex w-full items-center gap-3 rounded-xl px-3 py-2.5;
-    @apply text-left text-sm transition-colors min-h-[44px];
+    @apply min-h-[44px] text-left text-sm transition-colors;
 
     &--active {
-      @apply bg-gradient-to-br from-primary-500 to-primary-600 text-white shadow-lg font-semibold;
+      @apply from-primary-500 to-primary-600 bg-gradient-to-br font-semibold text-white shadow-lg;
     }
 
     &--inactive {
@@ -37,14 +37,14 @@
 
 /* Варіант з кнопками (buttons) */
 .date-filter-buttons {
-  @apply inline-flex rounded-full border border-neutral-200 bg-white/90 shadow-sm p-1;
+  @apply inline-flex rounded-full border border-neutral-200 bg-white/90 p-1 shadow-sm;
 
   &__option {
-    @apply px-2.5 py-1.5 text-[11px] font-semibold rounded-full;
-    @apply transition-all duration-200 whitespace-nowrap min-h-[32px];
+    @apply rounded-full px-2.5 py-1.5 text-[11px] font-semibold;
+    @apply min-h-[32px] whitespace-nowrap transition-all duration-200;
 
     &--active {
-      @apply bg-gradient-to-br from-primary-500 to-primary-600 text-white shadow-lg;
+      @apply from-primary-500 to-primary-600 bg-gradient-to-br text-white shadow-lg;
     }
 
     &--inactive {

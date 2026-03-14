@@ -19,15 +19,22 @@ type AboutSectionProps = {
   maxLength?: number;
 };
 
-export const AboutSection: FC<AboutSectionProps> = ({ text, maxLength = 220 }) => {
+export const AboutSection: FC<AboutSectionProps> = ({
+  text,
+  maxLength = 220,
+}) => {
   const [expanded, setExpanded] = useState(false);
   const needsExpansion = text.length > maxLength;
   const displayText =
-    expanded || !needsExpansion ? text : `${text.slice(0, maxLength).trimEnd()}...`;
+    expanded || !needsExpansion
+      ? text
+      : `${text.slice(0, maxLength).trimEnd()}...`;
 
   return (
     <div>
-      <p className="about-section__text">{displayText || 'Описание пока не заполнено.'}</p>
+      <p className="about-section__text">
+        {displayText || 'Описание пока не заполнено.'}
+      </p>
       {needsExpansion && (
         <button
           type="button"
@@ -51,10 +58,19 @@ type DetailRowProps = {
 
 const DETAIL_LABEL_WIDTH = 'w-[58%] min-w-[176px] pr-2';
 
-export const DetailRow: FC<DetailRowProps> = ({ icon, label, value, rightElement, onClick }) => {
+export const DetailRow: FC<DetailRowProps> = ({
+  icon,
+  label,
+  value,
+  rightElement,
+  onClick,
+}) => {
   const Component = onClick ? 'button' : 'div';
   return (
-    <Component onClick={onClick} className={cn('detail-row', onClick && 'detail-row--clickable')}>
+    <Component
+      onClick={onClick}
+      className={cn('detail-row', onClick && 'detail-row--clickable')}
+    >
       <div className="detail-row__icon" aria-hidden="true">
         {icon}
       </div>
@@ -76,7 +92,10 @@ type StickyActionsPanelProps = {
   rightAction: ReactNode;
 };
 
-export const StickyActionsPanel: FC<StickyActionsPanelProps> = ({ leftActions, rightAction }) => {
+export const StickyActionsPanel: FC<StickyActionsPanelProps> = ({
+  leftActions,
+  rightAction,
+}) => {
   return (
     <div
       className="sticky-actions"
@@ -105,7 +124,11 @@ type OverflowMenuButtonProps = {
   onToggle: () => void;
 };
 
-export const OverflowMenuButton: FC<OverflowMenuButtonProps> = ({ items, isOpen, onToggle }) => {
+export const OverflowMenuButton: FC<OverflowMenuButtonProps> = ({
+  items,
+  isOpen,
+  onToggle,
+}) => {
   if (items.length === 0) return null;
 
   return (
@@ -132,7 +155,10 @@ export const OverflowMenuButton: FC<OverflowMenuButtonProps> = ({ items, isOpen,
             aria-hidden="true"
           />
           <div
-            className={cn('overflow-menu-button__dropdown', APP_PANEL_SHADOW_CLASS)}
+            className={cn(
+              'overflow-menu-button__dropdown',
+              APP_PANEL_SHADOW_CLASS,
+            )}
             style={{
               top: `calc(env(safe-area-inset-top, 0px) + 76px)`,
               right: `calc(env(safe-area-inset-right, 0px) + 12px)`,

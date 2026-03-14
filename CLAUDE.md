@@ -104,7 +104,7 @@ export const MyWidget: FC<Props> = ({ title }) => {
 @import '../lib/styles/theme.css';
 
 .button {
-  @apply inline-flex items-center justify-center font-medium rounded-xl;
+  @apply inline-flex items-center justify-center rounded-xl font-medium;
   @apply transition-all duration-200;
 
   &--primary {
@@ -112,7 +112,9 @@ export const MyWidget: FC<Props> = ({ title }) => {
     @apply hover:bg-primary-600;
   }
 
-  &--sm { @apply px-4 py-2 text-sm min-h-[40px]; }
+  &--sm {
+    @apply min-h-[40px] px-4 py-2 text-sm;
+  }
 }
 ```
 
@@ -190,22 +192,22 @@ const authSlice = createSlice({
 
 Все enum'ы вариантов экспортируются из файла компонента и из `shared/components/index.ts`.
 
-| Компонент | Enum вариантов |
-|---|---|
-| `Button` | `ButtonVariant`, `ButtonSize` |
-| `IconButton` | `IconButtonVariant`, `ButtonSize` |
-| `Card` | `CardVariant`, `CardPadding` |
-| `Badge` | `BadgeVariant`, `BadgeSize`, `EventStatus` |
-| `Avatar` | `AvatarSize` |
+| Компонент    | Enum вариантов                             |
+| ------------ | ------------------------------------------ |
+| `Button`     | `ButtonVariant`, `ButtonSize`              |
+| `IconButton` | `IconButtonVariant`, `ButtonSize`          |
+| `Card`       | `CardVariant`, `CardPadding`               |
+| `Badge`      | `BadgeVariant`, `BadgeSize`, `EventStatus` |
+| `Avatar`     | `AvatarSize`                               |
 
 Пример использования:
 
 ```tsx
-import { Button, ButtonVariant, ButtonSize } from '@/shared/components';
+import { Button, ButtonSize, ButtonVariant } from '@/shared/components';
 
 <Button variant={ButtonVariant.PRIMARY} size={ButtonSize.MD}>
   Присоединиться
-</Button>
+</Button>;
 ```
 
 ---

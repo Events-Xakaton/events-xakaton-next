@@ -47,11 +47,7 @@ export function DetailsSection({
       padding={CardPadding.MD}
       className={cn('details-section', className)}
     >
-      {title ? (
-        <h3 className="details-section__title">
-          {title}
-        </h3>
-      ) : null}
+      {title ? <h3 className="details-section__title">{title}</h3> : null}
       {children}
     </Card>
   );
@@ -74,13 +70,9 @@ export function DetailsInfoRow({
         {icon}
       </div>
       <div>
-        <p className="details-info-row__title">
-          {title}
-        </p>
+        <p className="details-info-row__title">{title}</p>
         {subtitle ? (
-          <p className="details-info-row__subtitle">
-            {subtitle}
-          </p>
+          <p className="details-info-row__subtitle">{subtitle}</p>
         ) : null}
       </div>
       {right ?? null}
@@ -137,7 +129,8 @@ export function DetailsPage({
   const [showCompactHeader, setShowCompactHeader] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setShowCompactHeader(window.scrollY > COMPACT_HEADER_THRESHOLD_PX);
+    const onScroll = () =>
+      setShowCompactHeader(window.scrollY > COMPACT_HEADER_THRESHOLD_PX);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
@@ -177,9 +170,7 @@ export function DetailsPage({
           }}
         >
           <BackButton onClick={onBack} className="pointer-events-auto" />
-          <p className="details-page__compact-title">
-            {title}
-          </p>
+          <p className="details-page__compact-title">{title}</p>
           <span className="h-11 w-11 shrink-0" aria-hidden />
         </div>
       </div>
@@ -188,9 +179,7 @@ export function DetailsPage({
         className="details-page__hero"
         style={{ ...heroBackground, minHeight: 'min(46dvh, 420px)' }}
       >
-        {!coverUrl ? (
-          <div className="details-page__hero-noise" />
-        ) : null}
+        {!coverUrl ? <div className="details-page__hero-noise" /> : null}
         <div className="details-page__hero-scrim" />
 
         <div
@@ -224,20 +213,14 @@ export function DetailsPage({
           {subtitle ? (
             <p className="details-page__subtitle">{subtitle}</p>
           ) : null}
-          <h1 className="details-page__title">
-            {title}
-          </h1>
+          <h1 className="details-page__title">{title}</h1>
           {metaLine ? (
-            <p className="details-page__meta-line">
-              {metaLine}
-            </p>
+            <p className="details-page__meta-line">{metaLine}</p>
           ) : null}
         </div>
       </section>
 
-      <div className="details-page__summary">
-        {summaryCard}
-      </div>
+      <div className="details-page__summary">{summaryCard}</div>
 
       <div
         className="details-page__sections"

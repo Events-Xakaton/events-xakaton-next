@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import { useJoinClubMutation } from '@/entities/club/api';
 import { useJoinEventMutation } from '@/entities/event/api';
+
 import { appErrorText } from '@/shared/lib/utils';
 
 export function useFeedActions(onClubJoined: () => void) {
@@ -11,9 +12,9 @@ export function useFeedActions(onClubJoined: () => void) {
   const [joinClub, joinClubState] = useJoinClubMutation();
 
   const [hint, setHint] = useState('');
-  const [joinedEventIds, setJoinedEventIds] = useState<
-    Record<string, boolean>
-  >({});
+  const [joinedEventIds, setJoinedEventIds] = useState<Record<string, boolean>>(
+    {},
+  );
   const [joinedClubIds, setJoinedClubIds] = useState<Record<string, boolean>>(
     {},
   );

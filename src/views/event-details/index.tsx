@@ -37,9 +37,8 @@ import {
   SAFE_AREA_TOP,
   getBottomPadding,
 } from '@/shared/lib/ui-styles';
-import { cn } from '@/shared/lib/utils';
-
 import { useCompactHeader } from '@/shared/lib/useCompactHeader';
+import { cn } from '@/shared/lib/utils';
 
 import { useEditSheet } from './model/use-edit-sheet';
 import { useEventActions } from './model/use-event-actions';

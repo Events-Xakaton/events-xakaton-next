@@ -4,7 +4,13 @@ import { ChevronRight, Users } from 'lucide-react';
 import { FC, useMemo } from 'react';
 
 import { type ClubCard } from '@/entities/club/api';
-import { Button, ButtonSize, ButtonVariant, pluralize } from '@/shared/components';
+
+import {
+  Button,
+  ButtonSize,
+  ButtonVariant,
+  pluralize,
+} from '@/shared/components';
 import { buildGradient } from '@/shared/lib/gradient';
 import { APP_FEED_SCRIM_CLASS, getClubGradient } from '@/shared/lib/ui-styles';
 import { cn } from '@/shared/lib/utils';

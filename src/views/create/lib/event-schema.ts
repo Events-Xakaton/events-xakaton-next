@@ -4,7 +4,10 @@ import { toIsoFromLocal } from '@/shared/lib/utils';
 
 export const eventSchema = z
   .object({
-    title: z.string().min(1, 'Введите название').max(60, 'Не более 60 символов'),
+    title: z
+      .string()
+      .min(1, 'Введите название')
+      .max(60, 'Не более 60 символов'),
     description: z.string().min(1, 'Введите описание'),
     location: z.string().min(1, 'Укажите локацию'),
     startsAt: z.string().min(1, 'Укажите дату начала'),

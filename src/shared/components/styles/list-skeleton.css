@@ -4,14 +4,14 @@
   @apply space-y-3;
 
   &__item {
-    @apply animate-pulse rounded bg-neutral-200 h-4 w-2/3;
+    @apply h-4 w-2/3 animate-pulse rounded bg-neutral-200;
   }
 
   &__item-sub {
-    @apply animate-pulse rounded bg-neutral-200 mt-2 h-3 w-1/2;
+    @apply mt-2 h-3 w-1/2 animate-pulse rounded bg-neutral-200;
   }
 
   &__item-action {
-    @apply animate-pulse rounded bg-neutral-200 mt-3 h-9 w-24 rounded-xl;
+    @apply mt-3 h-9 w-24 animate-pulse rounded rounded-xl bg-neutral-200;
   }
 }

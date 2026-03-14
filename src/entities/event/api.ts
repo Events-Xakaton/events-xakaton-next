@@ -67,13 +67,17 @@ export const eventApi = apiBase.injectEndpoints({
           }),
         );
         const detailsPatch = dispatch(
-          eventApi.util.updateQueryData('eventDetails', { eventId }, (draft) => {
-            draft.joinedByMe = true;
-            draft.participantsCount += 1;
-            if (draft.freeSpots !== null) {
-              draft.freeSpots = Math.max(0, draft.freeSpots - 1);
-            }
-          }),
+          eventApi.util.updateQueryData(
+            'eventDetails',
+            { eventId },
+            (draft) => {
+              draft.joinedByMe = true;
+              draft.participantsCount += 1;
+              if (draft.freeSpots !== null) {
+                draft.freeSpots = Math.max(0, draft.freeSpots - 1);
+              }
+            },
+          ),
         );
         try {
           await queryFulfilled;
@@ -96,7 +100,10 @@ export const eventApi = apiBase.injectEndpoints({
             const event = draft.find((e) => e.id === eventId);
             if (event) {
               event.joinedByMe = false;
-              event.participantsCount = Math.max(0, event.participantsCount - 1);
+              event.participantsCount = Math.max(
+                0,
+                event.participantsCount - 1,
+              );
               if (event.freeSpots !== null) {
                 event.freeSpots += 1;
               }
@@ -104,13 +111,20 @@ export const eventApi = apiBase.injectEndpoints({
           }),
         );
         const detailsPatch = dispatch(
-          eventApi.util.updateQueryData('eventDetails', { eventId }, (draft) => {
-            draft.joinedByMe = false;
-            draft.participantsCount = Math.max(0, draft.participantsCount - 1);
-            if (draft.freeSpots !== null) {
-              draft.freeSpots += 1;
-            }
-          }),
+          eventApi.util.updateQueryData(
+            'eventDetails',
+            { eventId },
+            (draft) => {
+              draft.joinedByMe = false;
+              draft.participantsCount = Math.max(
+                0,
+                draft.participantsCount - 1,
+              );
+              if (draft.freeSpots !== null) {
+                draft.freeSpots += 1;
+              }
+            },
+          ),
         );
         try {
           await queryFulfilled;

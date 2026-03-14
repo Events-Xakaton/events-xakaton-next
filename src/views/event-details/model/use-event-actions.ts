@@ -8,6 +8,7 @@ import {
   useUnjoinEventMutation,
   useUpdateEventMutation,
 } from '@/entities/event/api';
+
 import { appErrorText, toIsoFromLocal } from '@/shared/lib/utils';
 
 import type { EventDraftFields, EventOriginalData } from '../types';
@@ -47,7 +48,9 @@ export function useEventActions(eventId: string) {
     if (!hasChanges || !canManage || archived) return;
 
     if (!hasRequiredFields) {
-      setHint('Заполните обязательные поля: название, описание, локацию и время.');
+      setHint(
+        'Заполните обязательные поля: название, описание, локацию и время.',
+      );
       return;
     }
 

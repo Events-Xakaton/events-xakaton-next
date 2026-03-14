@@ -1,5 +1,6 @@
-import { apiBase } from './base-api';
 import { ApiTag } from '@/shared/redux';
+
+import { apiBase } from './base-api';
 
 export const connectionsApi = apiBase.injectEndpoints({
   endpoints: (builder) => ({

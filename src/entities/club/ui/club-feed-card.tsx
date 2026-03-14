@@ -50,10 +50,7 @@ export function ClubFeedCard({
 
   return (
     <article
-      className={cn(
-        'club-feed-card',
-        !noShadow && APP_ELEVATED_CARD_CLASS,
-      )}
+      className={cn('club-feed-card', !noShadow && APP_ELEVATED_CARD_CLASS)}
       style={{ ...cardBackgroundStyle, ...cardStyle }}
       role="article"
       aria-label={`Клуб: ${club.title}`}
@@ -69,16 +66,17 @@ export function ClubFeedCard({
               aria-label={`${club.membersCount} участников`}
             >
               {club.membersCount}{' '}
-              {pluralize(club.membersCount, 'участник', 'участника', 'участников')}
+              {pluralize(
+                club.membersCount,
+                'участник',
+                'участника',
+                'участников',
+              )}
             </span>
           </div>
 
-          <h2 className="club-feed-card__title">
-            {club.title}
-          </h2>
-          <p className="club-feed-card__description">
-            {club.description}
-          </p>
+          <h2 className="club-feed-card__title">{club.title}</h2>
+          <p className="club-feed-card__description">{club.description}</p>
         </div>
 
         <div className="club-feed-card__actions">
@@ -87,7 +85,9 @@ export function ClubFeedCard({
               <button
                 type="button"
                 onClick={() => onToggleSaved(club.id)}
-                aria-label={saved ? 'Убрать из избранного' : 'Добавить в избранное'}
+                aria-label={
+                  saved ? 'Убрать из избранного' : 'Добавить в избранное'
+                }
                 title={saved ? 'Убрать из избранного' : 'Добавить в избранное'}
                 className={cn(
                   'inline-flex h-11 w-11 min-h-[44px] min-w-[44px] items-center justify-center rounded-full transition-all duration-200',

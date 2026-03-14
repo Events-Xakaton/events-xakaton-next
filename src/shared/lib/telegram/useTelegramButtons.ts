@@ -1,27 +1,35 @@
 'use client';
 
+import {
+  hideBackButton,
+  isBackButtonMounted,
+  isMainButtonMounted,
+  mountBackButton,
+  mountMainButton,
+  onBackButtonClick,
+  onMainButtonClick,
+  setMainButtonParams,
+  showBackButton,
+} from '@telegram-apps/sdk';
 import { useEffect } from 'react';
 
+// Цвет кнопки совпадает с primary-500 из темы приложения
+const MAIN_BUTTON_COLOR = '#7c3aed';
+const MAIN_BUTTON_TEXT_COLOR = '#ffffff';
+
 /**
- * Управление Telegram MainButton (BottomButton)
- *
- * MainButton - это системная кнопка внизу экрана в compact mode.
- * Используется для основных действий (Submit, Publish, Save, etc.)
- *
- * @param config.text - Текст кнопки
- * @param config.onClick - Callback при клике
- * @param config.enabled - Можно ли кликнуть (disabled если false)
- * @param config.visible - Показывать ли кнопку
+ * Управление Telegram MainButton (системная кнопка внизу экрана в compact mode).
+ * Используется для основных действий (Submit, Publish, Save и т.п.)
  *
  * @example
  * ```tsx
  * const mode = useViewportMode();
  *
  * useTelegramMainButton({
- *   text: "Создать событие",
+ *   text: 'Создать мероприятие',
  *   onClick: handleSubmit,
  *   enabled: canPublish,
- *   visible: mode === "compact",
+ *   visible: mode === 'compact',
  * });
  * ```
  */
@@ -32,66 +40,47 @@ export function useTelegramMainButton(config: {
   visible: boolean;
 }): void {
   useEffect(() => {
-    // SSR guard
-    if (typeof window === 'undefined') {
-      return;
-    }
-
-    const webApp = window.Telegram?.WebApp;
-    if (!webApp) {
-      return;
-    }
-
-    const button = webApp.MainButton;
-    if (!button) {
-      console.warn('[useTelegramMainButton] MainButton API not available');
-      return;
+    // Монтируем кнопку при первом использовании
+    if (!isMainButtonMounted() && mountMainButton.isAvailable()) {
+      mountMainButton();
     }
 
     if (config.visible) {
-      // Настроить внешний вид
-      button.text = config.text;
-      button.color = '#7c3aed'; // primary-500
-      button.textColor = '#ffffff';
-
-      // Состояние enabled/disabled
-      if (config.enabled) {
-        button.enable();
-      } else {
-        button.disable();
+      if (setMainButtonParams.isAvailable()) {
+        setMainButtonParams({
+          text: config.text,
+          backgroundColor: MAIN_BUTTON_COLOR,
+          textColor: MAIN_BUTTON_TEXT_COLOR,
+          isEnabled: config.enabled,
+          isVisible: true,
+        });
       }
 
-      // Показать кнопку
-      button.show();
+      if (!onMainButtonClick.isAvailable()) return;
+      const cleanup = onMainButtonClick(config.onClick);
 
-      // Обработчик клика
-      const handler = () => config.onClick();
-      button.onClick(handler);
-
-      // Cleanup
       return () => {
-        button.hide();
-        button.offClick(handler);
+        cleanup();
+        if (setMainButtonParams.isAvailable()) {
+          setMainButtonParams({ isVisible: false });
+        }
       };
     } else {
-      button.hide();
+      if (setMainButtonParams.isAvailable()) {
+        setMainButtonParams({ isVisible: false });
+      }
     }
   }, [config.text, config.onClick, config.enabled, config.visible]);
 }
 
 /**
- * Управление Telegram BackButton
- *
- * BackButton - это системная кнопка "назад" в левом верхнем углу.
- * Используется для навигации из detail screens.
- *
- * @param config.onClick - Callback при клике
- * @param config.visible - Показывать ли кнопку
+ * Управление Telegram BackButton (системная кнопка «назад» в левом верхнем углу).
+ * Используется для навигации с detail-экранов.
  *
  * @example
  * ```tsx
  * useTelegramBackButton({
- *   onClick: () => navigate("/home"),
+ *   onClick: () => onBack(),
  *   visible: true,
  * });
  * ```
@@ -101,37 +90,23 @@ export function useTelegramBackButton(config: {
   visible: boolean;
 }): void {
   useEffect(() => {
-    // SSR guard
-    if (typeof window === 'undefined') {
-      return;
-    }
-
-    const webApp = window.Telegram?.WebApp;
-    if (!webApp) {
-      return;
-    }
-
-    const button = webApp.BackButton;
-    if (!button) {
-      console.warn('[useTelegramBackButton] BackButton API not available');
-      return;
+    // Монтируем кнопку при первом использовании
+    if (!isBackButtonMounted() && mountBackButton.isAvailable()) {
+      mountBackButton();
     }
 
     if (config.visible) {
-      // Обработчик клика
-      const handler = () => config.onClick();
-      button.onClick(handler);
+      if (showBackButton.isAvailable()) showBackButton();
 
-      // Показать кнопку
-      button.show();
+      if (!onBackButtonClick.isAvailable()) return;
+      const cleanup = onBackButtonClick(config.onClick);
 
-      // Cleanup
       return () => {
-        button.hide();
-        button.offClick(handler);
+        cleanup();
+        if (hideBackButton.isAvailable()) hideBackButton();
       };
     } else {
-      button.hide();
+      if (hideBackButton.isAvailable()) hideBackButton();
     }
   }, [config.onClick, config.visible]);
 }

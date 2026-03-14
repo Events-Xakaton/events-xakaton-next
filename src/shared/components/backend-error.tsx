@@ -3,8 +3,8 @@
 import { RefreshCw, ServerOff } from 'lucide-react';
 import { FC } from 'react';
 
-import { Button, ButtonVariant, ButtonSize } from './button';
-import { Card, CardVariant, CardPadding } from './card';
+import { Button, ButtonSize, ButtonVariant } from './button';
+import { Card, CardPadding, CardVariant } from './card';
 import './styles/backend-error.css';
 
 type Props = {
@@ -14,7 +14,11 @@ type Props = {
 export const BackendError: FC<Props> = ({ onRetry }) => {
   return (
     <div className="backend-error">
-      <Card variant={CardVariant.ELEVATED} padding={CardPadding.LG} className="w-full">
+      <Card
+        variant={CardVariant.ELEVATED}
+        padding={CardPadding.LG}
+        className="w-full"
+      >
         <div className="backend-error__inner">
           <div className="backend-error__icon">
             <ServerOff className="h-8 w-8 text-red-400" aria-hidden="true" />
@@ -22,13 +26,17 @@ export const BackendError: FC<Props> = ({ onRetry }) => {
 
           <h2 className="backend-error__title">Сервер недоступен</h2>
 
-          <p className="backend-error__message">Backend не запущен. Выполните в терминале:</p>
+          <p className="backend-error__message">
+            Backend не запущен. Выполните в терминале:
+          </p>
 
           <div className="backend-error__code-block">
             <code className="text-sm text-accent-400">npm start</code>
           </div>
 
-          <p className="backend-error__hint">Или используйте: ./scripts/quick-start.sh</p>
+          <p className="backend-error__hint">
+            Или используйте: ./scripts/quick-start.sh
+          </p>
 
           {onRetry && (
             <div className="backend-error__action">

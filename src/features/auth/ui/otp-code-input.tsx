@@ -22,7 +22,12 @@ function lastFilledIndex(arr: string[]): number {
   return -1;
 }
 
-export const OtpCodeInput: FC<Props> = ({ value, onChange, error, autoFocus }) => {
+export const OtpCodeInput: FC<Props> = ({
+  value,
+  onChange,
+  error,
+  autoFocus,
+}) => {
   const [focusIndex, setFocusIndex] = useState(0);
   const refs = useRef<(HTMLInputElement | null)[]>([]);
   const digits = Array.from({ length: OTP_LENGTH }, (_, i) => value[i] ?? '');

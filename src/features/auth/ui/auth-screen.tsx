@@ -1,7 +1,7 @@
 'use client';
 
 import { Trophy } from 'lucide-react';
-import { FormEvent, FC } from 'react';
+import { FC, FormEvent } from 'react';
 
 import { Button, ButtonSize, ButtonVariant } from '@/shared/components/button';
 import {
@@ -45,7 +45,11 @@ export const AuthScreen: FC = () => {
         paddingBottom: SAFE_AREA_BOTTOM,
       }}
     >
-      <Card variant={CardVariant.ELEVATED} padding={CardPadding.LG} className="w-full">
+      <Card
+        variant={CardVariant.ELEVATED}
+        padding={CardPadding.LG}
+        className="w-full"
+      >
         <CardHeader>
           <div
             className="mx-auto mb-4 relative flex items-center justify-center"
@@ -118,7 +122,10 @@ export const AuthScreen: FC = () => {
               )}
 
               {auth.success && (
-                <p className="text-center text-sm text-accent-400" role="status">
+                <p
+                  className="text-center text-sm text-accent-400"
+                  role="status"
+                >
                   {auth.success}
                 </p>
               )}
@@ -172,7 +179,10 @@ export const AuthScreen: FC = () => {
               </Button>
 
               {auth.success && (
-                <p className="text-center text-sm text-accent-400" role="status">
+                <p
+                  className="text-center text-sm text-accent-400"
+                  role="status"
+                >
                   {auth.success}
                 </p>
               )}
@@ -183,4 +193,3 @@ export const AuthScreen: FC = () => {
     </div>
   );
 };
-

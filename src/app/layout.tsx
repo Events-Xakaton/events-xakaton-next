@@ -24,9 +24,6 @@ export default function RootLayout({
   return (
     <html lang="ru" suppressHydrationWarning>
       <head>
-        {/* Telegram WebApp SDK - КРИТИЧЕСКИ ВАЖНО для Mini App */}
-        <script src="https://telegram.org/js/telegram-web-app.js" async />
-
         {/* Preload critical logo */}
         <link
           rel="preload"

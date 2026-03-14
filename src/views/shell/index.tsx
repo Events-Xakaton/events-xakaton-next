@@ -8,7 +8,6 @@ import { setVerified } from '@/features/auth/model/auth-slice';
 import { AuthScreen } from '@/features/auth/ui/auth-screen';
 
 import { loadAuthSession } from '@/shared/lib/auth-session';
-import { initTelegramWebApp } from '@/shared/lib/telegram';
 import { useNotificationBadge } from '@/shared/lib/useNotificationBadge';
 import { useAppDispatch, useAppSelector } from '@/shared/store/hooks';
 import type { MainTab } from '@/shared/types/navigation';
@@ -49,7 +48,6 @@ export default function MiniAppShell() {
   } | null>(null);
 
   useEffect(() => {
-    initTelegramWebApp();
     const session = loadAuthSession();
     if (session) {
       dispatch(

@@ -2,13 +2,13 @@
 
 import { useEffect, useState } from 'react';
 
-const EVENTS_PAGE_SIZE = 6;
-
 import {
   type ClubEventBucket,
   type ClubEventListItem,
   useClubEventsQuery,
 } from '@/entities/club/api';
+
+const EVENTS_PAGE_SIZE = 6;
 
 type UseEventsCacheResult = {
   eventsBucket: ClubEventBucket;
@@ -23,7 +23,8 @@ type UseEventsCacheResult = {
 };
 
 export function useEventsCache(clubId: string): UseEventsCacheResult {
-  const [eventsBucket, setEventsBucketState] = useState<ClubEventBucket>('upcoming');
+  const [eventsBucket, setEventsBucketState] =
+    useState<ClubEventBucket>('upcoming');
   const [eventsPage, setEventsPage] = useState<Record<ClubEventBucket, number>>(
     { upcoming: 1, ongoing: 1, past: 1 },
   );
@@ -50,7 +51,8 @@ export function useEventsCache(clubId: string): UseEventsCacheResult {
           : [
               ...current,
               ...eventsData.items.filter(
-                (item: ClubEventListItem) => !current.some((existing) => existing.id === item.id),
+                (item: ClubEventListItem) =>
+                  !current.some((existing) => existing.id === item.id),
               ),
             ];
       return { ...prev, [eventsBucket]: nextItems };

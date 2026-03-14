@@ -10,15 +10,14 @@ import {
 import { CSSProperties, FC, RefObject } from 'react';
 
 import { type ClubEventAuthoring } from '@/entities/club/api';
+
 import { Button, ButtonSize, ButtonVariant } from '@/shared/components/button';
 import { DescriptionSection } from '@/shared/components/description-section';
 import { InlineTitleEditor } from '@/shared/components/inline-title-editor';
 import { PreviewCard } from '@/shared/components/preview-card';
 import { formatDateTimeDisplay } from '@/shared/lib/date-format';
 import { buildGradient, newSeed } from '@/shared/lib/gradient';
-import {
-  APP_PANEL_SHADOW_CLASS,
-} from '@/shared/lib/ui-styles';
+import { APP_PANEL_SHADOW_CLASS } from '@/shared/lib/ui-styles';
 import { cn } from '@/shared/lib/utils';
 
 import { SHEET_ANIMATION_MS } from '../model/use-edit-sheet';

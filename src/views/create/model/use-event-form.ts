@@ -1,17 +1,17 @@
 'use client';
 
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { zodResolver } from '@hookform/resolvers/zod';
-
 import { useEventAuthoringClubsQuery } from '@/entities/club/api';
 import { useCreateEventMutation } from '@/entities/event/api';
+
 import { buildGradient, newSeed } from '@/shared/lib/gradient';
 import { appErrorText, toIsoFromLocal } from '@/shared/lib/utils';
 
 import { createDefaultEventTimes } from '../lib/create-utils';
-import { eventSchema, type EventFormValues } from '../lib/event-schema';
+import { type EventFormValues, eventSchema } from '../lib/event-schema';
 
 export function useEventForm() {
   const [createEvent, { isLoading: isSubmitting }] = useCreateEventMutation();
@@ -19,18 +19,19 @@ export function useEventForm() {
 
   const defaultTimes = useMemo(createDefaultEventTimes, []);
 
-  const { watch, setValue, handleSubmit, formState, reset } = useForm<EventFormValues>({
-    resolver: zodResolver(eventSchema),
-    defaultValues: {
-      title: '',
-      description: '',
-      location: '',
-      startsAt: defaultTimes.startsAt,
-      endsAt: defaultTimes.endsAt,
-      maxParticipants: '',
-    },
-    mode: 'onChange',
-  });
+  const { watch, setValue, handleSubmit, formState, reset } =
+    useForm<EventFormValues>({
+      resolver: zodResolver(eventSchema),
+      defaultValues: {
+        title: '',
+        description: '',
+        location: '',
+        startsAt: defaultTimes.startsAt,
+        endsAt: defaultTimes.endsAt,
+        maxParticipants: '',
+      },
+      mode: 'onChange',
+    });
 
   const title = watch('title');
   const description = watch('description');
@@ -76,7 +77,9 @@ export function useEventForm() {
     if (!startsAtUtc || !endsAtUtc) return;
 
     try {
-      const clubIdForCreate = createFromClub ? selectedClubId || undefined : undefined;
+      const clubIdForCreate = createFromClub
+        ? selectedClubId || undefined
+        : undefined;
       const result = await createEvent({
         clubId: clubIdForCreate,
         title: values.title.trim(),
@@ -84,7 +87,9 @@ export function useEventForm() {
         locationOrLink: values.location.trim(),
         startsAtUtc,
         endsAtUtc,
-        maxParticipants: values.maxParticipants ? Number(values.maxParticipants) : undefined,
+        maxParticipants: values.maxParticipants
+          ? Number(values.maxParticipants)
+          : undefined,
         categoryCode: 'general',
         coverSeed,
       }).unwrap();
@@ -111,11 +116,14 @@ export function useEventForm() {
     title,
     setTitle: (v: string) => setValue('title', v, { shouldValidate: true }),
     description,
-    setDescription: (v: string) => setValue('description', v, { shouldValidate: true }),
+    setDescription: (v: string) =>
+      setValue('description', v, { shouldValidate: true }),
     location,
-    setLocation: (v: string) => setValue('location', v, { shouldValidate: true }),
+    setLocation: (v: string) =>
+      setValue('location', v, { shouldValidate: true }),
     startsAt,
-    setStartsAt: (v: string) => setValue('startsAt', v, { shouldValidate: true }),
+    setStartsAt: (v: string) =>
+      setValue('startsAt', v, { shouldValidate: true }),
     endsAt,
     setEndsAt: (v: string) => setValue('endsAt', v, { shouldValidate: true }),
     maxParticipants,

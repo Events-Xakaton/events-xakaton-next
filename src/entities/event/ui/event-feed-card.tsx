@@ -46,10 +46,7 @@ export function EventFeedCard({
 
   return (
     <article
-      className={cn(
-        'event-feed-card',
-        !noShadow && APP_ELEVATED_CARD_CLASS,
-      )}
+      className={cn('event-feed-card', !noShadow && APP_ELEVATED_CARD_CLASS)}
       style={{ ...cardBackgroundStyle, ...cardStyle }}
       role="article"
       aria-label={`Событие: ${event.title}`}
@@ -71,9 +68,7 @@ export function EventFeedCard({
             </Badge>
           </div>
 
-          <h2 className="event-feed-card__title">
-            {event.title}
-          </h2>
+          <h2 className="event-feed-card__title">{event.title}</h2>
 
           <p className="event-feed-card__participants">
             <Users className="h-4 w-4" aria-hidden="true" />

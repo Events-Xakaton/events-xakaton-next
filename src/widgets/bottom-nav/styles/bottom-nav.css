@@ -1,7 +1,7 @@
 @import '../../../shared/lib/styles/theme.css';
 
 .bottom-nav {
-  @apply fixed bottom-0 left-0 right-0 z-50 bg-[#f2f2f5] pt-2;
+  @apply fixed right-0 bottom-0 left-0 z-50 bg-[#f2f2f5] pt-2;
 
   &__inner {
     @apply mx-auto max-w-md px-4;
@@ -16,11 +16,11 @@
     @apply relative;
     @apply rounded-xl;
     @apply transition-all duration-200;
-    @apply focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-950;
+    @apply focus-visible:ring-primary-500 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-950;
     @apply active:scale-95;
 
     &--active {
-      @apply bg-gradient-to-br from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/30;
+      @apply from-primary-500 to-primary-600 shadow-primary-500/30 bg-gradient-to-br text-white shadow-lg;
     }
 
     &--inactive {
@@ -37,7 +37,7 @@
   }
 
   &__dot {
-    @apply pointer-events-none absolute right-[16px] top-[10px] h-2.5 w-2.5;
+    @apply pointer-events-none absolute top-[10px] right-[16px] h-2.5 w-2.5;
     @apply rounded-full border border-white bg-red-500;
   }
 }

@@ -3,8 +3,9 @@
 import { RefObject, useEffect, useMemo, useRef, useState } from 'react';
 
 import { type EventDetails } from '@/entities/event/api';
-import { buildGradient } from '@/shared/lib/gradient';
+
 import { toLocalDateTimeInputValue } from '@/shared/lib/date-format';
+import { buildGradient } from '@/shared/lib/gradient';
 import { toIsoFromLocal } from '@/shared/lib/utils';
 
 import type { EventDraftFields, EventOriginalData } from '../types';
@@ -31,7 +32,9 @@ export type UseEventDraftResult = {
   coverBackground: string;
 };
 
-export function useEventDraft(event: EventDetails | undefined): UseEventDraftResult {
+export function useEventDraft(
+  event: EventDetails | undefined,
+): UseEventDraftResult {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [location, setLocation] = useState('');
@@ -41,7 +44,9 @@ export function useEventDraft(event: EventDetails | undefined): UseEventDraftRes
   const [coverSeed, setCoverSeed] = useState('');
   const [selectedClubId, setSelectedClubId] = useState('');
 
-  const [originalData, setOriginalData] = useState<EventOriginalData | null>(null);
+  const [originalData, setOriginalData] = useState<EventOriginalData | null>(
+    null,
+  );
   const [hasChanges, setHasChanges] = useState(false);
   const [showTitleEditor, setShowTitleEditor] = useState(false);
 

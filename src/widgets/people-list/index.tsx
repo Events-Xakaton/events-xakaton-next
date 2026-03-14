@@ -52,10 +52,7 @@ export function PeopleList({
               const avatarUrl =
                 row.avatarUrl ?? (isSelf ? currentUser.avatarUrl : null);
               return (
-                <div
-                  key={row.telegramUserId}
-                  className="people-list__item"
-                >
+                <div key={row.telegramUserId} className="people-list__item">
                   {avatarUrl ? (
                     <img
                       src={avatarUrl}
@@ -68,14 +65,16 @@ export function PeopleList({
                       {getInitials(row.fullName) || 'U'}
                     </div>
                   )}
-                  <p className="people-list__name">
-                    {row.fullName}
-                  </p>
+                  <p className="people-list__name">{row.fullName}</p>
                   {isSelf ? (
                     <span className="people-list__self-label">Вы</span>
                   ) : (
                     <Button
-                      variant={row.followedByMe ? ButtonVariant.SECONDARY : ButtonVariant.PRIMARY}
+                      variant={
+                        row.followedByMe
+                          ? ButtonVariant.SECONDARY
+                          : ButtonVariant.PRIMARY
+                      }
                       size={ButtonSize.SM}
                       disabled={
                         followState.isLoading || unfollowState.isLoading

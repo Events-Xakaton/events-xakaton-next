@@ -4,7 +4,7 @@
   @apply p-4;
 
   &__header {
-    @apply mb-3 text-sm font-semibold uppercase tracking-wide text-zinc-500;
+    @apply mb-3 text-sm font-semibold tracking-wide text-zinc-500 uppercase;
   }
 
   &__readonly-notice {
@@ -44,7 +44,7 @@
   }
 
   &__item-text {
-    @apply break-all text-sm text-zinc-700;
+    @apply text-sm break-all text-zinc-700;
   }
 
   &__item-actions {

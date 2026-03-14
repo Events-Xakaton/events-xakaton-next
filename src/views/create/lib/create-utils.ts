@@ -20,7 +20,10 @@ export function stableColor(key: string): string {
 }
 
 /** Создаёт дефолтные значения времени: завтра 17:00 – 19:00 */
-export function createDefaultEventTimes(): { startsAt: string; endsAt: string } {
+export function createDefaultEventTimes(): {
+  startsAt: string;
+  endsAt: string;
+} {
   const start = new Date();
   start.setDate(start.getDate() + 1);
   start.setHours(17, 0, 0, 0);
