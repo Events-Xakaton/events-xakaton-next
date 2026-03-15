@@ -40,7 +40,7 @@ export const ProfileClubCard: FC<Props> = ({ club, onOpenClub }) => {
       <div className={cn('absolute inset-0', APP_FEED_SCRIM_CLASS)} />
 
       <div className="relative flex h-full flex-col p-5 pb-6">
-        <div className="mt-auto">
+        <div className="mt-auto pr-16">
           <h2 className="profile-card-title font-display text-4xl leading-[0.98] tracking-tight text-white drop-shadow-lg">
             {club.title}
           </h2>
@@ -59,17 +59,15 @@ export const ProfileClubCard: FC<Props> = ({ club, onOpenClub }) => {
           </p>
         </div>
 
-        <div className="mt-5 flex items-end justify-between gap-3">
-          <Button
-            variant={ButtonVariant.SECONDARY}
-            size={ButtonSize.MD}
-            onClick={() => onOpenClub(club.id)}
-            className="ml-auto rounded-full border-white/25 bg-white! p-3 text-zinc-900! shadow-md"
-            aria-label={`Посмотреть детали клуба ${club.title}`}
-          >
-            <ChevronRight className="h-5 w-5" aria-hidden="true" />
-          </Button>
-        </div>
+        <Button
+          variant={ButtonVariant.SECONDARY}
+          size={ButtonSize.MD}
+          onClick={() => onOpenClub(club.id)}
+          className="absolute right-5 bottom-6 rounded-full border-white/25 bg-white! p-3 text-zinc-900! shadow-md"
+          aria-label={`Посмотреть детали клуба ${club.title}`}
+        >
+          <ChevronRight className="h-5 w-5" aria-hidden="true" />
+        </Button>
       </div>
     </article>
   );
