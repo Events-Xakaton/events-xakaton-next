@@ -93,7 +93,17 @@ export function CreateScreen({
     }
   }
 
-  const titleForPreview = eventForm.title.trim() || 'Настолки в офисе';
+  const eventTitleValue = eventForm.title.trim();
+  const isEventTitlePlaceholder = eventTitleValue.length === 0;
+  const eventTitleForPreview = isEventTitlePlaceholder
+    ? 'Введите название мероприятия'
+    : eventTitleValue;
+
+  const clubTitleValue = clubForm.title.trim();
+  const isClubTitlePlaceholder = clubTitleValue.length === 0;
+  const clubTitleForPreview = isClubTitlePlaceholder
+    ? 'Введите название клуба'
+    : clubTitleValue;
 
   return (
     <div
@@ -186,7 +196,8 @@ export function CreateScreen({
         >
           <PreviewCard
             background={eventForm.coverBackground}
-            title={titleForPreview}
+            title={eventTitleForPreview}
+            isTitlePlaceholder={isEventTitlePlaceholder}
             onChangeBackground={eventForm.changeCoverSeed}
             titleEditing={eventForm.showTitleEditor}
             onTitleClick={() => eventForm.setShowTitleEditor(true)}
@@ -211,9 +222,15 @@ export function CreateScreen({
               ) : undefined
             }
             titleHint={
-              eventForm.showTitleEditor && 60 - eventForm.title.length <= 10 ? (
-                <p className="mt-2 text-xs text-white/70">
-                  Осталось символов: {60 - eventForm.title.length}
+              eventForm.showTitleEditor ? (
+                60 - eventForm.title.length <= 10 ? (
+                  <p className="mt-2 text-xs text-white/70">
+                    Осталось символов: {60 - eventForm.title.length}
+                  </p>
+                ) : null
+              ) : isEventTitlePlaceholder ? (
+                <p className="mt-2 inline-flex rounded-full border border-white/40 bg-white/15 px-2.5 py-1 text-[11px] font-medium text-white/90 backdrop-blur-sm">
+                  Нажмите на заголовок, чтобы ввести название
                 </p>
               ) : null
             }
@@ -437,7 +454,8 @@ export function CreateScreen({
         >
           <PreviewCard
             background={clubForm.coverBackground}
-            title={clubForm.title.trim() || 'Новый клуб'}
+            title={clubTitleForPreview}
+            isTitlePlaceholder={isClubTitlePlaceholder}
             subtitle={clubForm.description.trim() || undefined}
             onChangeBackground={clubForm.changeCoverSeed}
             titleEditing={clubForm.showTitleEditor}
@@ -463,9 +481,15 @@ export function CreateScreen({
               ) : undefined
             }
             titleHint={
-              clubForm.showTitleEditor && 60 - clubForm.title.length <= 10 ? (
-                <p className="mt-2 text-xs text-white/70">
-                  Осталось символов: {60 - clubForm.title.length}
+              clubForm.showTitleEditor ? (
+                60 - clubForm.title.length <= 10 ? (
+                  <p className="mt-2 text-xs text-white/70">
+                    Осталось символов: {60 - clubForm.title.length}
+                  </p>
+                ) : null
+              ) : isClubTitlePlaceholder ? (
+                <p className="mt-2 inline-flex rounded-full border border-white/40 bg-white/15 px-2.5 py-1 text-[11px] font-medium text-white/90 backdrop-blur-sm">
+                  Нажмите на заголовок, чтобы ввести название
                 </p>
               ) : null
             }

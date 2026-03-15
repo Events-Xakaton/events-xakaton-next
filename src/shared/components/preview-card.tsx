@@ -11,6 +11,7 @@ import './styles/preview-card.css';
 type Props = {
   background: string;
   title: string;
+  isTitlePlaceholder?: boolean;
   onChangeBackground: () => void;
   subtitle?: string;
   titleEditing?: boolean;
@@ -26,6 +27,7 @@ type Props = {
 export const PreviewCard: FC<Props> = ({
   background,
   title,
+  isTitlePlaceholder = false,
   onChangeBackground,
   subtitle,
   titleEditing = false,
@@ -86,6 +88,7 @@ export const PreviewCard: FC<Props> = ({
                   className={cn(
                     'preview-card__title',
                     onTitleClick && 'preview-card__title--clickable',
+                    isTitlePlaceholder && 'preview-card__title--placeholder',
                   )}
                   onClick={onTitleClick}
                 >

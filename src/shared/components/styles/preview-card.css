@@ -50,6 +50,10 @@
     &--clickable {
       @apply cursor-pointer;
     }
+
+    &--placeholder {
+      @apply text-white/70 italic font-semibold;
+    }
   }
 
   &__subtitle {
