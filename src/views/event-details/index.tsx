@@ -3,6 +3,7 @@
 import {
   CalendarArrowDown,
   CalendarArrowUp,
+  Check,
   ChevronRight,
   Lock,
   MapPin,
@@ -23,11 +24,7 @@ import {
 
 import { Button, ButtonSize, ButtonVariant } from '@/shared/components/button';
 import { ConfirmDialog } from '@/shared/components/confirm-dialog';
-import {
-  AboutSection,
-  DetailRow,
-  StickyActionsPanel,
-} from '@/shared/components/detail-shared';
+import { AboutSection, DetailRow } from '@/shared/components/detail-shared';
 import { ErrorState } from '@/shared/components/error-state';
 import { MinLevelBadge } from '@/shared/components/min-level-badge';
 import { PreviewCard } from '@/shared/components/preview-card';
@@ -52,6 +49,8 @@ import { EventEditSheet } from './ui/event-edit-sheet';
 
 const SECTION_CARD = APP_SECTION_CARD_CLASS;
 const SECTION_TITLE_CLASS = 'text-lg font-semibold text-neutral-900';
+const HERO_ACTION_BUTTON_CLASS =
+  'inline-flex h-7 items-center gap-1.5 rounded-full border border-white/45 bg-white/20 px-3 text-[11px] font-semibold tracking-[0.02em] text-white backdrop-blur-sm transition hover:bg-white/30 disabled:cursor-not-allowed disabled:opacity-70';
 
 export type EventDetailsProps = {
   id: string;
@@ -130,6 +129,7 @@ export function EventDetails({
   }
 
   const canEdit = event.canManage && !archived;
+  const showHeroJoinButton = !archived && !canJoinResult.blockReason;
 
   return (
     <>
@@ -189,15 +189,46 @@ export function EventDetails({
             showEditIndicator={false}
             showChangeBackgroundButton={false}
             extraActions={
-              canEdit ? (
-                <button
-                  type="button"
-                  onClick={editSheet.open}
-                  className="inline-flex h-7 items-center gap-1.5 rounded-full border border-white/45 bg-white/20 px-3 text-[11px] font-semibold tracking-[0.02em] text-white backdrop-blur-sm transition hover:bg-white/30"
-                >
-                  <Pencil className="h-3.5 w-3.5" aria-hidden="true" />
-                  Редактировать ивент
-                </button>
+              showHeroJoinButton || canEdit ? (
+                <div className="inline-flex flex-col items-end gap-2">
+                  {showHeroJoinButton ? (
+                    joined ? (
+                      <button
+                        type="button"
+                        disabled
+                        className={HERO_ACTION_BUTTON_CLASS}
+                        aria-label={`Вы участвуете в ивенте ${event.title}`}
+                      >
+                        <Check className="h-4 w-4" aria-hidden="true" />
+                        Вы участвуете
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => actions.handleJoin(fromLuckyWheel)}
+                        disabled={actions.joinState.isLoading}
+                        className={HERO_ACTION_BUTTON_CLASS}
+                        aria-label={`Участвовать в ивенте ${event.title}`}
+                      >
+                        <Plus className="h-5 w-5" aria-hidden="true" />
+                        {actions.joinState.isLoading
+                          ? 'Участвую...'
+                          : 'Участвовать'}
+                      </button>
+                    )
+                  ) : null}
+
+                  {canEdit ? (
+                    <button
+                      type="button"
+                      onClick={editSheet.open}
+                      className={HERO_ACTION_BUTTON_CLASS}
+                    >
+                      <Pencil className="h-3.5 w-3.5" aria-hidden="true" />
+                      Редактировать ивент
+                    </button>
+                  ) : null}
+                </div>
               ) : null
             }
           />
@@ -291,6 +322,66 @@ export function EventDetails({
                   }
                 />
               )}
+
+              <div className="pt-3">
+                {archived ? (
+                  <Button
+                    variant={ButtonVariant.SECONDARY}
+                    size={ButtonSize.LG}
+                    fullWidth
+                    className="rounded-full"
+                    disabled
+                  >
+                    {event.status === 'cancelled'
+                      ? 'Событие отменено'
+                      : 'Событие прошло'}
+                  </Button>
+                ) : joined ? (
+                  <Button
+                    variant={ButtonVariant.SECONDARY}
+                    size={ButtonSize.LG}
+                    fullWidth
+                    className="rounded-full"
+                    isLoading={actions.unjoinState.isLoading}
+                    onClick={actions.handleUnjoin}
+                  >
+                    Вы участвуете
+                  </Button>
+                ) : fromLuckyWheel ? (
+                  <Button
+                    variant={ButtonVariant.PRIMARY}
+                    size={ButtonSize.LG}
+                    fullWidth
+                    className="rounded-full"
+                    isLoading={actions.joinState.isLoading}
+                    onClick={() => actions.handleJoin(true)}
+                  >
+                    Участвовать
+                  </Button>
+                ) : canJoinResult.blockReason ? (
+                  <Button
+                    variant={ButtonVariant.SECONDARY}
+                    size={ButtonSize.LG}
+                    fullWidth
+                    className="rounded-full"
+                    disabled
+                    title={canJoinResult.levelTooltip ?? undefined}
+                  >
+                    {canJoinResult.blockReason}
+                  </Button>
+                ) : (
+                  <Button
+                    variant={ButtonVariant.PRIMARY}
+                    size={ButtonSize.LG}
+                    fullWidth
+                    className="rounded-full"
+                    isLoading={actions.joinState.isLoading}
+                    onClick={() => actions.handleJoin()}
+                  >
+                    Участвовать
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
 
@@ -340,65 +431,6 @@ export function EventDetails({
           )}
         </div>
 
-        <StickyActionsPanel
-          leftActions={null}
-          rightAction={
-            archived ? (
-              <Button
-                variant={ButtonVariant.SECONDARY}
-                size={ButtonSize.LG}
-                className="rounded-full px-6"
-                disabled
-              >
-                {event.status === 'cancelled'
-                  ? 'Событие отменено'
-                  : 'Событие прошло'}
-              </Button>
-            ) : joined ? (
-              <Button
-                variant={ButtonVariant.SECONDARY}
-                size={ButtonSize.LG}
-                className="rounded-full px-6"
-                isLoading={actions.unjoinState.isLoading}
-                onClick={actions.handleUnjoin}
-              >
-                Вы участвуете
-              </Button>
-            ) : fromLuckyWheel ? (
-              <Button
-                variant={ButtonVariant.PRIMARY}
-                size={ButtonSize.LG}
-                className="rounded-full px-7"
-                isLoading={actions.joinState.isLoading}
-                onClick={() => actions.handleJoin(true)}
-              >
-                <Plus className="mr-2 h-5 w-5" aria-hidden="true" />
-                Мне повезло, записаться
-              </Button>
-            ) : canJoinResult.blockReason ? (
-              <Button
-                variant={ButtonVariant.SECONDARY}
-                size={ButtonSize.LG}
-                className="rounded-full px-6"
-                disabled
-                title={canJoinResult.levelTooltip ?? undefined}
-              >
-                {canJoinResult.blockReason}
-              </Button>
-            ) : (
-              <Button
-                variant={ButtonVariant.PRIMARY}
-                size={ButtonSize.LG}
-                className="rounded-full px-7"
-                isLoading={actions.joinState.isLoading}
-                onClick={() => actions.handleJoin()}
-              >
-                <Plus className="mr-2 h-5 w-5" aria-hidden="true" />
-                Записаться
-              </Button>
-            )
-          }
-        />
       </div>
 
       {editSheet.isMounted ? (
