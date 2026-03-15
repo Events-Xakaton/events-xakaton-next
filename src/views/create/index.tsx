@@ -20,7 +20,6 @@ import { InlineTitleEditor } from '@/shared/components/inline-title-editor';
 import { LevelSelect } from '@/shared/components/level-select';
 import { PreviewCard } from '@/shared/components/preview-card';
 import { formatDateTimeDisplay } from '@/shared/lib/date-format';
-import { useViewportMode } from '@/shared/lib/telegram/useViewportMode';
 import {
   ADAPTIVE_VIEWPORT_HEIGHT,
   APP_PANEL_SHADOW_CLASS,
@@ -40,9 +39,12 @@ const SECTION_CARD = APP_SECTION_CARD_CLASS;
 const DETAIL_LABEL_WIDTH = 'w-[58%] min-w-[176px] pr-2';
 const SECTION_TITLE_CLASS = 'text-lg font-semibold text-neutral-900';
 
-export function CreateScreen() {
-  const mode = useViewportMode();
-  const [tab, setTab] = useState<CreateTab>('event');
+export function CreateScreen({
+  initialTab = 'event',
+}: {
+  initialTab?: CreateTab;
+}) {
+  const [tab, setTab] = useState<CreateTab>(initialTab);
   const [isCreateTypeOpen, setIsCreateTypeOpen] = useState(false);
   const createTypeRef = useRef<HTMLDivElement>(null);
 
@@ -77,6 +79,10 @@ export function CreateScreen() {
     document.addEventListener('mousedown', onClickOutside);
     return () => document.removeEventListener('mousedown', onClickOutside);
   }, []);
+
+  useEffect(() => {
+    setTab(initialTab);
+  }, [initialTab]);
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();

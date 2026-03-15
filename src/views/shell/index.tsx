@@ -26,6 +26,7 @@ import { loadAuthSession } from '@/shared/lib/auth-session';
 import { usePortraitGuard } from '@/shared/lib/telegram/usePortraitGuard';
 import { useNotificationBadge } from '@/shared/lib/useNotificationBadge';
 import { useAppDispatch, useAppSelector } from '@/shared/store/hooks';
+import type { CreateTab } from '@/shared/types/navigation';
 import type { MainTab } from '@/shared/types/navigation';
 
 const LoadingFallback: FC = () => (
@@ -42,6 +43,7 @@ export default function MiniAppShell() {
   const [tab, setTab] = useState<MainTab>('home');
   const notificationBadge = useNotificationBadge();
   const [luckyWheelOpen, setLuckyWheelOpen] = useState(false);
+  const [createTab, setCreateTab] = useState<CreateTab>('event');
   // Хук вызывается до ранних return'ов (React Rules of Hooks)
   const { isUnlocked, isNewUnlock, unlock } = useLuckyWheelUnlock();
   const [detail, setDetail] = useState<{
@@ -175,11 +177,16 @@ export default function MiniAppShell() {
                   setDetail({ kind: 'event', id: eventId })
                 }
                 onOpenClub={(clubId) => setDetail({ kind: 'club', id: clubId })}
-                onNavigateToCreate={() => setTab('create')}
+                onNavigateToCreate={() => {
+                  setCreateTab('event');
+                  setTab('create');
+                }}
                 onOpenLuckyWheel={() => setLuckyWheelOpen(true)}
               />
             ) : null}
-            {!detail && tab === 'create' ? <CreateScreen /> : null}
+            {!detail && tab === 'create' ? (
+              <CreateScreen initialTab={createTab} />
+            ) : null}
             {!detail && tab === 'notifications' ? (
               <NotificationsScreen />
             ) : null}
@@ -190,7 +197,10 @@ export default function MiniAppShell() {
                   setDetail({ kind: 'event', id: eventId })
                 }
                 onOpenClub={(clubId) => setDetail({ kind: 'club', id: clubId })}
-                onNavigateToCreate={() => setTab('create')}
+                onNavigateToCreate={(type) => {
+                  setCreateTab(type);
+                  setTab('create');
+                }}
               />
             ) : null}
           </div>
@@ -207,6 +217,7 @@ export default function MiniAppShell() {
             tab={tab}
             onTab={(next) => {
               if (next === 'notifications') notificationBadge.markSeen();
+              if (next === 'create') setCreateTab('event');
               setLuckyWheelOpen(false);
               setTab(next);
             }}
