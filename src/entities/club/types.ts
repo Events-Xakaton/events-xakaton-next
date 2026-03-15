@@ -22,6 +22,7 @@ export type ClubCard = {
   categoryCode: string;
   membersCount: number;
   coverSeed?: string | null;
+  coverUrl?: string | null;
   joinedByMe: boolean;
   isCreator: boolean;
 };
