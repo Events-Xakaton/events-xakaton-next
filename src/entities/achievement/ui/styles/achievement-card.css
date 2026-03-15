@@ -5,6 +5,7 @@
 
   &__icon {
     @apply relative h-16 w-16 shrink-0 overflow-hidden rounded-full;
+    @apply ring-4 ring-sky-400 ring-offset-2;
   }
 
   &__name {

@@ -44,13 +44,15 @@ export const gamificationApi = apiBase.injectEndpoints({
           rank: number;
           userId: string;
           fullName: string;
+          avatarUrl: string | null;
           points: number;
           rankInfo?: RankInfo;
         }>;
         currentUser: {
-          rank: number;
+          rank: number | null;
           userId: string;
           fullName: string;
+          avatarUrl: string | null;
           points: number;
           rankInfo?: RankInfo;
         } | null;
@@ -65,13 +67,15 @@ export const gamificationApi = apiBase.injectEndpoints({
           position: number;
           userId: string;
           fullName: string;
+          avatarUrl: string | null;
           points: number;
           rankInfo?: RankInfo;
         }>;
         currentUser: {
-          position: number;
+          position: number | null;
           userId: string;
           fullName: string;
+          avatarUrl: string | null;
           points: number;
           rankInfo?: RankInfo;
         } | null;

@@ -16,8 +16,7 @@ export const achievementsApi = apiBase.injectEndpoints({
   endpoints: (builder) => ({
     getUserAchievements: builder.query<AchievementDto[], void>({
       query: () => '/achievements/me',
-      transformResponse: (res: { data: AchievementDto[] }): AchievementDto[] =>
-        res.data,
+      transformResponse: (res: AchievementDto[]): AchievementDto[] => res,
       providesTags: [ApiTag.ACHIEVEMENTS],
     }),
     setActiveAchievement: builder.mutation<

@@ -58,7 +58,8 @@ const POINTS_RULE_LABELS: Record<string, string> = {
   admin_adjustment: 'Ручная корректировка',
 };
 
-function rankBadge(rank: number): string {
+function rankBadge(rank: number | null): string {
+  if (rank === null) return '—';
   if (rank === 1) return '1';
   if (rank === 2) return '2';
   if (rank === 3) return '3';
@@ -73,7 +74,7 @@ function pointsRuleLabel(code: string): string {
   return code.replaceAll('_', ' ');
 }
 
-function rankRowClass(rank: number, isCurrentUser: boolean): string {
+function rankRowClass(rank: number | null, isCurrentUser: boolean): string {
   if (rank === 1) {
     return 'border-amber-300 bg-gradient-to-r from-amber-50 via-amber-100 to-amber-50';
   }
@@ -89,7 +90,7 @@ function rankRowClass(rank: number, isCurrentUser: boolean): string {
   return 'border-zinc-200 bg-white';
 }
 
-function rankBadgeClass(rank: number, isCurrentUser: boolean): string {
+function rankBadgeClass(rank: number | null, isCurrentUser: boolean): string {
   if (rank === 1) {
     return 'border-amber-300 bg-amber-100 text-amber-800';
   }
