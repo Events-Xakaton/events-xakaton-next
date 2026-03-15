@@ -18,7 +18,6 @@ export function useFeedActions(onClubJoined: () => void) {
   const [joinedClubIds, setJoinedClubIds] = useState<Record<string, boolean>>(
     {},
   );
-  const [savedClubIds, setSavedClubIds] = useState<string[]>([]);
 
   function handleJoinEvent(eventId: string): void {
     void joinEvent({ eventId })
@@ -43,23 +42,13 @@ export function useFeedActions(onClubJoined: () => void) {
       );
   }
 
-  function handleToggleSavedClub(clubId: string): void {
-    setSavedClubIds((prev) =>
-      prev.includes(clubId)
-        ? prev.filter((id) => id !== clubId)
-        : [...prev, clubId],
-    );
-  }
-
   return {
     hint,
     joinedEventIds,
     joinedClubIds,
-    savedClubIds,
     joinEventLoading: joinEventState.isLoading,
     joinClubLoading: joinClubState.isLoading,
     handleJoinEvent,
     handleJoinClub,
-    handleToggleSavedClub,
   };
 }
