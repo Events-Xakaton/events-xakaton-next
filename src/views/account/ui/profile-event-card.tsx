@@ -62,18 +62,18 @@ export const ProfileEventCard: FC<Props> = ({ event, onOpenEvent }) => {
               )}
             </span>
           </p>
-        </div>
 
-        <div className="mt-5 flex items-end justify-between gap-3">
-          <Button
-            variant={ButtonVariant.SECONDARY}
-            size={ButtonSize.MD}
-            onClick={() => onOpenEvent(event.id)}
-            className="ml-auto rounded-full border-white/25 bg-white! p-3 text-zinc-900! shadow-md"
-            aria-label={`Посмотреть детали ивента ${event.title}`}
-          >
-            <ChevronRight className="h-5 w-5" aria-hidden="true" />
-          </Button>
+          <div className="mt-5 flex items-end justify-between gap-3">
+            <Button
+              variant={ButtonVariant.SECONDARY}
+              size={ButtonSize.MD}
+              onClick={() => onOpenEvent(event.id)}
+              className="ml-auto rounded-full border-white/25 bg-white! p-3 text-zinc-900! shadow-md"
+              aria-label={`Посмотреть детали ивента ${event.title}`}
+            >
+              <ChevronRight className="h-5 w-5" aria-hidden="true" />
+            </Button>
+          </div>
         </div>
       </div>
     </article>
