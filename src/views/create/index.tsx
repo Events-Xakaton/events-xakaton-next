@@ -41,15 +41,19 @@ const SECTION_TITLE_CLASS = 'text-lg font-semibold text-neutral-900';
 
 export function CreateScreen({
   initialTab = 'event',
+  onCreatedEvent,
+  onCreatedClub,
 }: {
   initialTab?: CreateTab;
+  onCreatedEvent?: (eventId: string) => void;
+  onCreatedClub?: (clubId: string) => void;
 }) {
   const [tab, setTab] = useState<CreateTab>(initialTab);
   const [isCreateTypeOpen, setIsCreateTypeOpen] = useState(false);
   const createTypeRef = useRef<HTMLDivElement>(null);
 
-  const eventForm = useEventForm();
-  const clubForm = useClubForm();
+  const eventForm = useEventForm({ onCreated: onCreatedEvent });
+  const clubForm = useClubForm({ onCreated: onCreatedClub });
 
   const selectedCreateType =
     CREATE_TYPE_OPTIONS.find((option) => option.value === tab) ??
@@ -408,22 +412,8 @@ export function CreateScreen({
           </div>
 
           {eventForm.hint && (
-            <div
-              className={cn(
-                'p-4 rounded-2xl',
-                eventForm.hint.includes('создан')
-                  ? 'bg-green-100'
-                  : 'bg-red-100',
-              )}
-            >
-              <p
-                className={cn(
-                  'text-sm font-medium',
-                  eventForm.hint.includes('создан')
-                    ? 'text-green-700'
-                    : 'text-red-700',
-                )}
-              >
+            <div className="rounded-2xl bg-red-100 p-4">
+              <p className="text-sm font-medium text-red-700">
                 {eventForm.hint}
               </p>
             </div>
@@ -492,22 +482,8 @@ export function CreateScreen({
           />
 
           {clubForm.hint && (
-            <div
-              className={cn(
-                'p-4 rounded-2xl',
-                clubForm.hint.includes('создан')
-                  ? 'bg-green-100'
-                  : 'bg-red-100',
-              )}
-            >
-              <p
-                className={cn(
-                  'text-sm font-medium',
-                  clubForm.hint.includes('создан')
-                    ? 'text-green-700'
-                    : 'text-red-700',
-                )}
-              >
+            <div className="rounded-2xl bg-red-100 p-4">
+              <p className="text-sm font-medium text-red-700">
                 {clubForm.hint}
               </p>
             </div>

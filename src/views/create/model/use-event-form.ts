@@ -15,7 +15,11 @@ import { appErrorText, toIsoFromLocal } from '@/shared/lib/utils';
 import { createDefaultEventTimes } from '../lib/create-utils';
 import { type EventFormValues, eventSchema } from '../lib/event-schema';
 
-export function useEventForm() {
+export function useEventForm({
+  onCreated,
+}: {
+  onCreated?: (eventId: string) => void;
+} = {}) {
   const [createEvent, { isLoading: isSubmitting }] = useCreateEventMutation();
   const eventAuthoringClubs = useEventAuthoringClubsQuery();
   const { triggerAchievement } = useAchievementContext();
@@ -104,7 +108,8 @@ export function useEventForm() {
       if (result.unlockedAchievements.length > 0) {
         triggerAchievement(result.unlockedAchievements);
       }
-      setHint(`Ивент создан: ${result.id}`);
+
+      const createdEventId = result.id;
       const next = createDefaultEventTimes();
       reset({
         title: '',
@@ -119,6 +124,7 @@ export function useEventForm() {
       setSelectedClubId('');
       setCreateFromClub(false);
       setShowTitleEditor(false);
+      onCreated?.(createdEventId);
     } catch (error) {
       setHint(appErrorText(error, 'Не удалось создать мероприятие.'));
     }

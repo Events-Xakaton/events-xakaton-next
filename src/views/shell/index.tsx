@@ -185,7 +185,15 @@ export default function MiniAppShell() {
               />
             ) : null}
             {!detail && tab === 'create' ? (
-              <CreateScreen initialTab={createTab} />
+              <CreateScreen
+                initialTab={createTab}
+                onCreatedEvent={(eventId) =>
+                  setDetail({ kind: 'event', id: eventId })
+                }
+                onCreatedClub={(clubId) =>
+                  setDetail({ kind: 'club', id: clubId })
+                }
+              />
             ) : null}
             {!detail && tab === 'notifications' ? (
               <NotificationsScreen />
