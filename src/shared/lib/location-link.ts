@@ -18,6 +18,13 @@ const ANY_PROTOCOL_RE = /^[a-z][a-z0-9+.-]*:/i;
 const BARE_HOST_RE =
   /^(?:www\.|maps\.|google\.|[a-z0-9-]+\.[a-z]{2,})(?:[/:?#]|$)/i;
 
+function getDisplayHost(rawUrl: string): string {
+  const parsed = toUrl(rawUrl);
+  if (!parsed) return rawUrl;
+
+  return parsed.hostname.replace(/^www\./i, '') || rawUrl;
+}
+
 function toUrl(rawUrl: string): URL | null {
   try {
     return new URL(rawUrl);
@@ -132,11 +139,13 @@ export function parseLocationLink(raw: string): ParsedLocationLink {
   const kind: LocationLinkKind = detectGoogleMapsUrl(normalizedUrl)
     ? 'google_maps_url'
     : 'url';
+  const displayText =
+    kind === 'google_maps_url' ? 'Google Maps' : getDisplayHost(normalizedUrl);
 
   return {
     raw,
     trimmed,
-    displayText: trimmed,
+    displayText,
     url: normalizedUrl,
     kind,
     isClickable: true,

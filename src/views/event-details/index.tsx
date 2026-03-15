@@ -184,7 +184,7 @@ export function EventDetails({
           <PreviewCard
             background={draft.coverBackground}
             title={event.title}
-            subtitle={`${formatDateTimeDisplay(event.startsAtUtc)} • ${event.locationOrLink}`}
+            subtitle={formatDateTimeDisplay(event.startsAtUtc)}
             onChangeBackground={() => {}}
             titleEditing={false}
             onTitleClick={undefined}
@@ -296,16 +296,27 @@ export function EventDetails({
                 icon={<MapPin className="h-5 w-5" />}
                 label="Локация"
                 value={locationLink.displayText}
-                multilineValue
-                valueClassName={
-                  locationLink.isClickable ? 'detail-row__location-link' : undefined
-                }
+                valueClassName={cn(
+                  'detail-row__location-value',
+                  locationLink.isClickable && 'detail-row__location-link',
+                )}
                 onClick={
                   locationLink.isClickable
                     ? () => {
                         openLocationLink(locationLink);
                       }
                     : undefined
+                }
+                rightElement={
+                  locationLink.kind === 'google_maps_url' ? (
+                    <img
+                      src="/google-maps.svg"
+                      alt=""
+                      aria-hidden="true"
+                      className="h-4 w-4 shrink-0"
+                      loading="lazy"
+                    />
+                  ) : null
                 }
               />
               <DetailRow
