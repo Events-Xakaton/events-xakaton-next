@@ -7,9 +7,6 @@ import { useMemo } from 'react';
 import { type EventCard } from '@/entities/event/api';
 
 import {
-  Badge,
-  BadgeSize,
-  BadgeVariant,
   Button,
   ButtonSize,
   ButtonVariant,
@@ -44,14 +41,10 @@ export const ProfileEventCard: FC<Props> = ({ event, onOpenEvent }) => {
       <div className={cn('absolute inset-0', APP_FEED_SCRIM_CLASS)} />
 
       <div className="relative flex h-full flex-col p-5 pb-6">
-        <Badge
-          variant={BadgeVariant.OUTLINE}
-          size={BadgeSize.SM}
-          className="self-start bg-white/95 border-white/30 text-zinc-900 backdrop-blur-sm shadow-sm gap-1.5"
-        >
+        <span className="event-time-chip self-start">
           <Clock className="h-3.5 w-3.5" />
           {formatLocalDateTime(event.startsAtUtc)}
-        </Badge>
+        </span>
 
         <div className="mt-auto">
           <h2 className="font-display text-4xl leading-[0.98] tracking-tight text-white drop-shadow-lg line-clamp-2">

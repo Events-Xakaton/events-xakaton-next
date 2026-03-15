@@ -3,7 +3,6 @@
 import { Check, ChevronRight, Clock, Plus, Users } from 'lucide-react';
 import { useMemo } from 'react';
 
-import { Badge, BadgeSize, BadgeVariant } from '@/shared/components/badge';
 import { Button, ButtonSize, ButtonVariant } from '@/shared/components/button';
 import { MinLevelBadge } from '@/shared/components/min-level-badge';
 import { buildGradient } from '@/shared/lib/gradient';
@@ -67,14 +66,10 @@ export function EventFeedCard({
       <div className="event-feed-card__body">
         <div className="event-feed-card__meta">
           <div className="event-feed-card__badge">
-            <Badge
-              variant={BadgeVariant.OUTLINE}
-              size={BadgeSize.SM}
-              className="bg-white/95 border-white/30 text-zinc-900 backdrop-blur-sm shadow-sm"
-            >
+            <span className="event-time-chip">
               <Clock className="h-3.5 w-3.5" />
               {formatLocalDateTime(event.startsAtUtc)}
-            </Badge>
+            </span>
           </div>
 
           <h2 className="event-feed-card__title">{event.title}</h2>

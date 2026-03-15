@@ -143,3 +143,14 @@ h6 {
 .link {
   @apply text-accent-400 hover:text-accent-300 underline-offset-2 transition-colors hover:underline;
 }
+
+.event-time-chip {
+  @apply inline-flex h-7 items-center gap-1.5 rounded-full;
+  @apply border border-white/45 bg-white/20 px-3.5;
+  @apply text-[11px] font-semibold tracking-[0.18em] text-white uppercase;
+  @apply backdrop-blur-sm;
+}
+
+.event-time-chip--on-light {
+  @apply border-neutral-300 bg-neutral-100 text-neutral-700;
+}
