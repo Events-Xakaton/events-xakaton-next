@@ -41,7 +41,7 @@ export const ProfileClubCard: FC<Props> = ({ club, onOpenClub }) => {
 
       <div className="relative flex h-full flex-col p-5 pb-6">
         <div className="mt-auto">
-          <h2 className="font-display text-4xl leading-[0.98] tracking-tight text-white drop-shadow-lg line-clamp-2">
+          <h2 className="profile-card-title font-display text-4xl leading-[0.98] tracking-tight text-white drop-shadow-lg">
             {club.title}
           </h2>
 

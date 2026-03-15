@@ -47,7 +47,7 @@ export const ProfileEventCard: FC<Props> = ({ event, onOpenEvent }) => {
         </span>
 
         <div className="mt-auto">
-          <h2 className="font-display text-4xl leading-[0.98] tracking-tight text-white drop-shadow-lg line-clamp-2">
+          <h2 className="profile-card-title font-display text-4xl leading-[0.98] tracking-tight text-white drop-shadow-lg">
             {event.title}
           </h2>
           <p className="mt-2 flex items-center gap-2 text-sm text-white/90 drop-shadow">
