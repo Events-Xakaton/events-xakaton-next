@@ -1,6 +1,6 @@
 'use client';
 
-import { Bookmark, Check, ChevronRight, Plus } from 'lucide-react';
+import { Check, ChevronRight, Plus } from 'lucide-react';
 import type { ReactElement } from 'react';
 import { useMemo } from 'react';
 
@@ -22,8 +22,6 @@ export function ClubFeedCard({
   onJoin,
   joinLoading,
   joinedOverride,
-  onToggleSaved,
-  saved,
   cardStyle,
   hideJoinButton = false,
   noShadow = false,
@@ -33,8 +31,6 @@ export function ClubFeedCard({
   onJoin: (clubId: string) => void;
   joinLoading: boolean;
   joinedOverride?: boolean;
-  onToggleSaved: (clubId: string) => void;
-  saved: boolean;
   cardStyle: React.CSSProperties;
   hideJoinButton?: boolean;
   noShadow?: boolean;
@@ -83,25 +79,6 @@ export function ClubFeedCard({
         <div className="club-feed-card__actions">
           {!hideJoinButton && (
             <div className="club-feed-card__join-group">
-              <button
-                type="button"
-                onClick={() => onToggleSaved(club.id)}
-                aria-label={
-                  saved ? 'Убрать из избранного' : 'Добавить в избранное'
-                }
-                title={saved ? 'Убрать из избранного' : 'Добавить в избранное'}
-                className={cn(
-                  'inline-flex h-11 w-11 min-h-[44px] min-w-[44px] items-center justify-center rounded-full transition-all duration-200',
-                  'focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500',
-                  'active:scale-95',
-                  saved
-                    ? 'bg-zinc-900 text-white hover:bg-zinc-800 shadow-md'
-                    : 'bg-white/90 backdrop-blur-sm text-zinc-900 hover:bg-white shadow-md',
-                )}
-              >
-                <Bookmark className={cn('h-5 w-5', saved && 'fill-current')} />
-              </button>
-
               {joined ? (
                 <Button
                   variant={ButtonVariant.SECONDARY}

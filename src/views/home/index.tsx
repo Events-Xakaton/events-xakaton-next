@@ -283,8 +283,6 @@ export function HomeScreen({
                     onJoin={feedActions.handleJoinClub}
                     joinLoading={feedActions.joinClubLoading}
                     joinedOverride={feedActions.joinedClubIds[club.id]}
-                    onToggleSaved={feedActions.handleToggleSavedClub}
-                    saved={feedActions.savedClubIds.includes(club.id)}
                     cardStyle={FEED_CARD_STYLE}
                   />
                 ))}
