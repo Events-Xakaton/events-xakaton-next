@@ -36,7 +36,7 @@ export const BannerUpload: FC<Props> = ({ coverUrl, onChange, className }) => {
         className="inline-flex h-7 items-center gap-1.5 rounded-full border border-white/45 bg-white/20 px-3.5 text-[11px] font-semibold tracking-[0.18em] text-white uppercase backdrop-blur-sm transition hover:bg-white/30 disabled:opacity-50"
       >
         <ImagePlus className="h-3.5 w-3.5" aria-hidden="true" />
-        {isLoading ? '...' : coverUrl ? 'Сменить фото' : 'Загрузить фото'}
+        {isLoading ? '...' : coverUrl ? 'Сменить обложку' : 'Загрузить обложку'}
       </button>
 
       {coverUrl && !isLoading ? (

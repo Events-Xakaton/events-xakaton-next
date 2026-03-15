@@ -157,7 +157,7 @@ export const EventEditSheet: FC<Props> = ({
               onTitleClick={onShowTitleEditor}
               showEditIndicator
               showChangeBackgroundButton
-              extraActions={
+              topLeftExtra={
                 <BannerUpload
                   coverUrl={fields.coverUrl}
                   onChange={setCoverUrl}

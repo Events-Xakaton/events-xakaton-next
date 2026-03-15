@@ -20,6 +20,7 @@ type Props = {
   showEditIndicator?: boolean;
   showChangeBackgroundButton?: boolean;
   extraActions?: ReactNode;
+  topLeftExtra?: ReactNode;
 };
 
 export const PreviewCard: FC<Props> = ({
@@ -34,6 +35,7 @@ export const PreviewCard: FC<Props> = ({
   showEditIndicator = false,
   showChangeBackgroundButton = true,
   extraActions,
+  topLeftExtra,
 }) => {
   return (
     <div className="preview-card">
@@ -43,17 +45,20 @@ export const PreviewCard: FC<Props> = ({
         data-testid="cover-preview-background"
       >
         <div className={cn('preview-card__scrim', APP_PREVIEW_SCRIM_CLASS)} />
-        {showChangeBackgroundButton && (
+        {(showChangeBackgroundButton || topLeftExtra) && (
           <div className="preview-card__top-left">
-            <button
-              type="button"
-              onClick={onChangeBackground}
-              data-testid="cover-change-background"
-              className="preview-card__change-bg-button"
-            >
-              <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" />
-              Другой фон
-            </button>
+            {showChangeBackgroundButton && (
+              <button
+                type="button"
+                onClick={onChangeBackground}
+                data-testid="cover-change-background"
+                className="preview-card__change-bg-button"
+              >
+                <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" />
+                Другой фон
+              </button>
+            )}
+            {topLeftExtra}
           </div>
         )}
         {(extraActions || (showEditIndicator && onTitleClick)) ? (

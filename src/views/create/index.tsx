@@ -185,7 +185,7 @@ export function CreateScreen() {
             titleEditing={eventForm.showTitleEditor}
             onTitleClick={() => eventForm.setShowTitleEditor(true)}
             showEditIndicator
-            extraActions={
+            topLeftExtra={
               <BannerUpload
                 coverUrl={eventForm.coverUrl}
                 onChange={eventForm.setCoverUrl}
@@ -437,7 +437,7 @@ export function CreateScreen() {
             titleEditing={clubForm.showTitleEditor}
             onTitleClick={() => clubForm.setShowTitleEditor(true)}
             showEditIndicator
-            extraActions={
+            topLeftExtra={
               <BannerUpload
                 coverUrl={clubForm.coverUrl}
                 onChange={clubForm.setCoverUrl}
