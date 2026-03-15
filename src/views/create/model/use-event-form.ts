@@ -41,6 +41,7 @@ export function useEventForm() {
   const maxParticipants = watch('maxParticipants') ?? '';
 
   const [coverSeed, setCoverSeed] = useState(() => newSeed('event'));
+  const [minLevel, setMinLevel] = useState<number | null>(null);
   const [selectedClubId, setSelectedClubId] = useState('');
   const [createFromClub, setCreateFromClub] = useState(false);
   const [showTitleEditor, setShowTitleEditor] = useState(false);
@@ -90,6 +91,7 @@ export function useEventForm() {
         maxParticipants: values.maxParticipants
           ? Number(values.maxParticipants)
           : undefined,
+        ...(minLevel !== null ? { minLevel } : {}),
         categoryCode: 'general',
         coverSeed,
       }).unwrap();
@@ -104,6 +106,7 @@ export function useEventForm() {
         endsAt: next.endsAt,
         maxParticipants: '',
       });
+      setMinLevel(null);
       setSelectedClubId('');
       setCreateFromClub(false);
       setShowTitleEditor(false);
@@ -132,6 +135,8 @@ export function useEventForm() {
     setSelectedClubId,
     createFromClub,
     setCreateFromClub,
+    minLevel,
+    setMinLevel,
     coverSeed,
     changeCoverSeed: () => setCoverSeed(newSeed('event')),
     showTitleEditor,

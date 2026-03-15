@@ -5,6 +5,7 @@ export type EventDraftFields = {
   startsAt: string;
   endsAt: string;
   maxParticipants: string;
+  minLevel: number | null;
   coverSeed: string;
   selectedClubId: string;
 };
@@ -16,6 +17,7 @@ export type EventOriginalData = {
   startsAt: string;
   endsAt: string;
   maxParticipants: string;
+  minLevel: number | null;
   coverSeed: string;
   clubId: string;
 };

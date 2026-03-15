@@ -14,6 +14,12 @@ import type { ClubEventListItem, EventCard, EventDetails } from './types';
 // Re-export types so consumers can import from a single entry point
 export type { EventCard, EventDetails, ClubEventListItem } from './types';
 
+export type LuckyWheelStreakRes = {
+  currentStreak: number;
+  daysUntilFreeSpin: number;
+  freeSpinBalance: number;
+};
+
 /** Машинно-читаемые коды ошибок random endpoint согласно контракту lucky-wheel */
 export enum LuckyWheelErrorCode {
   NO_ELIGIBLE_EVENTS = 'NO_ELIGIBLE_EVENTS',
@@ -54,13 +60,19 @@ export const eventApi = apiBase.injectEndpoints({
       query: ({ eventId }) => `/events/${eventId}/participants`,
       providesTags: [ApiTag.FEED],
     }),
-    randomEvent: builder.query<{ id: string }, void>({
+    randomEvent: builder.query<{ id: string; usedFreeSpin: boolean }, void>({
       query: () => '/events/random',
       providesTags: [ApiTag.FEED],
     }),
-    joinEvent: builder.mutation<{ status: string }, { eventId: string }>({
-      query: ({ eventId }) => ({
-        url: `/events/${eventId}/join`,
+    luckyWheelStreak: builder.query<LuckyWheelStreakRes, void>({
+      query: () => '/events/lucky-wheel/streak',
+    }),
+    joinEvent: builder.mutation<
+      { status: string },
+      { eventId: string; lucky?: boolean }
+    >({
+      query: ({ eventId, lucky }) => ({
+        url: `/events/${eventId}/join${lucky ? '?lucky=true' : ''}`,
         method: 'POST',
         headers: { 'idempotency-key': crypto.randomUUID() },
       }),
@@ -164,6 +176,7 @@ export const eventApi = apiBase.injectEndpoints({
         startsAtUtc: string;
         endsAtUtc: string;
         maxParticipants?: number;
+        minLevel?: number;
         categoryCode: string;
         tags?: string[];
         coverSeed?: string;
@@ -187,6 +200,7 @@ export const eventApi = apiBase.injectEndpoints({
         startsAtUtc?: string;
         endsAtUtc?: string;
         maxParticipants?: number;
+        minLevel?: number | null;
         coverSeed?: string;
         clubId?: string | null;
       }
@@ -228,4 +242,5 @@ export const {
   useCreateEventMutation,
   useUpdateEventMutation,
   useSubmitAttendanceFeedbackMutation,
+  useLuckyWheelStreakQuery,
 } = eventApi;

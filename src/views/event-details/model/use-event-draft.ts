@@ -20,6 +20,7 @@ export type UseEventDraftResult = {
   setEndsAt: (v: string) => void;
   setMaxParticipants: (v: string) => void;
   setCoverSeed: (v: string) => void;
+  setMinLevel: (v: number | null) => void;
   setSelectedClubId: (v: string) => void;
   originalData: EventOriginalData | null;
   hasChanges: boolean;
@@ -42,6 +43,7 @@ export function useEventDraft(
   const [startsAt, setStartsAt] = useState('');
   const [endsAt, setEndsAt] = useState('');
   const [maxParticipants, setMaxParticipants] = useState('');
+  const [minLevel, setMinLevel] = useState<number | null>(null);
   const [coverSeed, setCoverSeed] = useState('');
   const [selectedClubId, setSelectedClubId] = useState('');
 
@@ -69,6 +71,7 @@ export function useEventDraft(
     setStartsAt(startsAtLocal);
     setEndsAt(endsAtLocal);
     setMaxParticipants(maxPart);
+    setMinLevel(event.minLevel);
     setCoverSeed(seed);
     setSelectedClubId(event.clubId ?? '');
 
@@ -79,6 +82,7 @@ export function useEventDraft(
       startsAt: startsAtLocal,
       endsAt: endsAtLocal,
       maxParticipants: maxPart,
+      minLevel: event.minLevel,
       coverSeed: seed,
       clubId: event.clubId ?? '',
     });
@@ -97,6 +101,7 @@ export function useEventDraft(
       startsAt !== originalData.startsAt ||
       endsAt !== originalData.endsAt ||
       norm(maxParticipants) !== norm(originalData.maxParticipants) ||
+      minLevel !== originalData.minLevel ||
       coverSeed !== originalData.coverSeed ||
       selectedClubId !== originalData.clubId;
 
@@ -108,6 +113,7 @@ export function useEventDraft(
     startsAt,
     endsAt,
     maxParticipants,
+    minLevel,
     coverSeed,
     selectedClubId,
     originalData,
@@ -157,6 +163,7 @@ export function useEventDraft(
       startsAt,
       endsAt,
       maxParticipants,
+      minLevel,
       coverSeed,
       selectedClubId,
     },
@@ -166,6 +173,7 @@ export function useEventDraft(
     setStartsAt,
     setEndsAt,
     setMaxParticipants,
+    setMinLevel,
     setCoverSeed,
     setSelectedClubId,
     originalData,

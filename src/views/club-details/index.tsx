@@ -9,6 +9,7 @@ import { PeopleList } from '@/widgets/people-list';
 import { useClubDetailsQuery, useClubMembersQuery } from '@/entities/club/api';
 
 import { Button, ButtonSize, ButtonVariant } from '@/shared/components/button';
+import { MinLevelBadge } from '@/shared/components/min-level-badge';
 import { ConfirmDialog } from '@/shared/components/confirm-dialog';
 import {
   AboutSection,
@@ -290,11 +291,14 @@ export function ClubDetails({
                         <p className="font-semibold text-neutral-900 text-[15px]">
                           {event.title}
                         </p>
-                        <div className="mt-2 flex items-center gap-2 text-xs text-neutral-500">
+                        <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-neutral-500">
                           <CalendarDays className="h-4 w-4" />
                           <span>{formatEventTime(event.startsAtUtc)}</span>
                           <span>•</span>
                           <span>{event.participantsCount} участников</span>
+                          {event.minLevel !== null && (
+                            <MinLevelBadge minLevel={event.minLevel} />
+                          )}
                         </div>
                       </button>
                     ),

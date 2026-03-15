@@ -14,6 +14,7 @@ import { useEffect, useRef, useState } from 'react';
 import { AppHeader, UserRankHeader } from '@/widgets/app-header';
 
 import { Button, ButtonSize } from '@/shared/components/button';
+import { LevelSelect } from '@/shared/components/level-select';
 import { DescriptionSection } from '@/shared/components/description-section';
 import { InlineTitleEditor } from '@/shared/components/inline-title-editor';
 import { PreviewCard } from '@/shared/components/preview-card';
@@ -353,6 +354,14 @@ export function CreateScreen() {
             {eventForm.timeError && (
               <p className="text-sm text-red-500 mt-2">{eventForm.timeError}</p>
             )}
+          </div>
+
+          {/* Минимальный уровень */}
+          <div className={SECTION_CARD}>
+            <LevelSelect
+              value={eventForm.minLevel}
+              onChange={eventForm.setMinLevel}
+            />
           </div>
 
           {/* Привязка к клубу */}

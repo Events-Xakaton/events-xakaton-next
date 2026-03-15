@@ -4,6 +4,7 @@ import {
   CalendarArrowDown,
   CalendarArrowUp,
   ChevronRight,
+  Lock,
   MapPin,
   Pencil,
   Plus,
@@ -18,7 +19,10 @@ import {
   useEventParticipantsQuery,
 } from '@/entities/event/api';
 
+import { useCanJoin } from '@/features/join-event';
+
 import { Button, ButtonSize, ButtonVariant } from '@/shared/components/button';
+import { MinLevelBadge } from '@/shared/components/min-level-badge';
 import { ConfirmDialog } from '@/shared/components/confirm-dialog';
 import {
   AboutSection,
@@ -51,9 +55,10 @@ export type EventDetailsProps = {
   id: string;
   onBack: () => void;
   onOpenClub?: (clubId: string) => void;
+  fromLuckyWheel?: boolean;
 };
 
-export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
+export function EventDetails({ id, onBack, onOpenClub, fromLuckyWheel = false }: EventDetailsProps) {
   const details = useEventDetailsQuery({ eventId: id });
   const participants = useEventParticipantsQuery({ eventId: id });
   const eventAuthoringClubs = useEventAuthoringClubsQuery();
@@ -71,6 +76,18 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
 
   const ownerClubs = (eventAuthoringClubs.data ?? []).filter(
     (club) => club.role === 'owner',
+  );
+
+  // Хук должен вызываться до любых early return — используем безопасные дефолты пока event не загружен
+  const joined = (actions.joinedOverride ?? event?.joinedByMe) ?? false;
+  const canJoinResult = useCanJoin(
+    {
+      minLevel: event?.minLevel ?? null,
+      freeSpots: event?.freeSpots ?? null,
+      status: event?.status ?? 'past',
+      joinedByMe: joined,
+    },
+    { lucky: fromLuckyWheel },
   );
 
   if (details.isLoading) {
@@ -106,7 +123,6 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
   }
 
   const canEdit = event.canManage && !archived;
-  const joined = actions.joinedOverride ?? event.joinedByMe;
 
   return (
     <>
@@ -256,6 +272,18 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
                 label="Участники"
                 value={`${event.participantsCount}${event.maxParticipants ? ` / ${event.maxParticipants}` : ''}`}
               />
+              {event.minLevel !== null && (
+                <DetailRow
+                  icon={<Lock className="h-5 w-5" />}
+                  label="Мин. уровень"
+                  value={
+                    <MinLevelBadge
+                      minLevel={event.minLevel}
+                      userLevel={canJoinResult.userLevel}
+                    />
+                  }
+                />
+              )}
             </div>
           </div>
 
@@ -314,14 +342,26 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
               >
                 Вы участвуете
               </Button>
-            ) : event.freeSpots === 0 ? (
+            ) : fromLuckyWheel ? (
+              <Button
+                variant={ButtonVariant.PRIMARY}
+                size={ButtonSize.LG}
+                className="rounded-full px-7"
+                isLoading={actions.joinState.isLoading}
+                onClick={() => actions.handleJoin(true)}
+              >
+                <Plus className="mr-2 h-5 w-5" aria-hidden="true" />
+                Мне повезло, записаться
+              </Button>
+            ) : canJoinResult.blockReason ? (
               <Button
                 variant={ButtonVariant.SECONDARY}
                 size={ButtonSize.LG}
                 className="rounded-full px-6"
                 disabled
+                title={canJoinResult.levelTooltip ?? undefined}
               >
-                Мест нет
+                {canJoinResult.blockReason}
               </Button>
             ) : (
               <Button
@@ -329,7 +369,7 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
                 size={ButtonSize.LG}
                 className="rounded-full px-7"
                 isLoading={actions.joinState.isLoading}
-                onClick={actions.handleJoin}
+                onClick={() => actions.handleJoin()}
               >
                 <Plus className="mr-2 h-5 w-5" aria-hidden="true" />
                 Записаться
@@ -350,6 +390,7 @@ export function EventDetails({ id, onBack, onOpenClub }: EventDetailsProps) {
           setStartsAt={draft.setStartsAt}
           setEndsAt={draft.setEndsAt}
           setMaxParticipants={draft.setMaxParticipants}
+          setMinLevel={draft.setMinLevel}
           setCoverSeed={draft.setCoverSeed}
           setSelectedClubId={draft.setSelectedClubId}
           onShowTitleEditor={() => draft.setShowTitleEditor(true)}

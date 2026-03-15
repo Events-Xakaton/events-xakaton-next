@@ -16,6 +16,7 @@ import { BottomNav } from '@/widgets/bottom-nav';
 
 import { setInitialized } from '@/features/auth/model/auth-slice';
 import { AuthScreen } from '@/features/auth/ui/auth-screen';
+import { LoginStreakModalProvider } from '@/features/login-streak';
 
 import { loadAuthSession } from '@/shared/lib/auth-session';
 import { useNotificationBadge } from '@/shared/lib/useNotificationBadge';
@@ -39,6 +40,7 @@ export default function MiniAppShell() {
   const [detail, setDetail] = useState<{
     kind: 'event' | 'club';
     id: string;
+    fromLuckyWheel?: boolean;
   } | null>(null);
 
   useEffect(() => {
@@ -97,7 +99,7 @@ export default function MiniAppShell() {
             onBack={() => setLuckyWheelOpen(false)}
             onOpenEvent={(eventId) => {
               setLuckyWheelOpen(false);
-              setDetail({ kind: 'event', id: eventId });
+              setDetail({ kind: 'event', id: eventId, fromLuckyWheel: true });
             }}
           />
         ) : null}
@@ -105,6 +107,7 @@ export default function MiniAppShell() {
         {detail?.kind === 'event' ? (
           <EventDetails
             id={detail.id}
+            fromLuckyWheel={detail.fromLuckyWheel}
             onBack={() => setDetail(null)}
             onOpenClub={(clubId) => setDetail({ kind: 'club', id: clubId })}
           />
@@ -136,6 +139,8 @@ export default function MiniAppShell() {
           />
         ) : null}
       </div>
+      <LoginStreakModalProvider onOpenLuckyWheel={() => setLuckyWheelOpen(true)} />
+
       {/* BottomNav показываем только на основных экранах (без detail и без lucky wheel) */}
       {!detail && !luckyWheelOpen ? (
         <BottomNav

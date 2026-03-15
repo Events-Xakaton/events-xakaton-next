@@ -5,6 +5,7 @@ import { useMemo } from 'react';
 
 import { Badge, BadgeSize, BadgeVariant } from '@/shared/components/badge';
 import { Button, ButtonSize, ButtonVariant } from '@/shared/components/button';
+import { MinLevelBadge } from '@/shared/components/min-level-badge';
 import { buildGradient } from '@/shared/lib/gradient';
 import { formatLocalDateTime } from '@/shared/lib/time';
 import {
@@ -25,6 +26,7 @@ export function EventFeedCard({
   cardStyle,
   hideJoinButton = false,
   noShadow = false,
+  userLevel,
 }: {
   event: EventCard;
   joined: boolean;
@@ -34,6 +36,7 @@ export function EventFeedCard({
   cardStyle: React.CSSProperties;
   hideJoinButton?: boolean;
   noShadow?: boolean;
+  userLevel?: number;
 }) {
   const cardBackgroundStyle = useMemo(() => {
     // Если есть coverSeed — используем его
@@ -70,8 +73,8 @@ export function EventFeedCard({
 
           <h2 className="event-feed-card__title">{event.title}</h2>
 
-          <p className="event-feed-card__participants">
-            <Users className="h-4 w-4" aria-hidden="true" />
+          <div className="event-feed-card__participants">
+            <Users className="h-4 w-4 shrink-0" aria-hidden="true" />
             <span aria-label={`${event.participantsCount} участников`}>
               {event.participantsCount}{' '}
               {pluralize(
@@ -81,7 +84,10 @@ export function EventFeedCard({
                 'участников',
               )}
             </span>
-          </p>
+            {event.minLevel !== null && (
+              <MinLevelBadge minLevel={event.minLevel} userLevel={userLevel} />
+            )}
+          </div>
         </div>
 
         <div className="event-feed-card__actions">

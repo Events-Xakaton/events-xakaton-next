@@ -12,6 +12,7 @@ import type { CSSProperties, FC, RefObject } from 'react';
 import { type ClubEventAuthoring } from '@/entities/club/api';
 
 import { Button, ButtonSize, ButtonVariant } from '@/shared/components/button';
+import { LevelSelect } from '@/shared/components/level-select';
 import { DescriptionSection } from '@/shared/components/description-section';
 import { InlineTitleEditor } from '@/shared/components/inline-title-editor';
 import { PreviewCard } from '@/shared/components/preview-card';
@@ -39,6 +40,7 @@ type Props = {
   setStartsAt: (v: string) => void;
   setEndsAt: (v: string) => void;
   setMaxParticipants: (v: string) => void;
+  setMinLevel: (v: number | null) => void;
   setCoverSeed: (v: string) => void;
   setSelectedClubId: (v: string) => void;
   onShowTitleEditor: () => void;
@@ -65,6 +67,7 @@ export const EventEditSheet: FC<Props> = ({
   setStartsAt,
   setEndsAt,
   setMaxParticipants,
+  setMinLevel,
   setCoverSeed,
   setSelectedClubId,
   onShowTitleEditor,
@@ -381,6 +384,14 @@ export const EventEditSheet: FC<Props> = ({
               {timeError ? (
                 <p className="text-sm text-red-500 mt-2">{timeError}</p>
               ) : null}
+            </div>
+
+            {/* Минимальный уровень */}
+            <div className={SHEET_SECTION_CARD}>
+              <LevelSelect
+                value={fields.minLevel}
+                onChange={setMinLevel}
+              />
             </div>
 
             <Button

@@ -79,6 +79,10 @@ export function useEventActions(eventId: string) {
         maxParticipants: norm(fields.maxParticipants)
           ? Number(norm(fields.maxParticipants))
           : undefined,
+        // Отправляем minLevel только если изменилось: null явно снимает ограничение
+        ...(fields.minLevel !== originalData?.minLevel
+          ? { minLevel: fields.minLevel }
+          : {}),
         coverSeed: fields.coverSeed,
         ...(fields.selectedClubId !== originalData?.clubId
           ? { clubId: fields.selectedClubId || null }
@@ -92,9 +96,9 @@ export function useEventActions(eventId: string) {
     }
   }
 
-  function handleJoin(): void {
+  function handleJoin(lucky?: boolean): void {
     setJoinedOverride(true);
-    void joinEvent({ eventId })
+    void joinEvent({ eventId, lucky })
       .unwrap()
       .catch((error) => {
         setJoinedOverride(null);
@@ -134,7 +138,7 @@ export function useEventActions(eventId: string) {
     unjoinState,
     cancelState,
     handleUpdate,
-    handleJoin,
+    handleJoin: (lucky?: boolean) => handleJoin(lucky),
     handleUnjoin,
     handleCancelEvent,
   };

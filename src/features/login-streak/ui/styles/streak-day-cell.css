@@ -1,0 +1,53 @@
+@import '../../../../shared/lib/styles/theme.css';
+
+.streak-day-cell {
+  @apply flex flex-1 flex-col items-center gap-1.5 rounded-2xl border-2 p-3 transition-all duration-300;
+  @apply border-neutral-200 bg-neutral-100;
+
+  &--done {
+    @apply border-primary-500 bg-primary-500 text-white;
+  }
+
+  &--active {
+    @apply border-primary-400 bg-white text-primary-600;
+    animation: streak-pulse 1.8s ease-in-out infinite;
+  }
+
+  &--locked {
+    @apply border-neutral-200 bg-neutral-100 text-neutral-400;
+  }
+
+  &--reward-done {
+    @apply border-amber-400 bg-gradient-to-b from-amber-400 to-orange-500 text-white;
+  }
+
+  &__icon {
+    @apply flex h-8 w-8 items-center justify-center rounded-full bg-white/20;
+  }
+
+  &--done &__icon,
+  &--active &__icon {
+    @apply bg-white/25;
+  }
+
+  &--locked &__icon {
+    @apply bg-neutral-200;
+  }
+
+  &__label {
+    @apply flex flex-col items-center gap-0.5 text-center text-[11px] font-medium leading-tight;
+  }
+
+  &__reward-tag {
+    @apply text-[10px] font-semibold opacity-90;
+  }
+}
+
+@keyframes streak-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 theme('colors.primary.400 / 40%');
+  }
+  50% {
+    box-shadow: 0 0 0 6px theme('colors.primary.400 / 0%');
+  }
+}
