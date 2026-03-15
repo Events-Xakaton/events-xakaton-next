@@ -30,6 +30,7 @@ import { RankBadge } from '@/shared/components/rank-badge';
 import { RANK_EMOJIS } from '@/shared/constants/ranks';
 import { getTelegramProfileFallback } from '@/shared/lib/telegram';
 import { formatLocalDateTime } from '@/shared/lib/time';
+import { useCurrentUserAvatar } from '@/shared/lib/use-current-user-avatar';
 import {
   ADAPTIVE_VIEWPORT_HEIGHT,
   APP_SECTION_CARD_CLASS,
@@ -112,6 +113,7 @@ export function PointsScreen() {
   const [showHistory, setShowHistory] = useState(false);
 
   const profile = getTelegramProfileFallback();
+  const currentUserAvatarUrl = useCurrentUserAvatar();
   const balance = useBalanceQuery();
   const leaderboard = useLeaderboardQuery({ period });
   const rules = usePointsRulesQuery();
@@ -193,22 +195,10 @@ export function PointsScreen() {
               </article>
             </section>
 
-            <section className={SECTION_CARD}>
-              <h3 className={SECTION_TITLE_CLASS}>Мои достижения</h3>
-              {achievements.isLoading ? (
-                <div className="flex items-center justify-center py-6">
-                  <div className="h-6 w-6 animate-spin rounded-full border-2 border-zinc-200 border-t-zinc-900" />
-                </div>
-              ) : null}
-              {!achievements.isLoading &&
-              (achievements.data?.length ?? 0) === 0 ? (
-                <EmptyState
-                  title="Достижений пока нет"
-                  description="Получай достижения, создавая события и участвуя в жизни клубов"
-                />
-              ) : null}
-              {!achievements.isLoading &&
-              (achievements.data?.length ?? 0) > 0 ? (
+            {!achievements.isLoading &&
+            (achievements.data?.length ?? 0) > 0 ? (
+              <section className={SECTION_CARD}>
+                <h3 className={SECTION_TITLE_CLASS}>Мои достижения</h3>
                 <div className="grid grid-cols-2 gap-3">
                   {(achievements.data ?? []).map((achievement) => (
                     <AchievementCard
@@ -224,8 +214,8 @@ export function PointsScreen() {
                     />
                   ))}
                 </div>
-              ) : null}
-            </section>
+              </section>
+            ) : null}
 
             <section className={SECTION_CARD}>
               <div className="flex items-center justify-between gap-3">
@@ -282,6 +272,9 @@ export function PointsScreen() {
                   const displayName = isCurrentUser
                     ? profile.fullName
                     : row.fullName;
+                  const rowAvatarUrl = isCurrentUser
+                    ? currentUserAvatarUrl
+                    : row.avatarUrl;
                   return (
                     <div
                       key={row.userId}
@@ -299,10 +292,18 @@ export function PointsScreen() {
                         >
                           {rankBadge(row.rank)}
                         </span>
-                        <div className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-gradient-to-br from-primary-400 to-primary-600">
-                          <span className="text-base leading-none" aria-hidden>
-                            {RANK_EMOJIS[row.rankInfo?.level ?? 1] ?? '🐣'}
-                          </span>
+                        <div className="grid h-8 w-8 shrink-0 overflow-hidden rounded-full bg-gradient-to-br from-primary-400 to-primary-600">
+                          {rowAvatarUrl ? (
+                            <img
+                              src={rowAvatarUrl}
+                              alt={displayName}
+                              className="h-full w-full object-cover"
+                            />
+                          ) : (
+                            <span className="flex h-full w-full items-center justify-center text-base leading-none" aria-hidden>
+                              {RANK_EMOJIS[row.rankInfo?.level ?? 1] ?? '🐣'}
+                            </span>
+                          )}
                         </div>
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-1">
@@ -356,10 +357,18 @@ export function PointsScreen() {
                         >
                           {rankBadge(current.rank)}
                         </span>
-                        <div className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-gradient-to-br from-primary-400 to-primary-600">
-                          <span className="text-base leading-none" aria-hidden>
-                            {RANK_EMOJIS[current.rankInfo?.level ?? 1] ?? '🐣'}
-                          </span>
+                        <div className="grid h-8 w-8 shrink-0 overflow-hidden rounded-full bg-gradient-to-br from-primary-400 to-primary-600">
+                          {currentUserAvatarUrl ? (
+                            <img
+                              src={currentUserAvatarUrl}
+                              alt={profile.fullName}
+                              className="h-full w-full object-cover"
+                            />
+                          ) : (
+                            <span className="flex h-full w-full items-center justify-center text-base leading-none" aria-hidden>
+                              {RANK_EMOJIS[current.rankInfo?.level ?? 1] ?? '🐣'}
+                            </span>
+                          )}
                         </div>
                         <div className="min-w-0 flex-1">
                           <p className="truncate text-sm font-medium text-zinc-900">

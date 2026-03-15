@@ -28,7 +28,7 @@ export const achievementsApi = apiBase.injectEndpoints({
         method: 'POST',
         body,
       }),
-      invalidatesTags: [ApiTag.ACHIEVEMENTS, ApiTag.PROFILE],
+      invalidatesTags: [ApiTag.ACHIEVEMENTS],
     }),
   }),
 });

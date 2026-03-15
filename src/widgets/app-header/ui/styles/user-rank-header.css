@@ -9,6 +9,10 @@
     @apply ring-primary-300/40 shadow-sm ring-2;
   }
 
+  &__avatar-img {
+    @apply h-full w-full object-cover;
+  }
+
   &__avatar-emoji {
     @apply flex h-full w-full items-center justify-center text-xl leading-none;
   }

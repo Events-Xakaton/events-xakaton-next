@@ -13,6 +13,7 @@ import { EmptyState } from '@/shared/components/empty-state';
 import { RankBadge } from '@/shared/components/rank-badge';
 import { StarRating } from '@/shared/components/star-rating';
 import { getTelegramProfileFallback } from '@/shared/lib/telegram';
+import { useCurrentUserAvatar } from '@/shared/lib/use-current-user-avatar';
 import { APP_SECTION_CARD_CLASS } from '@/shared/lib/ui-styles';
 import { getInitials } from '@/shared/lib/utils';
 
@@ -34,6 +35,7 @@ export function PeopleList({
   const [follow] = useFollowMutation();
   const [unfollow] = useUnfollowMutation();
   const currentUser = getTelegramProfileFallback();
+  const currentUserAvatarUrl = useCurrentUserAvatar();
   const visibleRows = useMemo(() => {
     if (!previewCount || expanded) return rows;
     return rows.slice(0, previewCount);
@@ -53,7 +55,9 @@ export function PeopleList({
             {visibleRows.map((row) => {
               const isSelf = row.telegramUserId === currentUser.telegramUserId;
               const avatarUrl =
-                row.avatarUrl ?? (isSelf ? currentUser.avatarUrl : null);
+                isSelf
+                  ? (currentUserAvatarUrl ?? row.avatarUrl)
+                  : row.avatarUrl;
               return (
                 <div key={row.telegramUserId} className="people-list__item">
                   {avatarUrl ? (

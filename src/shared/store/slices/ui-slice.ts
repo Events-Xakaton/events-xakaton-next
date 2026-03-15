@@ -15,6 +15,9 @@ const uiSlice = createSlice({
     tab: 'home' as AppTab,
     homeKind: 'events' as 'events' | 'clubs',
     detail: null as DetailView,
+    // Актуальный аватар текущего пользователя (iconUrl активной ачивки или null).
+    // Синхронизируется из AchievementProvider, читается через useCurrentUserAvatar.
+    currentUserAvatarUrl: null as string | null,
   },
   reducers: {
     setTab(state, action: PayloadAction<AppTab>) {
@@ -32,6 +35,9 @@ const uiSlice = createSlice({
     closeDetail(state) {
       state.detail = null;
     },
+    setCurrentUserAvatarUrl(state, action: PayloadAction<string | null>) {
+      state.currentUserAvatarUrl = action.payload;
+    },
   },
 });
 
@@ -41,5 +47,6 @@ export const {
   openEventDetail,
   openClubDetail,
   closeDetail,
+  setCurrentUserAvatarUrl,
 } = uiSlice.actions;
 export default uiSlice.reducer;

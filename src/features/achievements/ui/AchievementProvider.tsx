@@ -4,7 +4,12 @@ import type { FC, ReactNode } from 'react';
 import { useCallback, useEffect, useState } from 'react';
 
 import type { AchievementDto } from '@/shared/api/achievements-api';
-import { useSetActiveAchievementMutation } from '@/shared/api/achievements-api';
+import {
+  useGetUserAchievementsQuery,
+  useSetActiveAchievementMutation,
+} from '@/shared/api/achievements-api';
+import { setCurrentUserAvatarUrl } from '@/shared/store/slices/ui-slice';
+import { useAppDispatch } from '@/shared/store/hooks';
 
 import {
   AchievementContext,
@@ -20,8 +25,18 @@ export const AchievementProvider: FC<Props> = ({ children }) => {
   const [pending, setPending] = useState<AchievementDto | null>(null);
   const [open, setOpen] = useState(false);
 
+  const dispatch = useAppDispatch();
+  const { data: achievements } = useGetUserAchievementsQuery();
   const [setActiveAchievement, { isLoading: isApplying }] =
     useSetActiveAchievementMutation();
+
+  // Единственная точка синхронизации аватара: активная ачивка → Redux.
+  // Все компоненты читают через useCurrentUserAvatar (useAppSelector), без RTK Query подписок.
+  useEffect(() => {
+    const activeIconUrl =
+      achievements?.find((a) => a.isActive)?.iconUrl ?? null;
+    dispatch(setCurrentUserAvatarUrl(activeIconUrl));
+  }, [achievements, dispatch]);
 
   // Запускаем конфетти при открытии модалки
   useEffect(() => {

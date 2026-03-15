@@ -9,6 +9,7 @@ import {
   SAFE_AREA_TOP,
   getBottomPadding,
 } from '@/shared/lib/ui-styles';
+import { useCurrentUserAvatar } from '@/shared/lib/use-current-user-avatar';
 
 import { ProfileClubsSection } from './profile-clubs-section';
 import { ProfileConnectionsSection } from './profile-connections-section';
@@ -37,6 +38,7 @@ export function AccountScreen({
   onNavigateToCreate: (type: 'event' | 'club') => void;
 }) {
   const profile = getTelegramProfileFallback();
+  const avatarUrl = useCurrentUserAvatar();
 
   return (
     <div
@@ -60,9 +62,9 @@ export function AccountScreen({
       <div className="space-y-4 px-4!">
         <section className={SECTION_CARD}>
           <div className="flex items-center gap-3">
-            {profile.avatarUrl ? (
+            {avatarUrl ? (
               <img
-                src={profile.avatarUrl}
+                src={avatarUrl}
                 alt={profile.fullName}
                 className="h-12 w-12 rounded-full object-cover"
                 loading="lazy"
