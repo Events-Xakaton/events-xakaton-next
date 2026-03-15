@@ -1,7 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import type { FC } from 'react';
+import type { FC, ReactNode } from 'react';
 import { useEffect, useRef, useState } from 'react';
 
 import type { WonItem } from '../lib';
@@ -15,11 +15,13 @@ type Props = {
 };
 
 // Спиннер-заглушка пока чанк с Pixi не загрузится
-const PixiLoadingFallback: FC = () => (
-  <div className="lucky-wheel__canvas-overlay">
-    <div className="lucky-wheel__canvas-spinner" />
-  </div>
-);
+const PixiLoadingFallback = (): ReactNode => {
+  return (
+    <div className="lucky-wheel__canvas-overlay">
+      <div className="lucky-wheel__canvas-spinner" />
+    </div>
+  );
+};
 
 // Pixi-компоненты загружаются только на клиенте — WebGL не доступен на сервере
 const ApplicationWrapper = dynamic(() => import('./ApplicationWrapper'), {
