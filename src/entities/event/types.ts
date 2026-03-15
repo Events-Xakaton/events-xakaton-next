@@ -7,6 +7,7 @@ export type EventCard = {
   title: string;
   status: string;
   startsAtUtc: string;
+  endsAtUtc?: string | null;
   participantsCount: number;
   freeSpots: number | null;
   minLevel: number | null;

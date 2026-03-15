@@ -43,6 +43,39 @@ const EMPTY_MESSAGES: Record<
   },
 };
 
+function getEventTimeBounds(event: EventCard): { startMs: number; endMs: number } | null {
+  const startMs = new Date(event.startsAtUtc).getTime();
+  if (!Number.isFinite(startMs)) return null;
+
+  const rawEndMs = event.endsAtUtc ? new Date(event.endsAtUtc).getTime() : NaN;
+  const endMs =
+    Number.isFinite(rawEndMs) && rawEndMs >= startMs ? rawEndMs : startMs;
+
+  return { startMs, endMs };
+}
+
+function isPastEvent(event: EventCard, nowMs: number): boolean {
+  const bounds = getEventTimeBounds(event);
+  if (!bounds) return event.status === 'past';
+  return bounds.endMs <= nowMs;
+}
+
+function isUpcomingOrOngoingEvent(event: EventCard, nowMs: number): boolean {
+  return !isPastEvent(event, nowMs);
+}
+
+function getEventSortStartMs(event: EventCard): number {
+  const bounds = getEventTimeBounds(event);
+  if (!bounds) return Number.MAX_SAFE_INTEGER;
+  return bounds.startMs;
+}
+
+function getEventSortEndMs(event: EventCard): number {
+  const bounds = getEventTimeBounds(event);
+  if (!bounds) return 0;
+  return bounds.endMs;
+}
+
 // ============================================================================
 // ProfileEventsSection Component
 // ============================================================================
@@ -60,12 +93,12 @@ export function ProfileEventsSection({
 
   const eventCounts = useMemo(() => {
     if (!eventsQuery.data) return { upcoming: 0, organizing: 0, past: 0 };
+    const nowMs = Date.now();
 
     const upcomingCount = eventsQuery.data.filter(
       (e) =>
         (e.joinedByMe || e.isOrganizer) &&
-        e.status === 'upcoming' &&
-        new Date(e.startsAtUtc) > new Date(),
+        isUpcomingOrOngoingEvent(e, nowMs),
     ).length;
 
     const organizingCount = eventsQuery.data.filter(
@@ -73,7 +106,7 @@ export function ProfileEventsSection({
     ).length;
 
     const pastCount = eventsQuery.data.filter(
-      (e) => e.joinedByMe && new Date(e.startsAtUtc) < new Date(),
+      (e) => e.joinedByMe && isPastEvent(e, nowMs),
     ).length;
 
     return {
@@ -85,6 +118,7 @@ export function ProfileEventsSection({
 
   const filteredEvents = useMemo(() => {
     if (!eventsQuery.data) return [];
+    const nowMs = Date.now();
 
     let filtered: EventCard[] = [];
 
@@ -93,31 +127,24 @@ export function ProfileEventsSection({
         filtered = eventsQuery.data.filter(
           (e) =>
             (e.joinedByMe || e.isOrganizer) &&
-            e.status === 'upcoming' &&
-            new Date(e.startsAtUtc) > new Date(),
+            isUpcomingOrOngoingEvent(e, nowMs),
         );
         return filtered.sort(
-          (a, b) =>
-            new Date(a.startsAtUtc).getTime() -
-            new Date(b.startsAtUtc).getTime(),
+          (a, b) => getEventSortStartMs(a) - getEventSortStartMs(b),
         );
 
       case 'organizing':
         filtered = eventsQuery.data.filter((e) => e.isOrganizer);
         return filtered.sort(
-          (a, b) =>
-            new Date(a.startsAtUtc).getTime() -
-            new Date(b.startsAtUtc).getTime(),
+          (a, b) => getEventSortStartMs(a) - getEventSortStartMs(b),
         );
 
       case 'past':
         filtered = eventsQuery.data.filter(
-          (e) => e.joinedByMe && new Date(e.startsAtUtc) < new Date(),
+          (e) => e.joinedByMe && isPastEvent(e, nowMs),
         );
         return filtered.sort(
-          (a, b) =>
-            new Date(b.startsAtUtc).getTime() -
-            new Date(a.startsAtUtc).getTime(),
+          (a, b) => getEventSortEndMs(b) - getEventSortEndMs(a),
         );
 
       default:

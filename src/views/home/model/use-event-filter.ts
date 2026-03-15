@@ -24,6 +24,34 @@ export const DAY_FILTER_SHORT: Record<DayFilterId, string> = {
   'next-week': 'След. нед.',
 };
 
+function parseDateValue(value: string | null | undefined): Date | null {
+  if (!value) return null;
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return null;
+  return parsed;
+}
+
+function resolveEventRange(event: EventCard): { start: Date; end: Date } | null {
+  const start = parseDateValue(event.startsAtUtc);
+  if (!start) return null;
+
+  const rawEnd = parseDateValue(event.endsAtUtc);
+  const end =
+    rawEnd && rawEnd.getTime() >= start.getTime() ? rawEnd : new Date(start);
+
+  return { start, end };
+}
+
+function intersectsRange(
+  eventRange: { start: Date; end: Date },
+  filterRange: { start: Date; end: Date },
+): boolean {
+  return (
+    eventRange.end.getTime() > filterRange.start.getTime() &&
+    eventRange.start.getTime() < filterRange.end.getTime()
+  );
+}
+
 export function useEventFilter(events: EventCard[] | undefined) {
   const [dayFilter, setDayFilter] = useState<DayFilterId>('any');
   const [sortByDate, setSortByDate] = useState(true);
@@ -52,19 +80,34 @@ export function useEventFilter(events: EventCard[] | undefined) {
     nextWeekEnd.setDate(nextWeekEnd.getDate() + 7);
 
     return (events ?? []).filter((event) => {
-      const starts = new Date(event.startsAtUtc);
-      if (Number.isNaN(starts.getTime())) return true;
+      const eventRange = resolveEventRange(event);
+      if (!eventRange) return true;
 
       if (dayFilter === 'today')
-        return starts >= startOfToday && starts < endOfToday;
+        return intersectsRange(eventRange, {
+          start: startOfToday,
+          end: endOfToday,
+        });
       if (dayFilter === 'tomorrow')
-        return starts >= endOfToday && starts < endOfTomorrow;
+        return intersectsRange(eventRange, {
+          start: endOfToday,
+          end: endOfTomorrow,
+        });
       if (dayFilter === 'week')
-        return starts >= startOfToday && starts < endOfWeek;
+        return intersectsRange(eventRange, {
+          start: startOfToday,
+          end: endOfWeek,
+        });
       if (dayFilter === 'weekend')
-        return starts >= startOfWeekend && starts < endOfWeekend;
+        return intersectsRange(eventRange, {
+          start: startOfWeekend,
+          end: endOfWeekend,
+        });
       if (dayFilter === 'next-week')
-        return starts >= nextWeekStart && starts < nextWeekEnd;
+        return intersectsRange(eventRange, {
+          start: nextWeekStart,
+          end: nextWeekEnd,
+        });
       return true;
     });
   }, [events, dayFilter]);
