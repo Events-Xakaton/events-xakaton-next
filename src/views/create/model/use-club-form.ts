@@ -7,7 +7,11 @@ import { useCreateClubMutation } from '@/entities/club/api';
 import { buildGradient, newSeed } from '@/shared/lib/gradient';
 import { appErrorText } from '@/shared/lib/utils';
 
-export function useClubForm() {
+export function useClubForm({
+  onCreated,
+}: {
+  onCreated?: (clubId: string) => void;
+} = {}) {
   const [createClub, { isLoading: isSubmitting }] = useCreateClubMutation();
 
   const [title, setTitle] = useState('');
@@ -42,9 +46,12 @@ export function useClubForm() {
         coverUrl: coverUrl ?? undefined,
         coverSeed,
       }).unwrap();
-      setHint(`Клуб создан: ${result.id}`);
+      const createdClubId = result.id;
+      setTitle('');
+      setDescription('');
       setCoverUrl(null);
       setShowTitleEditor(false);
+      onCreated?.(createdClubId);
     } catch (error) {
       setHint(appErrorText(error, 'Не удалось создать клуб.'));
     }

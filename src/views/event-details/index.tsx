@@ -29,6 +29,7 @@ import { ErrorState } from '@/shared/components/error-state';
 import { MinLevelBadge } from '@/shared/components/min-level-badge';
 import { PreviewCard } from '@/shared/components/preview-card';
 import { formatDateTimeDisplay } from '@/shared/lib/date-format';
+import { openLocationLink, parseLocationLink } from '@/shared/lib/location-link';
 import { useTelegramBackButton } from '@/shared/lib/telegram/useTelegramButtons';
 import {
   ADAPTIVE_VIEWPORT_HEIGHT,
@@ -130,6 +131,7 @@ export function EventDetails({
 
   const canEdit = event.canManage && !archived;
   const showHeroJoinButton = !archived && !canJoinResult.blockReason;
+  const locationLink = parseLocationLink(event.locationOrLink);
 
   return (
     <>
@@ -182,7 +184,7 @@ export function EventDetails({
           <PreviewCard
             background={draft.coverBackground}
             title={event.title}
-            subtitle={`${formatDateTimeDisplay(event.startsAtUtc)} • ${event.locationOrLink}`}
+            subtitle={formatDateTimeDisplay(event.startsAtUtc)}
             onChangeBackground={() => {}}
             titleEditing={false}
             onTitleClick={undefined}
@@ -293,7 +295,37 @@ export function EventDetails({
               <DetailRow
                 icon={<MapPin className="h-5 w-5" />}
                 label="Локация"
-                value={event.locationOrLink}
+                value={
+                  locationLink.kind === 'google_maps_url' ? (
+                    <span className="detail-row__location-link-content">
+                      <img
+                        src="/google-maps.svg"
+                        alt=""
+                        aria-hidden="true"
+                        className="h-4 w-4 shrink-0"
+                        loading="lazy"
+                      />
+                      <span className="detail-row__location-link">
+                        {locationLink.displayText}
+                      </span>
+                    </span>
+                  ) : (
+                    locationLink.displayText
+                  )
+                }
+                valueClassName={cn(
+                  'detail-row__location-value',
+                  locationLink.isClickable &&
+                    locationLink.kind !== 'google_maps_url' &&
+                    'detail-row__location-link',
+                )}
+                onClick={
+                  locationLink.isClickable
+                    ? () => {
+                        openLocationLink(locationLink);
+                      }
+                    : undefined
+                }
               />
               <DetailRow
                 icon={<CalendarArrowUp className="h-5 w-5" />}

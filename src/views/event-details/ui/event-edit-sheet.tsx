@@ -151,7 +151,7 @@ export const EventEditSheet: FC<Props> = ({
             <PreviewCard
               background={coverBackground}
               title={fields.title || ''}
-              subtitle={`${formatDateTimeDisplay(fields.startsAt)} • ${fields.location}`}
+              subtitle={formatDateTimeDisplay(fields.startsAt)}
               onChangeBackground={() => setCoverSeed(newSeed('event'))}
               titleEditing={showTitleEditor}
               onTitleClick={onShowTitleEditor}
