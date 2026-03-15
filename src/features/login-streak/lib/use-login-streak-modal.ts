@@ -22,10 +22,16 @@ export function useLoginStreakModal(): UseLoginStreakModalResult {
     return sessionStorage.getItem(SESSION_KEY) === '1';
   });
 
+  // Показываем только если пасхалка активирована
+  const [isLuckyUnlocked] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    return localStorage.getItem('lucky_wheel_unlocked') === '1';
+  });
+
   const [open, setOpen] = useState(false);
 
   const { data, isSuccess } = useLuckyWheelStreakQuery(undefined, {
-    skip: alreadyShown,
+    skip: alreadyShown || !isLuckyUnlocked,
   });
 
   useEffect(() => {

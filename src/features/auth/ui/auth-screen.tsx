@@ -66,8 +66,11 @@ export const AuthScreen: FC = () => {
             </div>
           </div>
 
-          <CardTitle as="h1" className="text-center text-3xl font-display">
-            Y Events
+          <CardTitle
+            as="h1"
+            className="text-white! text-center text-3xl font-display"
+          >
+            Party Maker 🎉
           </CardTitle>
 
           <CardDescription className="text-center py-4">

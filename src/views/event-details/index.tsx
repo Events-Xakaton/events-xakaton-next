@@ -46,6 +46,8 @@ import { cn } from '@/shared/lib/utils';
 import { useEditSheet } from './model/use-edit-sheet';
 import { useEventActions } from './model/use-event-actions';
 import { useEventDraft } from './model/use-event-draft';
+import { AttendanceAlreadyDone } from './ui/attendance-already-done';
+import { AttendancePanel } from './ui/attendance-panel';
 import { EventEditSheet } from './ui/event-edit-sheet';
 
 const SECTION_CARD = APP_SECTION_CARD_CLASS;
@@ -292,6 +294,19 @@ export function EventDetails({ id, onBack, onOpenClub, fromLuckyWheel = false }:
             rows={participants.data ?? []}
             previewCount={5}
           />
+
+          {/* Панель посещаемости — только организатор на прошедшем событии */}
+          {event.canManage && archived && event.status === 'past' && (
+            participants.data && participants.data.some((p) => p.attendanceConfirmed) ? (
+              <AttendanceAlreadyDone />
+            ) : participants.data && participants.data.length > 0 ? (
+              <AttendancePanel
+                eventId={id}
+                participants={participants.data}
+                onDone={() => void participants.refetch()}
+              />
+            ) : null
+          )}
 
           {actions.hint && (
             <div

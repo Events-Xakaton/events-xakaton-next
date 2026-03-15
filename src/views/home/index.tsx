@@ -33,11 +33,15 @@ const CARD_CONTENT_HORIZONTAL_PADDING_PX = 20;
 const CARD_CONTENT_VERTICAL_PADDING_TOP_PX = 24;
 
 export function HomeScreen({
+  isUnlocked,
+  onUnlock,
   onOpenEvent,
   onOpenClub,
   onNavigateToCreate,
   onOpenLuckyWheel,
 }: {
+  isUnlocked: boolean;
+  onUnlock: () => void;
   onOpenEvent: (eventId: string) => void;
   onOpenClub: (clubId: string) => void;
   onNavigateToCreate: () => void;
@@ -53,7 +57,7 @@ export function HomeScreen({
     setScrollContainer,
     scrollContainerRef: feedScrollRef,
     reset: resetLucky,
-  } = useLuckyTrigger();
+  } = useLuckyTrigger({ disabled: isUnlocked });
 
   const events = useEventsQuery();
   const clubs = useClubsQuery();
@@ -121,6 +125,13 @@ export function HomeScreen({
   useEffect(() => {
     if (isLuckyTriggered) trackLuckyReveal();
   }, [isLuckyTriggered]);
+
+  // При первом срабатывании триггера — разблокируем Lucky Wheel навсегда
+  useEffect(() => {
+    if (isLuckyTriggered && !isUnlocked) {
+      onUnlock();
+    }
+  }, [isLuckyTriggered, isUnlocked, onUnlock]);
 
   return (
     <div className="relative bg-[#f2f2f5]" style={FEED_MIN_HEIGHT_STYLE}>

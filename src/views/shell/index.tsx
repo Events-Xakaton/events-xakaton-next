@@ -17,6 +17,7 @@ import { BottomNav } from '@/widgets/bottom-nav';
 import { setInitialized } from '@/features/auth/model/auth-slice';
 import { AuthScreen } from '@/features/auth/ui/auth-screen';
 import { LoginStreakModalProvider } from '@/features/login-streak';
+import { useLuckyWheelUnlock } from '@/features/lucky-wheel-unlock';
 import { PointsBalanceProvider } from '@/features/points';
 
 import { loadAuthSession } from '@/shared/lib/auth-session';
@@ -24,7 +25,6 @@ import { useNotificationBadge } from '@/shared/lib/useNotificationBadge';
 import { useAppDispatch, useAppSelector } from '@/shared/store/hooks';
 import type { MainTab } from '@/shared/types/navigation';
 
-// Simple loading fallback for lazy-loaded components
 const LoadingFallback: FC = () => (
   <div className="flex h-screen items-center justify-center">
     <div className="h-8 w-8 animate-spin rounded-full border-4 border-zinc-200 border-t-zinc-900" />
@@ -38,6 +38,8 @@ export default function MiniAppShell() {
   const [tab, setTab] = useState<MainTab>('home');
   const notificationBadge = useNotificationBadge();
   const [luckyWheelOpen, setLuckyWheelOpen] = useState(false);
+  // Хук вызывается до ранних return'ов (React Rules of Hooks)
+  const { isUnlocked, isNewUnlock, unlock } = useLuckyWheelUnlock();
   const [detail, setDetail] = useState<{
     kind: 'event' | 'club';
     id: string;
@@ -49,6 +51,22 @@ export default function MiniAppShell() {
       dispatch(setInitialized(session ?? null));
     });
   }, [dispatch]);
+
+  // Конфетти при первой разблокировке рулетки
+  useEffect(() => {
+    if (!isNewUnlock) return;
+    const timer = setTimeout(() => {
+      void import('@hiseb/confetti').then(({ default: confetti }) => {
+        confetti({
+          position: { x: window.innerWidth / 2, y: window.innerHeight - 60 },
+          count: 60,
+          velocity: 170,
+          fade: true,
+        });
+      });
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [isNewUnlock]);
 
   if (isInitializing) {
     return <LoadingFallback />;
@@ -123,6 +141,8 @@ export default function MiniAppShell() {
 
         {!detail && !luckyWheelOpen && tab === 'home' ? (
           <HomeScreen
+            isUnlocked={isUnlocked}
+            onUnlock={unlock}
             onOpenEvent={(eventId) => setDetail({ kind: 'event', id: eventId })}
             onOpenClub={(clubId) => setDetail({ kind: 'club', id: clubId })}
             onNavigateToCreate={() => setTab('create')}
@@ -140,6 +160,7 @@ export default function MiniAppShell() {
           />
         ) : null}
       </div>
+
       <PointsBalanceProvider />
       <LoginStreakModalProvider onOpenLuckyWheel={() => setLuckyWheelOpen(true)} />
 
@@ -152,6 +173,9 @@ export default function MiniAppShell() {
             setTab(next);
           }}
           hasNewNotifications={notificationBadge.hasNewNotifications}
+          luckyWheelUnlocked={isUnlocked}
+          isNewLuckyWheel={isNewUnlock}
+          onOpenLuckyWheel={() => setLuckyWheelOpen(true)}
         />
       ) : null}
     </main>

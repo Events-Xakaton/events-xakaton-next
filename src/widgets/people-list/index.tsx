@@ -11,6 +11,7 @@ import {
 import { Button, ButtonSize, ButtonVariant } from '@/shared/components/button';
 import { EmptyState } from '@/shared/components/empty-state';
 import { RankBadge } from '@/shared/components/rank-badge';
+import { StarRating } from '@/shared/components/star-rating';
 import { getTelegramProfileFallback } from '@/shared/lib/telegram';
 import { APP_SECTION_CARD_CLASS } from '@/shared/lib/ui-styles';
 import { getInitials } from '@/shared/lib/utils';
@@ -70,6 +71,11 @@ export function PeopleList({
                     <p className="people-list__name">{row.fullName}</p>
                     {row.rankInfo ? (
                       <RankBadge rankInfo={row.rankInfo} />
+                    ) : null}
+                    {row.attendanceConfirmed && row.rating !== null ? (
+                      <StarRating value={row.rating} size="sm" />
+                    ) : row.attendanceConfirmed ? (
+                      <span className="text-xs text-green-600 font-medium">✓</span>
                     ) : null}
                   </div>
                   {isSelf ? (

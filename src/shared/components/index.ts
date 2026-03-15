@@ -67,3 +67,5 @@ export {
   appErrorText,
   toIsoFromLocal,
 } from '@/shared/lib/utils';
+
+export { StarRating } from './star-rating';

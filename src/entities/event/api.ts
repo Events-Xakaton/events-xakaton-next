@@ -18,6 +18,8 @@ export type LuckyWheelStreakRes = {
   currentStreak: number;
   daysUntilFreeSpin: number;
   freeSpinBalance: number;
+  hasUsedWeeklySpin: boolean;
+  nextWeekKey: string;
 };
 
 /** Машинно-читаемые коды ошибок random endpoint согласно контракту lucky-wheel */
@@ -227,6 +229,18 @@ export const eventApi = apiBase.injectEndpoints({
       }),
       invalidatesTags: [ApiTag.FEED, ApiTag.PROFILE],
     }),
+    confirmAttendance: builder.mutation<
+      { status: string },
+      { eventId: string; attendances: Array<{ userId: string; rating?: number }> }
+    >({
+      query: ({ eventId, attendances }) => ({
+        url: `/events/${eventId}/attendance`,
+        method: 'POST',
+        body: { attendances },
+        headers: { 'idempotency-key': crypto.randomUUID() },
+      }),
+      invalidatesTags: [ApiTag.FEED],
+    }),
   }),
 });
 
@@ -243,4 +257,5 @@ export const {
   useUpdateEventMutation,
   useSubmitAttendanceFeedbackMutation,
   useLuckyWheelStreakQuery,
+  useConfirmAttendanceMutation,
 } = eventApi;

@@ -1,6 +1,6 @@
 'use client';
 
-import { Bell, Home, Plus, Star, User } from 'lucide-react';
+import { Bell, Dices, Home, Plus, Star, User } from 'lucide-react';
 import type { ReactElement } from 'react';
 
 import { SAFE_AREA_BOTTOM } from '@/shared/lib/ui-styles';
@@ -13,10 +13,16 @@ export function BottomNav({
   tab,
   onTab,
   hasNewNotifications,
+  luckyWheelUnlocked = false,
+  isNewLuckyWheel = false,
+  onOpenLuckyWheel,
 }: {
   tab: MainTab;
   onTab: (next: MainTab) => void;
   hasNewNotifications: boolean;
+  luckyWheelUnlocked?: boolean;
+  isNewLuckyWheel?: boolean;
+  onOpenLuckyWheel?: () => void;
 }): ReactElement {
   const items: Array<{ id: MainTab; label: string; Icon: typeof Home }> = [
     { id: 'home', label: 'Главная', Icon: Home },
@@ -34,7 +40,12 @@ export function BottomNav({
       aria-label="Основная навигация"
     >
       <div className="bottom-nav__inner">
-        <div className="bottom-nav__grid">
+        <div
+          className={cn(
+            'bottom-nav__grid',
+            luckyWheelUnlocked && 'bottom-nav__grid--six',
+          )}
+        >
           {items.map((item) => {
             const active = tab === item.id;
             const Icon = item.Icon;
@@ -65,6 +76,20 @@ export function BottomNav({
               </button>
             );
           })}
+
+          {luckyWheelUnlocked ? (
+            <button
+              type="button"
+              onClick={onOpenLuckyWheel}
+              aria-label="Lucky Wheel"
+              className={cn(
+                'bottom-nav__item bottom-nav__item--lucky',
+                isNewLuckyWheel && 'bottom-nav__item--lucky-new',
+              )}
+            >
+              <Dices className="bottom-nav__icon" aria-hidden="true" />
+            </button>
+          ) : null}
         </div>
       </div>
     </nav>

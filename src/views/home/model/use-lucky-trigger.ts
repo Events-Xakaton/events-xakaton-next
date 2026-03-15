@@ -9,6 +9,8 @@ export const LUCKY_TRIGGER_WINDOW_MS = 3000;
 /** Размер окна ближайших кандидатов для серверного выбора (передаётся как справочная константа) */
 export const LUCKY_K_NEAREST = 5;
 
+type UseLuckyTriggerOptions = { disabled?: boolean };
+
 type UseLuckyTriggerResult = {
   isTriggered: boolean;
   /** Передать в `ref` контейнера ленты (заменяет обычный feedScrollRef) */
@@ -26,8 +28,14 @@ type UseLuckyTriggerResult = {
  * Когда порог LUCKY_MIN_VIEWED_EVENTS достигнут, выставляет isTriggered = true.
  *
  * Каждый элемент карточки должен иметь атрибут data-event-id.
+ *
+ * Когда `disabled=true` — наблюдатели не создаются, возвращаются инертные значения.
  */
-export function useLuckyTrigger(): UseLuckyTriggerResult {
+export function useLuckyTrigger(
+  options: UseLuckyTriggerOptions = {},
+): UseLuckyTriggerResult {
+  const { disabled = false } = options;
+
   const [isTriggered, setIsTriggered] = useState(false);
   const triggeredRef = useRef(false);
   const viewRecords = useRef<Array<{ eventId: string; ts: number }>>([]);
@@ -35,30 +43,39 @@ export function useLuckyTrigger(): UseLuckyTriggerResult {
   const ioRef = useRef<IntersectionObserver | null>(null);
   const moRef = useRef<MutationObserver | null>(null);
 
-  const onIntersection = useCallback((entries: IntersectionObserverEntry[]) => {
-    if (triggeredRef.current) return;
+  const onIntersection = useCallback(
+    (entries: IntersectionObserverEntry[]) => {
+      if (triggeredRef.current) return;
 
-    const now = Date.now();
-    for (const entry of entries) {
-      if (!entry.isIntersecting) continue;
-      const eventId = (entry.target as HTMLElement).dataset['eventId'];
-      if (!eventId) continue;
-      viewRecords.current.push({ eventId, ts: now });
-    }
+      const now = Date.now();
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        const eventId = (entry.target as HTMLElement).dataset['eventId'];
+        if (!eventId) continue;
+        viewRecords.current.push({ eventId, ts: now });
+      }
 
-    // Отсекаем записи за пределами временного окна
-    const cutoff = now - LUCKY_TRIGGER_WINDOW_MS;
-    viewRecords.current = viewRecords.current.filter((r) => r.ts >= cutoff);
+      // Отсекаем записи за пределами временного окна
+      const cutoff = now - LUCKY_TRIGGER_WINDOW_MS;
+      viewRecords.current = viewRecords.current.filter((r) => r.ts >= cutoff);
 
-    const uniqueIds = new Set(viewRecords.current.map((r) => r.eventId));
-    if (uniqueIds.size >= LUCKY_MIN_VIEWED_EVENTS) {
-      triggeredRef.current = true;
-      setIsTriggered(true);
-    }
-  }, []);
+      const uniqueIds = new Set(viewRecords.current.map((r) => r.eventId));
+      if (uniqueIds.size >= LUCKY_MIN_VIEWED_EVENTS) {
+        triggeredRef.current = true;
+        setIsTriggered(true);
+        // Отключаем наблюдатели сразу после срабатывания — больше не нужны
+        ioRef.current?.disconnect();
+        moRef.current?.disconnect();
+      }
+    },
+    [],
+  );
 
   const setupObservers = useCallback(
     (container: HTMLDivElement) => {
+      // Не создаём наблюдатели если триггер отключён
+      if (disabled) return;
+
       ioRef.current?.disconnect();
       moRef.current?.disconnect();
 
@@ -84,7 +101,7 @@ export function useLuckyTrigger(): UseLuckyTriggerResult {
       mo.observe(container, { childList: true, subtree: true });
       moRef.current = mo;
     },
-    [onIntersection],
+    [disabled, onIntersection],
   );
 
   useEffect(() => {

@@ -40,6 +40,8 @@
   @apply outline-none;
 
   transform-origin: center bottom;
+  /* GPU-слой заранее — предотвращает заикание анимации при hover/focus */
+  will-change: transform;
   animation:
     egg-enter 300ms ease-out both,
     egg-wobble 2.8s ease-in-out 300ms infinite;
