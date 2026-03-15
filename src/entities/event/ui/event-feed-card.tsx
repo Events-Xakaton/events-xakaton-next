@@ -1,7 +1,7 @@
 'use client';
 
 import { Check, ChevronRight, Clock, Plus, Users } from 'lucide-react';
-import { useMemo } from 'react';
+import { useMemo, type MouseEvent } from 'react';
 
 import { Button, ButtonSize, ButtonVariant } from '@/shared/components/button';
 import { MinLevelBadge } from '@/shared/components/min-level-badge';
@@ -57,6 +57,22 @@ export function EventFeedCard({
     userLevel !== undefined &&
     userLevel < event.minLevel;
 
+  const handleOpenDetails = () => {
+    onOpenEvent(event.id);
+  };
+
+  const handleCardClick = (clickEvent: MouseEvent<HTMLElement>) => {
+    const target = clickEvent.target as HTMLElement | null;
+    if (
+      target?.closest(
+        'button, a, input, textarea, select, [role="button"], [role="link"]',
+      )
+    ) {
+      return;
+    }
+    handleOpenDetails();
+  };
+
   return (
     <article
       className={cn('event-feed-card', !noShadow && APP_ELEVATED_CARD_CLASS)}
@@ -65,6 +81,7 @@ export function EventFeedCard({
       aria-label={`Событие: ${event.title}`}
       data-feed-card="event"
       data-event-id={event.id}
+      onClick={handleCardClick}
     >
       {/* Scrim overlay для защиты текста */}
       <div className="event-feed-card__scrim" />
@@ -129,7 +146,7 @@ export function EventFeedCard({
           <Button
             variant={ButtonVariant.SECONDARY}
             size={ButtonSize.MD}
-            onClick={() => onOpenEvent(event.id)}
+            onClick={handleOpenDetails}
             className="ml-auto rounded-full border-white/25 bg-white! px-5! py-2.5! text-[15px]! font-semibold text-zinc-900! shadow-md"
             aria-label={`Посмотреть детали ивента ${event.title}`}
           >

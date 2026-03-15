@@ -1,7 +1,7 @@
 'use client';
 
 import { Check, ChevronRight, Clock, Plus, Users } from 'lucide-react';
-import type { FC } from 'react';
+import type { FC, MouseEvent } from 'react';
 import { useMemo } from 'react';
 
 import type { ClubEventListItem } from '@/entities/club/api';
@@ -43,13 +43,36 @@ export const ClubProfileEventCard: FC<Props> = ({
     return { background: getEventGradient(event.id) };
   }, [coverSeed, event.id]);
 
+  const handleOpenDetails = () => {
+    onOpenEvent?.(event.id);
+  };
+
+  const handleCardClick = (clickEvent: MouseEvent<HTMLElement>) => {
+    if (!onOpenEvent) {
+      return;
+    }
+    const target = clickEvent.target as HTMLElement | null;
+    if (
+      target?.closest(
+        'button, a, input, textarea, select, [role="button"], [role="link"]',
+      )
+    ) {
+      return;
+    }
+    handleOpenDetails();
+  };
+
   return (
     <article
-      className="relative h-[240px] overflow-hidden rounded-[30px] border border-neutral-200"
+      className={cn(
+        'relative h-[240px] overflow-hidden rounded-[30px] border border-neutral-200',
+        onOpenEvent && 'cursor-pointer',
+      )}
       style={cardBackgroundStyle}
       role="article"
       aria-label={`Событие: ${event.title}`}
       data-feed-card="event"
+      onClick={handleCardClick}
     >
       <div className={cn('absolute inset-0', APP_FEED_SCRIM_CLASS)} />
 
@@ -106,7 +129,7 @@ export const ClubProfileEventCard: FC<Props> = ({
           <Button
             variant={ButtonVariant.SECONDARY}
             size={ButtonSize.MD}
-            onClick={() => onOpenEvent?.(event.id)}
+            onClick={handleOpenDetails}
             disabled={!onOpenEvent}
             className="h-11 w-11 min-h-[44px] min-w-[44px] rounded-full border-white/25 bg-white! px-0! py-0! text-zinc-900! shadow-md"
             aria-label={`Посмотреть детали ивента ${event.title}`}
