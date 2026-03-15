@@ -9,6 +9,56 @@ export type TelegramProfile = {
 // Демо-ID для локальной разработки вне Telegram (не реальный пользователь)
 const DEMO_TELEGRAM_USER_ID = '900000001';
 
+type InitDataUserLike = {
+  id?: string | number;
+  first_name?: string;
+  last_name?: string;
+  username?: string;
+  photo_url?: string | null;
+};
+
+function getDemoUserId(): string {
+  if (typeof window !== 'undefined') {
+    return (
+      window.localStorage.getItem('tg_demo_user_id') ?? DEMO_TELEGRAM_USER_ID
+    );
+  }
+  return DEMO_TELEGRAM_USER_ID;
+}
+
+function getRawInitDataQuietly(): string | null {
+  try {
+    const raw =
+      process.env['NEXT_PUBLIC_ENV'] === 'development'
+        ? process.env['NEXT_PUBLIC_INIT_DATA']
+        : retrieveRawInitData();
+    return raw ?? null;
+  } catch {
+    return null;
+  }
+}
+
+function parseUserFromRawInitData(raw: string | null): InitDataUserLike | null {
+  if (!raw) return null;
+
+  const encodedUser = new URLSearchParams(raw).get('user');
+  if (!encodedUser) return null;
+
+  try {
+    const parsed = JSON.parse(encodedUser) as InitDataUserLike;
+    return parsed?.id ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+function resolveTelegramUser(): InitDataUserLike | null {
+  const sdkUser = initDataUser() as InitDataUserLike | undefined;
+  if (sdkUser?.id) return sdkUser;
+
+  return parseUserFromRawInitData(getRawInitDataQuietly());
+}
+
 /**
  * Возвращает сырую строку initData из launch params, переданных Telegram-клиентом.
  * Используется в заголовке x-telegram-init-data для аутентификации на бэкенде.
@@ -41,18 +91,12 @@ export function getTelegramInitData(): string | null {
  * Fallback: demo ID из localStorage или константа.
  */
 export function getTelegramUserIdFallback(): string {
-  const user = initDataUser();
+  const user = resolveTelegramUser();
   if (user?.id) {
     return String(user.id);
   }
 
-  if (typeof window !== 'undefined') {
-    return (
-      window.localStorage.getItem('tg_demo_user_id') ?? DEMO_TELEGRAM_USER_ID
-    );
-  }
-
-  return DEMO_TELEGRAM_USER_ID;
+  return getDemoUserId();
 }
 
 /**
@@ -60,15 +104,14 @@ export function getTelegramUserIdFallback(): string {
  * Fallback: демо-профиль для разработки вне Telegram.
  */
 export function getTelegramProfileFallback(): TelegramProfile {
-  const user = initDataUser();
+  const user = resolveTelegramUser();
 
-  if (!user) {
-    const fallbackId =
-      typeof window !== 'undefined'
-        ? (window.localStorage.getItem('tg_demo_user_id') ??
-          DEMO_TELEGRAM_USER_ID)
-        : DEMO_TELEGRAM_USER_ID;
-    return { telegramUserId: fallbackId, fullName: 'Вы', avatarUrl: null };
+  if (!user?.id) {
+    return {
+      telegramUserId: getDemoUserId(),
+      fullName: 'Вы',
+      avatarUrl: null,
+    };
   }
 
   const telegramUserId = String(user.id);

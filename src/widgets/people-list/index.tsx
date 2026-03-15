@@ -53,13 +53,14 @@ export function PeopleList({
         ) : (
           <div className="space-y-3">
             {visibleRows.map((row) => {
-              const isSelf = row.telegramUserId === currentUser.telegramUserId;
+              const rowTelegramUserId = String(row.telegramUserId);
+              const isSelf = rowTelegramUserId === currentUser.telegramUserId;
               const avatarUrl =
                 isSelf
                   ? (currentUserAvatarUrl ?? row.avatarUrl)
                   : row.avatarUrl;
               return (
-                <div key={row.telegramUserId} className="people-list__item">
+                <div key={rowTelegramUserId} className="people-list__item">
                   {avatarUrl ? (
                     <img
                       src={avatarUrl}
@@ -95,13 +96,13 @@ export function PeopleList({
                           : ButtonVariant.PRIMARY
                       }
                       size={ButtonSize.SM}
-                      disabled={loadingUserId === row.telegramUserId}
-                      isLoading={loadingUserId === row.telegramUserId}
+                      disabled={loadingUserId === rowTelegramUserId}
+                      isLoading={loadingUserId === rowTelegramUserId}
                       onClick={() => {
-                        setLoadingUserId(row.telegramUserId);
+                        setLoadingUserId(rowTelegramUserId);
                         const mutation = row.followedByMe
-                          ? unfollow({ telegramUserId: row.telegramUserId })
-                          : follow({ telegramUserId: row.telegramUserId });
+                          ? unfollow({ telegramUserId: rowTelegramUserId })
+                          : follow({ telegramUserId: rowTelegramUserId });
                         void mutation.finally(() => setLoadingUserId(null));
                       }}
                       className="rounded-full"
