@@ -42,6 +42,8 @@ type Props = {
   setEndsAt: (v: string) => void;
   setMaxParticipants: (v: string) => void;
   setMinLevel: (v: number | null) => void;
+  setIsForKids: (v: boolean) => void;
+  setKidsMinAge: (v: number | null) => void;
   setCoverUrl: (v: string | null) => void;
   setCoverSeed: (v: string) => void;
   setSelectedClubId: (v: string) => void;
@@ -70,6 +72,8 @@ export const EventEditSheet: FC<Props> = ({
   setEndsAt,
   setMaxParticipants,
   setMinLevel,
+  setIsForKids,
+  setKidsMinAge,
   setCoverUrl,
   setCoverSeed,
   setSelectedClubId,
@@ -389,6 +393,71 @@ export const EventEditSheet: FC<Props> = ({
                     />
                   </div>
                 </div>
+
+                {/* Для детей */}
+                <div className="flex items-center gap-3 bg-white rounded-2xl pl-3 pr-4 py-3.5">
+                  <Users
+                    className="h-5 w-5 text-neutral-700 flex-shrink-0"
+                    aria-hidden="true"
+                  />
+                  <span className="text-sm font-medium text-neutral-900 flex-shrink-0 w-[90px]">
+                    Для детей
+                  </span>
+                  <div className={cn('ml-auto', DETAIL_LABEL_WIDTH)}>
+                    <div className="flex justify-end">
+                      <button
+                        type="button"
+                        role="switch"
+                        aria-checked={fields.isForKids}
+                        onClick={() => setIsForKids(!fields.isForKids)}
+                        className={cn(
+                          'relative inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-colors',
+                          fields.isForKids ? 'bg-primary-500' : 'bg-neutral-300',
+                        )}
+                      >
+                        <span
+                          className={cn(
+                            'inline-block h-5 w-5 transform rounded-full bg-white transition-transform',
+                            fields.isForKids
+                              ? 'translate-x-6'
+                              : 'translate-x-1',
+                          )}
+                        />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {fields.isForKids ? (
+                  <div className="flex items-center gap-3 bg-white rounded-2xl pl-3 pr-4 py-3.5">
+                    <Users
+                      className="h-5 w-5 text-neutral-700 flex-shrink-0"
+                      aria-hidden="true"
+                    />
+                    <span className="text-sm font-medium text-neutral-900 flex-shrink-0 w-[90px]">
+                      Возраст
+                    </span>
+                    <div className={cn('ml-auto', DETAIL_LABEL_WIDTH)}>
+                      <select
+                        value={fields.kidsMinAge ?? ''}
+                        onChange={(e) => {
+                          const nextValue = e.target.value;
+                          setKidsMinAge(
+                            nextValue === '' ? null : Number(nextValue),
+                          );
+                        }}
+                        className="w-full rounded-lg border border-neutral-200 bg-white px-2 py-1 text-right text-sm text-neutral-700 outline-none focus:border-neutral-400"
+                      >
+                        <option value="">Без уточнения</option>
+                        {Array.from({ length: 18 }, (_, age) => (
+                          <option key={age} value={age}>
+                            {age}+
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                ) : null}
               </div>
               {timeError ? (
                 <p className="text-sm text-red-500 mt-2">{timeError}</p>

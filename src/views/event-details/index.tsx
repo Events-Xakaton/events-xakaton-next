@@ -17,6 +17,7 @@ import { PeopleList } from '@/widgets/people-list';
 import { useCanJoin } from '@/features/join-event';
 
 import { useEventAuthoringClubsQuery } from '@/entities/club/api';
+import { getEventAudienceLabel } from '@/entities/event';
 import {
   useEventDetailsQuery,
   useEventParticipantsQuery,
@@ -136,6 +137,10 @@ export function EventDetails({
   const canEdit = event.canManage && !archived;
   const showHeroJoinButton = !archived && !canJoinResult.blockReason;
   const locationLink = parseLocationLink(event.locationOrLink);
+  const audienceLabel = getEventAudienceLabel({
+    isForKids: event.isForKids,
+    kidsMinAge: event.kidsMinAge,
+  });
 
   return (
     <>
@@ -346,6 +351,13 @@ export function EventDetails({
                 label="Участники"
                 value={`${event.participantsCount}${event.maxParticipants ? ` / ${event.maxParticipants}` : ''}`}
               />
+              {audienceLabel ? (
+                <DetailRow
+                  icon={<Users className="h-5 w-5" />}
+                  label="Аудитория"
+                  value={audienceLabel}
+                />
+              ) : null}
               {event.minLevel !== null && (
                 <DetailRow
                   icon={<Lock className="h-5 w-5" />}
@@ -489,6 +501,8 @@ export function EventDetails({
           setEndsAt={draft.setEndsAt}
           setMaxParticipants={draft.setMaxParticipants}
           setMinLevel={draft.setMinLevel}
+          setIsForKids={draft.setIsForKids}
+          setKidsMinAge={draft.setKidsMinAge}
           setCoverUrl={draft.setCoverUrl}
           setCoverSeed={draft.setCoverSeed}
           setSelectedClubId={draft.setSelectedClubId}

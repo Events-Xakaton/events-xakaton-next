@@ -12,6 +12,8 @@ export type EventCard = {
   minLevel: number | null;
   coverUrl: string | null;
   coverSeed?: string | null;
+  isForKids: boolean;
+  kidsMinAge: number | null;
   joinedByMe: boolean;
   isOrganizer: boolean;
 };
@@ -35,6 +37,8 @@ export type EventDetails = {
   minLevel: number | null;
   coverUrl: string | null;
   coverSeed: string | null;
+  isForKids: boolean;
+  kidsMinAge: number | null;
   joinedByMe: boolean;
   canManage: boolean;
 };
@@ -48,4 +52,6 @@ export type ClubEventListItem = {
   participantsCount: number;
   freeSpots: number | null;
   minLevel: number | null;
+  isForKids: boolean;
+  kidsMinAge: number | null;
 };

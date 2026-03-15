@@ -5,6 +5,7 @@ import type { FC, MouseEvent } from 'react';
 import { useMemo } from 'react';
 
 import { type EventCard } from '@/entities/event/api';
+import { getEventAudienceLabel } from '@/entities/event';
 
 import {
   Button,
@@ -23,6 +24,10 @@ type Props = {
 };
 
 export const ProfileEventCard: FC<Props> = ({ event, onOpenEvent }) => {
+  const audienceLabel = getEventAudienceLabel({
+    isForKids: event.isForKids,
+    kidsMinAge: event.kidsMinAge,
+  });
   const cardBackgroundStyle = useMemo(() => {
     if (event.coverUrl) {
       return {
@@ -65,10 +70,17 @@ export const ProfileEventCard: FC<Props> = ({ event, onOpenEvent }) => {
       <div className={cn('absolute inset-0', APP_FEED_SCRIM_CLASS)} />
 
       <div className="relative flex h-full flex-col p-5 pb-6">
-        <span className="event-time-chip self-start">
-          <Clock className="h-3.5 w-3.5" />
-          {formatLocalDateTime(event.startsAtUtc)}
-        </span>
+        <div className="flex flex-col items-start gap-2">
+          <span className="event-time-chip">
+            <Clock className="h-3.5 w-3.5" />
+            {formatLocalDateTime(event.startsAtUtc)}
+          </span>
+          {audienceLabel ? (
+            <span className="inline-flex items-center rounded-full border border-white/35 bg-white/20 px-2.5 py-1 text-[11px] font-semibold text-white backdrop-blur-sm">
+              {audienceLabel}
+            </span>
+          ) : null}
+        </div>
 
         <div className="mt-auto pr-16">
           <h2 className="profile-card-title font-display text-4xl leading-[0.98] tracking-tight text-white drop-shadow-lg">

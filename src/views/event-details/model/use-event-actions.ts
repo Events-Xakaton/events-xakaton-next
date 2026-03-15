@@ -83,6 +83,16 @@ export function useEventActions(eventId: string) {
         ...(fields.minLevel !== originalData?.minLevel
           ? { minLevel: fields.minLevel }
           : {}),
+        ...(fields.isForKids !== originalData?.isForKids
+          ? { isForKids: fields.isForKids }
+          : {}),
+        ...((fields.kidsMinAge !== originalData?.kidsMinAge ||
+          (fields.isForKids !== originalData?.isForKids &&
+            fields.isForKids === false))
+          ? {
+              kidsMinAge: fields.isForKids ? fields.kidsMinAge : null,
+            }
+          : {}),
         coverSeed: fields.coverSeed,
         // Отправляем coverUrl только если это валидная строка (null не принимает бэк)
         ...(fields.coverUrl && fields.coverUrl !== originalData?.coverUrl

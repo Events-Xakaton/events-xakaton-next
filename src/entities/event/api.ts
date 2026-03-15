@@ -180,6 +180,8 @@ export const eventApi = apiBase.injectEndpoints({
         endsAtUtc: string;
         maxParticipants?: number;
         minLevel?: number;
+        isForKids?: boolean;
+        kidsMinAge?: number;
         categoryCode: string;
         tags?: string[];
         coverSeed?: string;
@@ -204,6 +206,8 @@ export const eventApi = apiBase.injectEndpoints({
         endsAtUtc?: string;
         maxParticipants?: number;
         minLevel?: number | null;
+        isForKids?: boolean;
+        kidsMinAge?: number | null;
         coverSeed?: string;
         clubId?: string | null;
       }

@@ -14,6 +14,7 @@ import {
 import { cn, pluralize } from '@/shared/lib/utils';
 
 import type { EventCard } from '../types';
+import { getEventAudienceLabel } from '../lib/audience-label';
 import './styles/event-feed-card.css';
 
 export function EventFeedCard({
@@ -56,6 +57,10 @@ export function EventFeedCard({
     event.minLevel !== null &&
     userLevel !== undefined &&
     userLevel < event.minLevel;
+  const audienceLabel = getEventAudienceLabel({
+    isForKids: event.isForKids,
+    kidsMinAge: event.kidsMinAge,
+  });
 
   const handleOpenDetails = () => {
     onOpenEvent(event.id);
@@ -92,6 +97,9 @@ export function EventFeedCard({
               <Clock className="h-3.5 w-3.5" />
               {formatLocalDateTime(event.startsAtUtc)}
             </span>
+            {audienceLabel ? (
+              <span className="event-kids-chip">{audienceLabel}</span>
+            ) : null}
           </div>
 
           <h2 className="event-feed-card__title">{event.title}</h2>

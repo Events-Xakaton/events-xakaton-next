@@ -378,6 +378,73 @@ export function CreateScreen({
                   />
                 </div>
               </div>
+
+              {/* Для детей */}
+              <div className="flex items-center gap-3 bg-white rounded-2xl pl-3 pr-4 py-3.5">
+                <Users
+                  className="h-5 w-5 text-neutral-700 flex-shrink-0"
+                  aria-hidden="true"
+                />
+                <span className="text-sm font-medium text-neutral-900 flex-shrink-0 w-[90px]">
+                  Для детей
+                </span>
+                <div className={cn('ml-auto', DETAIL_LABEL_WIDTH)}>
+                  <div className="flex justify-end">
+                    <button
+                      type="button"
+                      role="switch"
+                      aria-checked={eventForm.isForKids}
+                      onClick={() => eventForm.setIsForKids(!eventForm.isForKids)}
+                      className={cn(
+                        'relative inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-colors',
+                        eventForm.isForKids
+                          ? 'bg-primary-500'
+                          : 'bg-neutral-300',
+                      )}
+                    >
+                      <span
+                        className={cn(
+                          'inline-block h-5 w-5 transform rounded-full bg-white transition-transform',
+                          eventForm.isForKids
+                            ? 'translate-x-6'
+                            : 'translate-x-1',
+                        )}
+                      />
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {eventForm.isForKids && (
+                <div className="flex items-center gap-3 bg-white rounded-2xl pl-3 pr-4 py-3.5">
+                  <Users
+                    className="h-5 w-5 text-neutral-700 flex-shrink-0"
+                    aria-hidden="true"
+                  />
+                  <span className="text-sm font-medium text-neutral-900 flex-shrink-0 w-[90px]">
+                    Возраст
+                  </span>
+                  <div className={cn('ml-auto', DETAIL_LABEL_WIDTH)}>
+                    <select
+                      value={eventForm.kidsMinAge ?? ''}
+                      onChange={(e) => {
+                        const nextValue = e.target.value;
+                        eventForm.setKidsMinAge(
+                          nextValue === '' ? null : Number(nextValue),
+                        );
+                      }}
+                      className="w-full rounded-lg border border-neutral-200 bg-white px-2 py-1 text-right text-sm text-neutral-700 outline-none focus:border-neutral-400"
+                    >
+                      <option value="">Без уточнения</option>
+                      {Array.from({ length: 18 }, (_, age) => (
+                        <option key={age} value={age}>
+                          {age}+
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+              )}
             </div>
             {eventForm.timeError && (
               <p className="text-sm text-red-500 mt-2">{eventForm.timeError}</p>

@@ -22,6 +22,8 @@ export type UseEventDraftResult = {
   setCoverUrl: (v: string | null) => void;
   setCoverSeed: (v: string) => void;
   setMinLevel: (v: number | null) => void;
+  setIsForKids: (v: boolean) => void;
+  setKidsMinAge: (v: number | null) => void;
   setSelectedClubId: (v: string) => void;
   originalData: EventOriginalData | null;
   hasChanges: boolean;
@@ -45,6 +47,8 @@ export function useEventDraft(
   const [endsAt, setEndsAt] = useState('');
   const [maxParticipants, setMaxParticipants] = useState('');
   const [minLevel, setMinLevel] = useState<number | null>(null);
+  const [isForKids, setIsForKids] = useState(false);
+  const [kidsMinAge, setKidsMinAge] = useState<number | null>(null);
   const [coverUrl, setCoverUrl] = useState<string | null>(null);
   const [coverSeed, setCoverSeed] = useState('');
   const [selectedClubId, setSelectedClubId] = useState('');
@@ -74,6 +78,8 @@ export function useEventDraft(
     setEndsAt(endsAtLocal);
     setMaxParticipants(maxPart);
     setMinLevel(event.minLevel);
+    setIsForKids(event.isForKids);
+    setKidsMinAge(event.kidsMinAge);
     setCoverUrl(event.coverUrl ?? null);
     setCoverSeed(seed);
     setSelectedClubId(event.clubId ?? '');
@@ -86,6 +92,8 @@ export function useEventDraft(
       endsAt: endsAtLocal,
       maxParticipants: maxPart,
       minLevel: event.minLevel,
+      isForKids: event.isForKids,
+      kidsMinAge: event.kidsMinAge,
       coverUrl: event.coverUrl ?? null,
       coverSeed: seed,
       clubId: event.clubId ?? '',
@@ -106,6 +114,8 @@ export function useEventDraft(
       endsAt !== originalData.endsAt ||
       norm(maxParticipants) !== norm(originalData.maxParticipants) ||
       minLevel !== originalData.minLevel ||
+      isForKids !== originalData.isForKids ||
+      kidsMinAge !== originalData.kidsMinAge ||
       coverUrl !== originalData.coverUrl ||
       coverSeed !== originalData.coverSeed ||
       selectedClubId !== originalData.clubId;
@@ -119,6 +129,8 @@ export function useEventDraft(
     endsAt,
     maxParticipants,
     minLevel,
+    isForKids,
+    kidsMinAge,
     coverUrl,
     coverSeed,
     selectedClubId,
@@ -170,6 +182,8 @@ export function useEventDraft(
       endsAt,
       maxParticipants,
       minLevel,
+      isForKids,
+      kidsMinAge,
       coverUrl,
       coverSeed,
       selectedClubId,
@@ -181,6 +195,11 @@ export function useEventDraft(
     setEndsAt,
     setMaxParticipants,
     setMinLevel,
+    setIsForKids: (value: boolean) => {
+      setIsForKids(value);
+      if (!value) setKidsMinAge(null);
+    },
+    setKidsMinAge,
     setCoverUrl,
     setCoverSeed,
     setSelectedClubId,

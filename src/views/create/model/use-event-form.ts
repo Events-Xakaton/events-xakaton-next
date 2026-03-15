@@ -50,6 +50,8 @@ export function useEventForm({
   const [coverSeed, setCoverSeed] = useState(() => newSeed('event'));
   const [coverUrl, setCoverUrl] = useState<string | null>(null);
   const [minLevel, setMinLevel] = useState<number | null>(null);
+  const [isForKids, setIsForKids] = useState(false);
+  const [kidsMinAge, setKidsMinAge] = useState<number | null>(null);
   const [selectedClubId, setSelectedClubId] = useState('');
   const [createFromClub, setCreateFromClub] = useState(false);
   const [showTitleEditor, setShowTitleEditor] = useState(false);
@@ -100,6 +102,8 @@ export function useEventForm({
           ? Number(values.maxParticipants)
           : undefined,
         ...(minLevel !== null ? { minLevel } : {}),
+        isForKids,
+        ...(isForKids && kidsMinAge !== null ? { kidsMinAge } : {}),
         categoryCode: 'general',
         coverSeed,
         ...(coverUrl !== null ? { coverUrl } : {}),
@@ -120,6 +124,8 @@ export function useEventForm({
         maxParticipants: '',
       });
       setMinLevel(null);
+      setIsForKids(false);
+      setKidsMinAge(null);
       setCoverUrl(null);
       setSelectedClubId('');
       setCreateFromClub(false);
@@ -152,6 +158,13 @@ export function useEventForm({
     setCreateFromClub,
     minLevel,
     setMinLevel,
+    isForKids,
+    setIsForKids: (value: boolean) => {
+      setIsForKids(value);
+      if (!value) setKidsMinAge(null);
+    },
+    kidsMinAge,
+    setKidsMinAge,
     coverSeed,
     changeCoverSeed: () => setCoverSeed(newSeed('event')),
     coverUrl,
