@@ -6,6 +6,8 @@ import { useState } from 'react';
 import { useConfirmAttendanceMutation } from '@/entities/event/api';
 import type { PersonRow } from '@/entities/user';
 
+import { useAchievementContext } from '@/features/achievements';
+
 import { Button, ButtonSize, ButtonVariant } from '@/shared/components/button';
 import { StarRating } from '@/shared/components/star-rating';
 import { getInitials } from '@/shared/lib/utils';
@@ -26,6 +28,7 @@ export const AttendancePanel: FC<Props> = ({
   onDone,
 }) => {
   const [confirmAttendance, { isLoading }] = useConfirmAttendanceMutation();
+  const { triggerAchievement } = useAchievementContext();
 
   const [presence, setPresence] = useState<Record<string, Presence>>(() =>
     Object.fromEntries(participants.map((p) => [p.telegramUserId, 'present'])),
@@ -52,7 +55,10 @@ export const AttendancePanel: FC<Props> = ({
       }));
 
     try {
-      await confirmAttendance({ eventId, attendances }).unwrap();
+      const result = await confirmAttendance({ eventId, attendances }).unwrap();
+      if (result.unlockedAchievements.length > 0) {
+        triggerAchievement(result.unlockedAchievements);
+      }
       onDone();
     } catch (err: unknown) {
       const status = (err as { status?: number })?.status;

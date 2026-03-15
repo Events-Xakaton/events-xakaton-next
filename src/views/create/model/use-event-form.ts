@@ -7,6 +7,8 @@ import { useForm } from 'react-hook-form';
 import { useEventAuthoringClubsQuery } from '@/entities/club/api';
 import { useCreateEventMutation } from '@/entities/event/api';
 
+import { useAchievementContext } from '@/features/achievements';
+
 import { buildGradient, newSeed } from '@/shared/lib/gradient';
 import { appErrorText, toIsoFromLocal } from '@/shared/lib/utils';
 
@@ -16,6 +18,7 @@ import { type EventFormValues, eventSchema } from '../lib/event-schema';
 export function useEventForm() {
   const [createEvent, { isLoading: isSubmitting }] = useCreateEventMutation();
   const eventAuthoringClubs = useEventAuthoringClubsQuery();
+  const { triggerAchievement } = useAchievementContext();
 
   const defaultTimes = createDefaultEventTimes();
 
@@ -96,6 +99,9 @@ export function useEventForm() {
         coverSeed,
       }).unwrap();
 
+      if (result.unlockedAchievements.length > 0) {
+        triggerAchievement(result.unlockedAchievements);
+      }
       setHint(`Ивент создан: ${result.id}`);
       const next = createDefaultEventTimes();
       reset({

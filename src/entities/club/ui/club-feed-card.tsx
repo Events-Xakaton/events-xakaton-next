@@ -133,7 +133,7 @@ export function ClubFeedCard({
             variant={ButtonVariant.SECONDARY}
             size={ButtonSize.MD}
             onClick={() => onOpenClub(club.id)}
-            className="ml-auto rounded-full border-white/25 bg-white/90 px-5! py-2.5! text-[15px] font-semibold text-zinc-900 shadow-md hover:bg-white"
+            className="ml-auto rounded-full border-white/25 bg-white! px-5! py-2.5! text-[15px]! font-semibold text-zinc-900! shadow-md"
             aria-label={`Посмотреть детали клуба ${club.title}`}
           >
             Детали

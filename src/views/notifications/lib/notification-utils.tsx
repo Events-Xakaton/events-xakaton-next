@@ -87,6 +87,17 @@ export function renderEventChangedText(item: NotificationItem): ReactElement {
   );
 }
 
+export function renderAchievementUnlockedText(
+  item: NotificationItem,
+): ReactElement {
+  return (
+    <p className="mt-1 text-[15px] leading-5 text-neutral-700">
+      Достижение разблокировано:{' '}
+      <span className="font-semibold text-neutral-900">{item.preview}</span>
+    </p>
+  );
+}
+
 export function renderMemberJoinedText(item: NotificationItem): ReactElement {
   const values = Array.from(item.preview.matchAll(/\*\*([^*]+)\*\*/g))
     .map((m) => m[1]?.trim())

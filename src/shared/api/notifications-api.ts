@@ -2,7 +2,10 @@ import { ApiTag } from '@/shared/redux';
 
 import { apiBase } from './base-api';
 
-export type NotificationType = 'event_changed' | 'member_joined';
+export type NotificationType =
+  | 'event_changed'
+  | 'member_joined'
+  | 'achievement_unlocked';
 export type NotificationTargetType = 'club' | 'event';
 
 export type NotificationItem = {

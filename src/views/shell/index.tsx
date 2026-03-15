@@ -14,6 +14,7 @@ import { PointsScreen } from '@/views/points';
 
 import { BottomNav } from '@/widgets/bottom-nav';
 
+import { AchievementProvider } from '@/features/achievements';
 import { setInitialized } from '@/features/auth/model/auth-slice';
 import { AuthScreen } from '@/features/auth/ui/auth-screen';
 import { LoginStreakModalProvider } from '@/features/login-streak';
@@ -106,113 +107,117 @@ export default function MiniAppShell() {
   const shellBgClass = 'bg-[#f2f2f5]';
 
   return (
-    <main
-      className={`text-zinc-900 ${shellBgClass}`}
-      style={{ minHeight: 'var(--app-vh, 100dvh)' }}
-    >
-      {/* Lucky Wheel рендерится вне max-w-md, чтобы фон не обрезался */}
-      {luckyWheelOpen ? (
-        <WheelSoundsProvider>
-          <LuckyWheelScreen
-            onBack={() => setLuckyWheelOpen(false)}
-            onOpenEvent={(eventId) => {
-              setLuckyWheelOpen(false);
-              setDetail({ kind: 'event', id: eventId, fromLuckyWheel: true });
-            }}
-          />
-        </WheelSoundsProvider>
-      ) : null}
+    <AchievementProvider>
+      <main
+        className={`text-zinc-900 ${shellBgClass}`}
+        style={{ minHeight: 'var(--app-vh, 100dvh)' }}
+      >
+        {/* Lucky Wheel рендерится вне max-w-md, чтобы фон не обрезался */}
+        {luckyWheelOpen ? (
+          <WheelSoundsProvider>
+            <LuckyWheelScreen
+              onBack={() => setLuckyWheelOpen(false)}
+              onOpenEvent={(eventId) => {
+                setLuckyWheelOpen(false);
+                setDetail({ kind: 'event', id: eventId, fromLuckyWheel: true });
+              }}
+            />
+          </WheelSoundsProvider>
+        ) : null}
 
-      {!luckyWheelOpen && (
-        <div
-          className={
-            homeNoDetail ||
-            createNoDetail ||
-            notificationsNoDetail ||
-            accountNoDetail ||
-            pointsNoDetail
-              ? 'mx-auto w-full max-w-md'
-              : inDetail
+        {!luckyWheelOpen && (
+          <div
+            className={
+              homeNoDetail ||
+              createNoDetail ||
+              notificationsNoDetail ||
+              accountNoDetail ||
+              pointsNoDetail
                 ? 'mx-auto w-full max-w-md'
-                : 'mx-auto w-full max-w-md px-4 pb-24'
-          }
-          style={
-            !homeNoDetail &&
-            !createNoDetail &&
-            !notificationsNoDetail &&
-            !pointsNoDetail &&
-            !accountNoDetail &&
-            !inDetail
-              ? { paddingTop: `calc(env(safe-area-inset-top, 0px) + 1rem)` }
-              : undefined
-          }
-        >
-          {detail?.kind === 'event' ? (
-            <EventDetails
-              id={detail.id}
-              fromLuckyWheel={detail.fromLuckyWheel}
-              onBack={() => setDetail(null)}
-              onOpenClub={(clubId) => setDetail({ kind: 'club', id: clubId })}
-            />
-          ) : null}
-          {detail?.kind === 'club' ? (
-            <ClubDetails
-              id={detail.id}
-              onBack={() => setDetail(null)}
-              onOpenEvent={(eventId) =>
-                setDetail({ kind: 'event', id: eventId })
-              }
-            />
-          ) : null}
+                : inDetail
+                  ? 'mx-auto w-full max-w-md'
+                  : 'mx-auto w-full max-w-md px-4 pb-24'
+            }
+            style={
+              !homeNoDetail &&
+              !createNoDetail &&
+              !notificationsNoDetail &&
+              !pointsNoDetail &&
+              !accountNoDetail &&
+              !inDetail
+                ? { paddingTop: `calc(env(safe-area-inset-top, 0px) + 1rem)` }
+                : undefined
+            }
+          >
+            {detail?.kind === 'event' ? (
+              <EventDetails
+                id={detail.id}
+                fromLuckyWheel={detail.fromLuckyWheel}
+                onBack={() => setDetail(null)}
+                onOpenClub={(clubId) => setDetail({ kind: 'club', id: clubId })}
+              />
+            ) : null}
+            {detail?.kind === 'club' ? (
+              <ClubDetails
+                id={detail.id}
+                onBack={() => setDetail(null)}
+                onOpenEvent={(eventId) =>
+                  setDetail({ kind: 'event', id: eventId })
+                }
+              />
+            ) : null}
 
-          {!detail && !luckyWheelOpen && tab === 'home' ? (
-            <HomeScreen
-              isUnlocked={isUnlocked}
-              onUnlock={unlock}
-              onOpenEvent={(eventId) =>
-                setDetail({ kind: 'event', id: eventId })
-              }
-              onOpenClub={(clubId) => setDetail({ kind: 'club', id: clubId })}
-              onNavigateToCreate={() => setTab('create')}
-              onOpenLuckyWheel={() => setLuckyWheelOpen(true)}
-            />
-          ) : null}
-          {!detail && tab === 'create' ? <CreateScreen /> : null}
-          {!detail && tab === 'notifications' ? <NotificationsScreen /> : null}
-          {!detail && tab === 'points' ? <PointsScreen /> : null}
-          {!detail && tab === 'account' ? (
-            <AccountScreen
-              onOpenEvent={(eventId) =>
-                setDetail({ kind: 'event', id: eventId })
-              }
-              onOpenClub={(clubId) => setDetail({ kind: 'club', id: clubId })}
-              onNavigateToCreate={() => setTab('create')}
-            />
-          ) : null}
-        </div>
-      )}
+            {!detail && !luckyWheelOpen && tab === 'home' ? (
+              <HomeScreen
+                isUnlocked={isUnlocked}
+                onUnlock={unlock}
+                onOpenEvent={(eventId) =>
+                  setDetail({ kind: 'event', id: eventId })
+                }
+                onOpenClub={(clubId) => setDetail({ kind: 'club', id: clubId })}
+                onNavigateToCreate={() => setTab('create')}
+                onOpenLuckyWheel={() => setLuckyWheelOpen(true)}
+              />
+            ) : null}
+            {!detail && tab === 'create' ? <CreateScreen /> : null}
+            {!detail && tab === 'notifications' ? (
+              <NotificationsScreen />
+            ) : null}
+            {!detail && tab === 'points' ? <PointsScreen /> : null}
+            {!detail && tab === 'account' ? (
+              <AccountScreen
+                onOpenEvent={(eventId) =>
+                  setDetail({ kind: 'event', id: eventId })
+                }
+                onOpenClub={(clubId) => setDetail({ kind: 'club', id: clubId })}
+                onNavigateToCreate={() => setTab('create')}
+              />
+            ) : null}
+          </div>
+        )}
 
-      <PointsBalanceProvider />
-      <LoginStreakModalProvider
-        onOpenLuckyWheel={() => setLuckyWheelOpen(true)}
-      />
-
-      {/* BottomNav скрываем только при открытом detail */}
-      {!detail ? (
-        <BottomNav
-          tab={tab}
-          onTab={(next) => {
-            if (next === 'notifications') notificationBadge.markSeen();
-            setLuckyWheelOpen(false);
-            setTab(next);
-          }}
-          hasNewNotifications={notificationBadge.hasNewNotifications}
-          luckyWheelUnlocked={isUnlocked}
-          isNewLuckyWheel={isNewUnlock}
-          isLuckyWheelOpen={luckyWheelOpen}
+        <PointsBalanceProvider />
+        <LoginStreakModalProvider
           onOpenLuckyWheel={() => setLuckyWheelOpen(true)}
         />
-      ) : null}
-    </main>
+
+        {/* BottomNav скрываем только при открытом detail */}
+        {!detail ? (
+          <BottomNav
+            tab={tab}
+            onTab={(next) => {
+              if (next === 'notifications') notificationBadge.markSeen();
+              setLuckyWheelOpen(false);
+              setTab(next);
+            }}
+            hasNewNotifications={notificationBadge.hasNewNotifications}
+            luckyWheelUnlocked={isUnlocked}
+            isNewLuckyWheel={isNewUnlock}
+            isLuckyWheelOpen={luckyWheelOpen}
+            onOpenLuckyWheel={() => setLuckyWheelOpen(true)}
+          />
+        ) : null}
+      </main>
+    </AchievementProvider>
   );
 }

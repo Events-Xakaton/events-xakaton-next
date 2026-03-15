@@ -5,11 +5,14 @@ import { useState } from 'react';
 import { useJoinClubMutation } from '@/entities/club/api';
 import { useJoinEventMutation } from '@/entities/event/api';
 
+import { useAchievementContext } from '@/features/achievements';
+
 import { appErrorText } from '@/shared/lib/utils';
 
 export function useFeedActions(onClubJoined: () => void) {
   const [joinEvent, joinEventState] = useJoinEventMutation();
   const [joinClub, joinClubState] = useJoinClubMutation();
+  const { triggerAchievement } = useAchievementContext();
 
   const [hint, setHint] = useState('');
   const [joinedEventIds, setJoinedEventIds] = useState<Record<string, boolean>>(
@@ -23,8 +26,11 @@ export function useFeedActions(onClubJoined: () => void) {
   function handleJoinEvent(eventId: string): void {
     void joinEvent({ eventId })
       .unwrap()
-      .then(() => {
+      .then((result) => {
         setJoinedEventIds((prev) => ({ ...prev, [eventId]: true }));
+        if (result.unlockedAchievements.length > 0) {
+          triggerAchievement(result.unlockedAchievements);
+        }
       })
       .catch((error) =>
         setHint(appErrorText(error, 'Не удалось присоединиться к ивенту')),

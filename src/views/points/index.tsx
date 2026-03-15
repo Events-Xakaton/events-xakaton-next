@@ -10,8 +10,14 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 
+import { AchievementCard } from '@/entities/achievement';
+
 import { AppHeader, UserRankHeader } from '@/widgets/app-header';
 
+import {
+  useGetUserAchievementsQuery,
+  useSetActiveAchievementMutation,
+} from '@/shared/api/achievements-api';
 import {
   useBalanceQuery,
   useLeaderboardQuery,
@@ -109,6 +115,9 @@ export function PointsScreen() {
   const leaderboard = useLeaderboardQuery({ period });
   const rules = usePointsRulesQuery();
   const history = usePointsHistoryQuery();
+  const achievements = useGetUserAchievementsQuery();
+  const [setActiveAchievement, { isLoading: isAchievementPending }] =
+    useSetActiveAchievementMutation();
 
   const top = leaderboard.data?.top ?? [];
   const current = leaderboard.data?.currentUser ?? null;
@@ -181,6 +190,40 @@ export function PointsScreen() {
                   {balance.data?.weekly ?? '-'}
                 </p>
               </article>
+            </section>
+
+            <section className={SECTION_CARD}>
+              <h3 className={SECTION_TITLE_CLASS}>Мои достижения</h3>
+              {achievements.isLoading ? (
+                <div className="flex items-center justify-center py-6">
+                  <div className="h-6 w-6 animate-spin rounded-full border-2 border-zinc-200 border-t-zinc-900" />
+                </div>
+              ) : null}
+              {!achievements.isLoading &&
+              (achievements.data?.length ?? 0) === 0 ? (
+                <EmptyState
+                  title="Достижений пока нет"
+                  description="Получай достижения, создавая события и участвуя в жизни клубов"
+                />
+              ) : null}
+              {!achievements.isLoading &&
+              (achievements.data?.length ?? 0) > 0 ? (
+                <div className="grid grid-cols-2 gap-3">
+                  {(achievements.data ?? []).map((achievement) => (
+                    <AchievementCard
+                      key={achievement.id}
+                      achievement={achievement}
+                      isPending={isAchievementPending}
+                      onApply={(id) =>
+                        void setActiveAchievement({ achievementId: id })
+                      }
+                      onRemove={() =>
+                        void setActiveAchievement({ achievementId: null })
+                      }
+                    />
+                  ))}
+                </div>
+              ) : null}
             </section>
 
             <section className={SECTION_CARD}>

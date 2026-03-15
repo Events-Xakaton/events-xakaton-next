@@ -15,6 +15,7 @@ import {
 import { cn } from '@/shared/lib/utils';
 
 import {
+  renderAchievementUnlockedText,
   renderEventChangedText,
   renderMemberJoinedText,
 } from './lib/notification-utils';
@@ -92,7 +93,9 @@ export function NotificationsScreen(): ReactElement {
                       </p>
                       {item.type === 'event_changed'
                         ? renderEventChangedText(item)
-                        : renderMemberJoinedText(item)}
+                        : item.type === 'achievement_unlocked'
+                          ? renderAchievementUnlockedText(item)
+                          : renderMemberJoinedText(item)}
 
                       <div className="mt-2 flex items-center gap-2">
                         <span className="text-xs text-neutral-500">

@@ -8,11 +8,11 @@
   }
 
   &__body {
-    @apply relative flex h-full flex-col p-5 pr-6 pb-7;
+    @apply relative flex h-full flex-col p-5 pb-6;
   }
 
   &__meta {
-    @apply mt-auto;
+    @apply mt-auto flex flex-col;
   }
 
   &__members {
@@ -32,7 +32,7 @@
   }
 
   &__actions {
-    @apply mt-5 flex items-end justify-between gap-3;
+    @apply mt-4 flex items-end justify-between gap-3;
   }
 
   &__join-group {

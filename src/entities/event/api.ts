@@ -6,6 +6,7 @@
  */
 import type { PersonRow } from '@/entities/user';
 
+import type { AchievementDto } from '@/shared/api/achievements-api';
 import { apiBase } from '@/shared/api/base-api';
 import { ApiTag } from '@/shared/redux';
 
@@ -70,7 +71,7 @@ export const eventApi = apiBase.injectEndpoints({
       query: () => '/events/lucky-wheel/streak',
     }),
     joinEvent: builder.mutation<
-      { status: string },
+      { status: string; unlockedAchievements: AchievementDto[] },
       { eventId: string; lucky?: boolean }
     >({
       query: ({ eventId, lucky }) => ({
@@ -169,7 +170,7 @@ export const eventApi = apiBase.injectEndpoints({
       invalidatesTags: [ApiTag.FEED, ApiTag.PROFILE, ApiTag.NOTIFICATIONS],
     }),
     createEvent: builder.mutation<
-      { id: string },
+      { id: string; unlockedAchievements: AchievementDto[] },
       {
         clubId?: string;
         title: string;
@@ -230,7 +231,7 @@ export const eventApi = apiBase.injectEndpoints({
       invalidatesTags: [ApiTag.FEED, ApiTag.PROFILE],
     }),
     confirmAttendance: builder.mutation<
-      { status: string },
+      { status: string; unlockedAchievements: AchievementDto[] },
       {
         eventId: string;
         attendances: Array<{ userId: string; rating?: number }>;

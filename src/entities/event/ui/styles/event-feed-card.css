@@ -28,6 +28,6 @@
   }
 
   &__actions {
-    @apply mt-5 flex items-end justify-between gap-3;
+    @apply mt-4 flex items-end justify-between gap-3;
   }
 }

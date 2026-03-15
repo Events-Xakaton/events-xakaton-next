@@ -8,7 +8,10 @@ import type { LuckyWheelStreakRes } from '@/entities/event/api';
 const STORAGE_KEY = 'streak_modal_shown_date';
 
 type TgCloudStorage = {
-  getItem: (key: string, callback: (err: unknown, value: string) => void) => void;
+  getItem: (
+    key: string,
+    callback: (err: unknown, value: string) => void,
+  ) => void;
   setItem: (key: string, value: string, callback?: () => void) => void;
 };
 

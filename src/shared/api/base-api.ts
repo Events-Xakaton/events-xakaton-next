@@ -61,6 +61,12 @@ export const apiBase = createApi({
     }
     return result;
   },
-  tagTypes: [ApiTag.AUTH, ApiTag.FEED, ApiTag.NOTIFICATIONS, ApiTag.PROFILE],
+  tagTypes: [
+    ApiTag.AUTH,
+    ApiTag.FEED,
+    ApiTag.NOTIFICATIONS,
+    ApiTag.PROFILE,
+    ApiTag.ACHIEVEMENTS,
+  ],
   endpoints: () => ({}),
 });

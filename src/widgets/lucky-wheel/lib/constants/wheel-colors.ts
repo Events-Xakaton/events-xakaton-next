@@ -9,5 +9,14 @@ export const WHEEL_COLORS = {
   // Светлый центр
   centralPoint: '#F0EAFF',
   // 8 уникальных цветов — циклически применяются к 12 сегментам
-  segments: ['#E07070', '#5B6FD4', '#F4A261', '#C970B0', '#5BC4D4', '#7B52C1', '#5BD4A0', '#A78BDA'],
+  segments: [
+    '#E07070',
+    '#5B6FD4',
+    '#F4A261',
+    '#C970B0',
+    '#5BC4D4',
+    '#7B52C1',
+    '#5BD4A0',
+    '#A78BDA',
+  ],
 } as const;
