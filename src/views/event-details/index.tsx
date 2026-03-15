@@ -29,6 +29,7 @@ import { ErrorState } from '@/shared/components/error-state';
 import { MinLevelBadge } from '@/shared/components/min-level-badge';
 import { PreviewCard } from '@/shared/components/preview-card';
 import { formatDateTimeDisplay } from '@/shared/lib/date-format';
+import { openLocationLink, parseLocationLink } from '@/shared/lib/location-link';
 import { useTelegramBackButton } from '@/shared/lib/telegram/useTelegramButtons';
 import {
   ADAPTIVE_VIEWPORT_HEIGHT,
@@ -130,6 +131,7 @@ export function EventDetails({
 
   const canEdit = event.canManage && !archived;
   const showHeroJoinButton = !archived && !canJoinResult.blockReason;
+  const locationLink = parseLocationLink(event.locationOrLink);
 
   return (
     <>
@@ -293,7 +295,18 @@ export function EventDetails({
               <DetailRow
                 icon={<MapPin className="h-5 w-5" />}
                 label="Локация"
-                value={event.locationOrLink}
+                value={locationLink.displayText}
+                multilineValue
+                valueClassName={
+                  locationLink.isClickable ? 'detail-row__location-link' : undefined
+                }
+                onClick={
+                  locationLink.isClickable
+                    ? () => {
+                        openLocationLink(locationLink);
+                      }
+                    : undefined
+                }
               />
               <DetailRow
                 icon={<CalendarArrowUp className="h-5 w-5" />}

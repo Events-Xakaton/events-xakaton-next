@@ -55,6 +55,9 @@ type DetailRowProps = {
   value: string | ReactNode;
   rightElement?: ReactNode;
   onClick?: () => void;
+  className?: string;
+  valueClassName?: string;
+  multilineValue?: boolean;
 };
 
 const DETAIL_LABEL_WIDTH = 'w-[58%] min-w-[176px] pr-2';
@@ -65,22 +68,52 @@ export const DetailRow: FC<DetailRowProps> = ({
   value,
   rightElement,
   onClick,
+  className,
+  valueClassName,
+  multilineValue = false,
 }) => {
   const Component = onClick ? 'button' : 'div';
   return (
     <Component
       onClick={onClick}
-      className={cn('detail-row', onClick && 'detail-row--clickable')}
+      className={cn(
+        'detail-row',
+        onClick && 'detail-row--clickable',
+        multilineValue && 'detail-row--multiline',
+        className,
+      )}
     >
       <div className="detail-row__icon" aria-hidden="true">
         {icon}
       </div>
       <span className="detail-row__label">{label}</span>
-      <div className={cn('detail-row__value', DETAIL_LABEL_WIDTH)}>
+      <div
+        className={cn(
+          'detail-row__value',
+          DETAIL_LABEL_WIDTH,
+          multilineValue && 'detail-row__value--multiline',
+        )}
+      >
         {typeof value === 'string' ? (
-          <span className="detail-row__value-text">{value}</span>
+          <span
+            className={cn(
+              'detail-row__value-text',
+              multilineValue && 'detail-row__value-text--multiline',
+              valueClassName,
+            )}
+          >
+            {value}
+          </span>
         ) : (
-          <div className="detail-row__value-node">{value}</div>
+          <div
+            className={cn(
+              'detail-row__value-node',
+              multilineValue && 'detail-row__value-node--multiline',
+              valueClassName,
+            )}
+          >
+            {value}
+          </div>
         )}
         {rightElement}
       </div>
