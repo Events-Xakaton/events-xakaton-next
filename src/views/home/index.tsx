@@ -188,7 +188,7 @@ export function HomeScreen({
           className="fixed z-fixed pointer-events-none"
           style={{
             top: `calc(${feedLayout.feedTopOffset} + ${CARD_CONTENT_HORIZONTAL_PADDING_PX}px)`,
-            right: `${FEED_CARD_HORIZONTAL_PADDING_PX + CARD_CONTENT_HORIZONTAL_PADDING_PX + 20}px`,
+            right: `${FEED_CARD_HORIZONTAL_PADDING_PX + CARD_CONTENT_HORIZONTAL_PADDING_PX}px`,
           }}
         >
           <div ref={filterRef} className="relative pointer-events-auto">
