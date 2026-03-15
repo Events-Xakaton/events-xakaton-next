@@ -64,7 +64,10 @@ export function ProfileConnectionsSection(): ReactElement {
         ) : (
           <div className="space-y-3">
             {data.map((item) => (
-              <div key={item.telegramUserId} className="flex items-center gap-3">
+              <div
+                key={item.telegramUserId}
+                className="flex items-center gap-3"
+              >
                 <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-gradient-to-br from-primary-400 to-primary-600">
                   <span className="text-xl leading-none" aria-hidden>
                     {RANK_EMOJIS[item.rankInfo?.level ?? 1] ?? '🐣'}

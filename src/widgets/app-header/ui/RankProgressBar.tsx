@@ -11,7 +11,12 @@ type Props = {
 };
 
 export const RankProgressBar: FC<Props> = ({ progress, skeleton = false }) => (
-  <div className={cn('rank-progress-bar', skeleton && 'rank-progress-bar--skeleton')}>
+  <div
+    className={cn(
+      'rank-progress-bar',
+      skeleton && 'rank-progress-bar--skeleton',
+    )}
+  >
     <div
       className="rank-progress-bar__fill"
       style={{ width: `${Math.min(1, Math.max(0, progress)) * 100}%` }}

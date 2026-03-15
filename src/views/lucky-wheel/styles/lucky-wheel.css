@@ -1,115 +1,100 @@
 @import '../../../shared/lib/styles/theme.css';
 
 .lucky-wheel {
-  @apply flex flex-col items-center;
+  @apply flex flex-col items-center bg-[#f2f2f5];
   min-height: var(--app-vh, 100dvh);
-  background: linear-gradient(160deg, #1e1333 0%, #0f0920 60%, #160b2e 100%);
   padding-top: calc(env(safe-area-inset-top, 0px) + 1rem);
-  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 1.5rem);
+  /* 80px — высота BottomNav + safe area */
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 80px);
 
   &__header {
-    @apply flex w-full max-w-md items-center justify-between px-4 pb-4;
+    @apply flex w-full max-w-md items-center justify-center px-4 pb-4;
   }
 
   &__back-btn {
-    @apply inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full text-white/60 transition-colors hover:text-white;
+    @apply inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full text-neutral-500 transition-colors hover:text-neutral-900;
   }
 
   &__title {
-    @apply text-lg font-semibold text-white;
+    @apply text-lg font-semibold text-neutral-900;
   }
 
-  &__stage {
-    @apply relative flex items-center justify-center;
-    width: 300px;
-    height: 300px;
-  }
+  /* ── Pixi canvas wrapper ─────────────────────────────────────────────────── */
 
-  &__disk-wrapper {
-    @apply absolute inset-0;
-    transform-origin: 150px 150px;
-    will-change: transform;
-  }
-
-  &__indicator {
-    @apply absolute top-0 left-1/2 z-10 -translate-x-1/2 -translate-y-2;
-  }
-
-  &__center-gem {
-    @apply absolute top-1/2 left-1/2 z-10 -translate-x-1/2 -translate-y-1/2;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: radial-gradient(
-      circle at 38% 38%,
-      #fff 0%,
-      #e0d4ff 40%,
-      #7c3aed 100%
-    );
+  &__canvas-wrapper {
+    @apply relative w-full max-w-[370px] overflow-hidden rounded-full;
+    aspect-ratio: 1;
+    /* Фиолетовое свечение вокруг колеса */
     box-shadow:
-      0 0 20px rgba(124, 58, 237, 0.8),
-      0 0 40px rgba(124, 58, 237, 0.4);
+      0 0 0 6px theme('colors.primary.500 / 15%'),
+      0 0 40px theme('colors.primary.500 / 25%'),
+      0 12px 32px rgba(0, 0, 0, 0.12);
+
+    /* canvas по умолчанию inline — baseline-gap вызывает лишнее масштабирование */
+    canvas {
+      display: block;
+    }
   }
+
+  &__canvas-overlay {
+    @apply absolute inset-0 flex items-center justify-center rounded-3xl;
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(4px);
+  }
+
+  &__canvas-spinner {
+    @apply h-12 w-12 animate-spin rounded-full;
+    border: 4px solid theme('colors.neutral.200');
+    border-top-color: theme('colors.primary.500');
+  }
+
+  /* ── Controls ────────────────────────────────────────────────────────────── */
 
   &__controls {
-    @apply mt-8 flex w-full max-w-md flex-col items-center gap-4 px-6;
+    @apply mt-5 flex w-full max-w-md flex-col items-center gap-4 px-4;
   }
 
   &__spin-btn {
-    @apply w-full rounded-2xl py-4 text-lg font-bold tracking-wide;
-    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #7c3aed 100%);
-    color: white;
-    box-shadow: 0 8px 32px rgba(124, 58, 237, 0.5);
+    @apply w-full rounded-2xl py-4 text-lg font-bold tracking-wide text-white;
+    background: linear-gradient(
+      135deg,
+      theme('colors.primary.500') 0%,
+      theme('colors.primary.600') 100%
+    );
+    box-shadow: 0 8px 24px theme('colors.primary.500 / 30%');
     transition: all 0.2s ease;
     min-height: 56px;
 
     &:active:not(:disabled) {
       transform: scale(0.97);
-      box-shadow: 0 4px 16px rgba(124, 58, 237, 0.4);
+      box-shadow: 0 4px 12px theme('colors.primary.500 / 20%');
     }
 
     &:disabled {
-      opacity: 0.6;
+      opacity: 0.5;
       cursor: not-allowed;
     }
   }
 
-  &__result-card {
-    @apply w-full rounded-2xl p-5;
-    background: rgba(255, 255, 255, 0.07);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    backdrop-filter: blur(12px);
-    animation: luckyFadeIn 0.4s ease forwards;
+  /* ── Free spins counter ──────────────────────────────────────────────────── */
+
+  &__free-spins {
+    @apply flex items-center gap-2;
   }
 
-  &__result-label {
-    @apply mb-2 text-xs font-medium tracking-widest text-violet-300 uppercase;
+  &__free-spins-icon {
+    @apply text-2xl;
   }
 
-  &__result-title {
-    @apply text-base font-semibold text-white;
+  &__free-spins-text {
+    @apply text-primary-600 text-sm font-bold;
   }
 
-  &__result-meta {
-    @apply mt-1 text-sm text-white/60;
-  }
-
-  &__open-btn {
-    @apply mt-4 w-full rounded-xl py-3 text-sm font-semibold;
-    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
-    color: white;
-    min-height: 48px;
-    transition: all 0.2s ease;
-
-    &:active {
-      transform: scale(0.97);
-    }
-  }
+  /* ── Fallback / Timer ────────────────────────────────────────────────────── */
 
   &__fallback {
-    @apply mt-4 flex w-full max-w-md flex-col items-center gap-3 rounded-2xl px-6 py-5 text-center;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    @apply mt-2 flex w-full flex-col items-center gap-3 rounded-2xl bg-white px-6 py-5 text-center shadow-sm;
+    border: 1px solid theme('colors.neutral.200');
     animation: luckyFadeIn 0.3s ease forwards;
   }
 
@@ -118,23 +103,104 @@
   }
 
   &__fallback-title {
-    @apply text-base font-semibold text-white;
+    @apply text-base font-semibold text-neutral-900;
   }
 
   &__fallback-desc {
-    @apply text-sm text-white/60;
+    @apply text-sm text-neutral-500;
+  }
+
+  &__fallback-countdown {
+    @apply text-primary-600 text-2xl font-bold;
   }
 
   &__back-cta {
-    @apply mt-1 rounded-xl px-6 py-2.5 text-sm font-semibold;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: white;
+    @apply mt-1 rounded-xl px-6 py-2.5 text-sm font-semibold text-neutral-700;
+    background: theme('colors.neutral.100');
+    border: 1px solid theme('colors.neutral.200');
     min-height: 44px;
     transition: background 0.2s;
 
     &:active {
-      background: rgba(255, 255, 255, 0.15);
+      background: theme('colors.neutral.200');
+    }
+  }
+
+  /* ── Event Modal ─────────────────────────────────────────────────────────── */
+
+  &__modal-backdrop {
+    @apply fixed inset-0 z-50 flex items-end justify-center;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    animation: luckyFadeIn 0.25s ease forwards;
+  }
+
+  &__modal {
+    @apply flex w-full max-w-md flex-col gap-3 rounded-t-3xl bg-white p-6 pb-8;
+    border-top: 1px solid theme('colors.neutral.200');
+    animation: luckySlideUp 0.3s ease forwards;
+  }
+
+  &__modal-headline {
+    @apply text-center text-xl font-bold text-neutral-900;
+  }
+
+  &__modal-title {
+    @apply text-center text-base font-semibold text-neutral-900;
+  }
+
+  &__modal-meta {
+    @apply text-center text-sm text-neutral-500;
+  }
+
+  &__modal-hint {
+    @apply text-primary-700 rounded-xl px-4 py-3 text-center text-sm;
+    background: theme('colors.primary.500 / 8%');
+    border: 1px solid theme('colors.primary.500 / 20%');
+  }
+
+  &__modal-freespin-badge {
+    @apply text-primary-700 rounded-xl px-4 py-2 text-center text-xs font-medium;
+    background: theme('colors.primary.500 / 10%');
+  }
+
+  &__modal-skeleton {
+    @apply animate-pulse rounded-lg bg-neutral-100;
+
+    &--title {
+      @apply mx-auto h-5 w-3/4;
+    }
+
+    &--meta {
+      @apply mx-auto h-4 w-1/2;
+    }
+  }
+
+  &__modal-btn {
+    @apply min-h-[52px] w-full rounded-2xl py-3.5 text-sm font-semibold transition-all;
+
+    &--primary {
+      @apply text-white;
+      background: linear-gradient(
+        135deg,
+        theme('colors.primary.500') 0%,
+        theme('colors.primary.600') 100%
+      );
+      box-shadow: 0 4px 16px theme('colors.primary.500 / 25%');
+
+      &:active {
+        transform: scale(0.97);
+      }
+    }
+
+    &--secondary {
+      @apply text-neutral-700;
+      background: theme('colors.neutral.100');
+      border: 1px solid theme('colors.neutral.200');
+
+      &:active {
+        background: theme('colors.neutral.200');
+      }
     }
   }
 }
@@ -142,10 +208,17 @@
 @keyframes luckyFadeIn {
   from {
     opacity: 0;
-    transform: translateY(8px);
   }
   to {
     opacity: 1;
+  }
+}
+
+@keyframes luckySlideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
     transform: translateY(0);
   }
 }

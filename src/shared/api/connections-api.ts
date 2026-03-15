@@ -1,6 +1,5 @@
-import type { RankInfo } from '@/shared/types/rank';
-
 import { ApiTag } from '@/shared/redux';
+import type { RankInfo } from '@/shared/types/rank';
 
 import { apiBase } from './base-api';
 
@@ -40,8 +39,5 @@ export const connectionsApi = apiBase.injectEndpoints({
   }),
 });
 
-export const {
-  useFollowingQuery,
-  useFollowMutation,
-  useUnfollowMutation,
-} = connectionsApi;
+export const { useFollowingQuery, useFollowMutation, useUnfollowMutation } =
+  connectionsApi;

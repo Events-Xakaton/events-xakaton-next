@@ -12,9 +12,9 @@ import type { CSSProperties, FC, RefObject } from 'react';
 import { type ClubEventAuthoring } from '@/entities/club/api';
 
 import { Button, ButtonSize, ButtonVariant } from '@/shared/components/button';
-import { LevelSelect } from '@/shared/components/level-select';
 import { DescriptionSection } from '@/shared/components/description-section';
 import { InlineTitleEditor } from '@/shared/components/inline-title-editor';
+import { LevelSelect } from '@/shared/components/level-select';
 import { PreviewCard } from '@/shared/components/preview-card';
 import { formatDateTimeDisplay } from '@/shared/lib/date-format';
 import { buildGradient, newSeed } from '@/shared/lib/gradient';
@@ -388,10 +388,7 @@ export const EventEditSheet: FC<Props> = ({
 
             {/* Минимальный уровень */}
             <div className={SHEET_SECTION_CARD}>
-              <LevelSelect
-                value={fields.minLevel}
-                onChange={setMinLevel}
-              />
+              <LevelSelect value={fields.minLevel} onChange={setMinLevel} />
             </div>
 
             <Button

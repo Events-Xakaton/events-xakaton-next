@@ -5,13 +5,19 @@ import { useCallback, useEffect, useState } from 'react';
 const STORAGE_KEY = 'lucky_wheel_unlocked';
 
 type TgCloudStorage = {
-  getItem: (key: string, callback: (err: unknown, value: string) => void) => void;
+  getItem: (
+    key: string,
+    callback: (err: unknown, value: string) => void,
+  ) => void;
   setItem: (key: string, value: string, callback?: () => void) => void;
 };
 
 function getTgCloudStorage(): TgCloudStorage | undefined {
-  return (window as Window & { Telegram?: { WebApp?: { CloudStorage?: TgCloudStorage } } })
-    .Telegram?.WebApp?.CloudStorage;
+  return (
+    window as Window & {
+      Telegram?: { WebApp?: { CloudStorage?: TgCloudStorage } };
+    }
+  ).Telegram?.WebApp?.CloudStorage;
 }
 
 type UseLuckyWheelUnlockResult = {

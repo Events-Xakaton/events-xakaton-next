@@ -7,7 +7,6 @@ import { getTelegramProfileFallback } from '@/shared/lib/telegram';
 
 import { useRankProgress } from '../model/use-rank-progress';
 import { RankBadge } from './RankBadge';
-
 import './styles/user-rank-header.css';
 
 export const UserRankHeader: FC = () => {

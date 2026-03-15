@@ -3,7 +3,6 @@
 import { FC } from 'react';
 
 import { RANKS } from '@/shared/constants/ranks';
-
 import { cn } from '@/shared/lib/utils';
 
 type Props = {

@@ -12,9 +12,6 @@ import { useState } from 'react';
 
 import { AppHeader, UserRankHeader } from '@/widgets/app-header';
 
-import { RankBadge } from '@/shared/components/rank-badge';
-import { RANK_EMOJIS } from '@/shared/constants/ranks';
-
 import {
   useBalanceQuery,
   useLeaderboardQuery,
@@ -23,6 +20,8 @@ import {
 } from '@/shared/api/gamification-api';
 import { EmptyState } from '@/shared/components/empty-state';
 import { ErrorState } from '@/shared/components/error-state';
+import { RankBadge } from '@/shared/components/rank-badge';
+import { RANK_EMOJIS } from '@/shared/constants/ranks';
 import { getTelegramProfileFallback } from '@/shared/lib/telegram';
 import { formatLocalDateTime } from '@/shared/lib/time';
 import {
@@ -267,17 +266,29 @@ export function PointsScreen() {
                               {displayName}
                             </p>
                             {row.rank === 1 ? (
-                              <Trophy className="h-4 w-4 shrink-0 text-amber-600" aria-hidden="true" />
+                              <Trophy
+                                className="h-4 w-4 shrink-0 text-amber-600"
+                                aria-hidden="true"
+                              />
                             ) : null}
                             {row.rank === 2 ? (
-                              <Award className="h-4 w-4 shrink-0 text-slate-600" aria-hidden="true" />
+                              <Award
+                                className="h-4 w-4 shrink-0 text-slate-600"
+                                aria-hidden="true"
+                              />
                             ) : null}
                             {row.rank === 3 ? (
-                              <Medal className="h-4 w-4 shrink-0 text-orange-600" aria-hidden="true" />
+                              <Medal
+                                className="h-4 w-4 shrink-0 text-orange-600"
+                                aria-hidden="true"
+                              />
                             ) : null}
                           </div>
                           {row.rankInfo ? (
-                            <RankBadge rankInfo={row.rankInfo} className="mt-0.5" />
+                            <RankBadge
+                              rankInfo={row.rankInfo}
+                              className="mt-0.5"
+                            />
                           ) : null}
                         </div>
                       </div>
@@ -311,7 +322,10 @@ export function PointsScreen() {
                             {profile.fullName}
                           </p>
                           {current.rankInfo ? (
-                            <RankBadge rankInfo={current.rankInfo} className="mt-0.5" />
+                            <RankBadge
+                              rankInfo={current.rankInfo}
+                              className="mt-0.5"
+                            />
                           ) : null}
                         </div>
                       </div>

@@ -1,7 +1,6 @@
 import { FC } from 'react';
 
 import { RANKS } from '@/shared/constants/ranks';
-
 import { cn } from '@/shared/lib/utils';
 
 type Props = {
@@ -10,7 +9,11 @@ type Props = {
   className?: string;
 };
 
-export const MinLevelBadge: FC<Props> = ({ minLevel, userLevel, className }) => {
+export const MinLevelBadge: FC<Props> = ({
+  minLevel,
+  userLevel,
+  className,
+}) => {
   const rankTitle = RANKS.find((r) => r.level === minLevel)?.title ?? '';
   const blocked = userLevel !== undefined && userLevel < minLevel;
 
@@ -29,9 +32,14 @@ export const MinLevelBadge: FC<Props> = ({ minLevel, userLevel, className }) => 
   );
 };
 
-export const MinLevelBadgeSkeleton: FC<{ className?: string }> = ({ className }) => (
+export const MinLevelBadgeSkeleton: FC<{ className?: string }> = ({
+  className,
+}) => (
   <span
-    className={cn('inline-block h-4 w-24 animate-pulse rounded-full bg-neutral-200', className)}
+    className={cn(
+      'inline-block h-4 w-24 animate-pulse rounded-full bg-neutral-200',
+      className,
+    )}
     aria-hidden
   />
 );

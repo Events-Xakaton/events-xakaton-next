@@ -54,7 +54,9 @@ export const LuckyWheelPill: FC<Props> = ({ isNew, onClick }) => {
         onClick={onClick}
         aria-label="Открыть Lucky Wheel"
       >
-        <span className="lucky-pill__emoji" aria-hidden="true">🎰</span>
+        <span className="lucky-pill__emoji" aria-hidden="true">
+          🎰
+        </span>
         <span className="lucky-pill__label">Рулетка</span>
       </button>
     </div>

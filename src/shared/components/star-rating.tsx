@@ -19,9 +19,16 @@ export const StarRating: FC<Props> = ({ value, onChange, size = 'md' }) => {
 
   return (
     <div
-      className={cn('inline-flex items-center gap-0.5', readonly && 'pointer-events-none')}
+      className={cn(
+        'inline-flex items-center gap-0.5',
+        readonly && 'pointer-events-none',
+      )}
       role={readonly ? 'img' : 'group'}
-      aria-label={value !== null && value !== undefined ? `Оценка: ${value} из 5` : 'Оценка не выставлена'}
+      aria-label={
+        value !== null && value !== undefined
+          ? `Оценка: ${value} из 5`
+          : 'Оценка не выставлена'
+      }
     >
       {[1, 2, 3, 4, 5].map((star) => {
         const filled = value !== null && value !== undefined && star <= value;

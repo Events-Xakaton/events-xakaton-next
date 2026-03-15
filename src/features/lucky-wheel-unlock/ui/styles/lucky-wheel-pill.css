@@ -24,7 +24,7 @@
   }
 
   &__label {
-    @apply text-[9px] font-semibold leading-none text-orange-500;
+    @apply text-[9px] leading-none font-semibold text-orange-500;
   }
 }
 

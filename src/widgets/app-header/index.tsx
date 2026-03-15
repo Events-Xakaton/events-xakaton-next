@@ -2,13 +2,13 @@
 
 import type { CSSProperties, ReactNode } from 'react';
 
-export { RankBadge } from './ui/RankBadge';
-export { RankProgressBar } from './ui/RankProgressBar';
-export { UserRankHeader } from './ui/UserRankHeader';
-
 import { cn } from '@/shared/lib/utils';
 
 import './styles/app-header.css';
+
+export { RankBadge } from './ui/RankBadge';
+export { RankProgressBar } from './ui/RankProgressBar';
+export { UserRankHeader } from './ui/UserRankHeader';
 
 export type AppHeaderMode = 'sticky' | 'fixed';
 

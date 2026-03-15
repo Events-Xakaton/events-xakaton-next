@@ -3,7 +3,7 @@
 .level-up-toast {
   @apply fixed bottom-24 left-1/2 z-[2000] -translate-x-1/2;
   @apply flex items-center gap-3 rounded-2xl px-4 py-3 shadow-xl;
-  @apply bg-white border border-neutral-100;
+  @apply border border-neutral-100 bg-white;
   @apply pointer-events-none;
   /* Ограничиваем ширину по дизайну Mini App */
   max-width: min(calc(100vw - 32px), 360px);
@@ -14,7 +14,7 @@
   }
 
   &__emoji {
-    @apply flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary-400 to-primary-600 text-xl;
+    @apply from-primary-400 to-primary-600 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br text-xl;
   }
 
   &__text {
@@ -22,7 +22,7 @@
   }
 
   &__title {
-    @apply text-xs font-semibold uppercase tracking-wide text-primary-600;
+    @apply text-primary-600 text-xs font-semibold tracking-wide uppercase;
   }
 
   &__label {

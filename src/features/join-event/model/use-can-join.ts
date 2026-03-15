@@ -49,8 +49,10 @@ export function useCanJoin(
   const levelTooltip: string | null =
     !meetsLevel && event.minLevel !== null
       ? (() => {
-          const reqTitle = RANKS.find((r) => r.level === event.minLevel)?.title ?? '';
-          const userTitle = RANKS.find((r) => r.level === userLevel)?.title ?? '';
+          const reqTitle =
+            RANKS.find((r) => r.level === event.minLevel)?.title ?? '';
+          const userTitle =
+            RANKS.find((r) => r.level === userLevel)?.title ?? '';
           return `Для записи нужен уровень ${event.minLevel} · ${reqTitle}.\nВаш уровень: ${userLevel} · ${userTitle}.`;
         })()
       : null;

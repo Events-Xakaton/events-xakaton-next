@@ -37,7 +37,7 @@ const TelegramViewportSync: FC = () => {
   const stableHeight = useSignal(viewportStableHeight);
 
   useEffect(() => {
-    const update = (): void => {
+    const apply = (): void => {
       // stableHeight из Telegram SDK может вернуть 0 или некорректное значение
       // при запуске вне Telegram (dev-режим, браузер). Берём максимум из значения
       // SDK и реальной высоты окна — это также корректно обрабатывает открытие
@@ -46,9 +46,21 @@ const TelegramViewportSync: FC = () => {
       document.documentElement.style.setProperty('--app-vh', `${vh}px`);
     };
 
-    update();
-    window.addEventListener('resize', update);
-    return () => window.removeEventListener('resize', update);
+    apply();
+
+    // Дебаунс нужен, чтобы сотни событий resize при ресайзе окна не вызывали
+    // сотни перерисовок компонентов, завязанных на --app-vh.
+    let timer: ReturnType<typeof setTimeout>;
+    const onResize = (): void => {
+      clearTimeout(timer);
+      timer = setTimeout(apply, 100);
+    };
+
+    window.addEventListener('resize', onResize);
+    return () => {
+      window.removeEventListener('resize', onResize);
+      clearTimeout(timer);
+    };
   }, [stableHeight]);
 
   return null;

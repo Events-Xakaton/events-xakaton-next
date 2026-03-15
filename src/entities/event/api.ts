@@ -231,7 +231,10 @@ export const eventApi = apiBase.injectEndpoints({
     }),
     confirmAttendance: builder.mutation<
       { status: string },
-      { eventId: string; attendances: Array<{ userId: string; rating?: number }> }
+      {
+        eventId: string;
+        attendances: Array<{ userId: string; rating?: number }>;
+      }
     >({
       query: ({ eventId, attendances }) => ({
         url: `/events/${eventId}/attendance`,

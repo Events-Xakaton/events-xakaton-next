@@ -3,8 +3,9 @@
 import type { FC } from 'react';
 import { useCallback, useEffect, useState } from 'react';
 
-import { Button, ButtonSize, ButtonVariant } from '@/shared/components/button';
 import type { LuckyWheelStreakRes } from '@/entities/event/api';
+
+import { Button, ButtonSize, ButtonVariant } from '@/shared/components/button';
 
 import { StreakDayTrack } from './StreakDayTrack';
 import './styles/login-streak-modal.css';
@@ -46,15 +47,13 @@ function getCtaContent(
   if (cycleRemainder === 1) {
     return {
       title: 'Отличное начало!',
-      subtitle:
-        'Возвращайся завтра — ты уже на пути к бесплатному спину 🎰',
+      subtitle: 'Возвращайся завтра — ты уже на пути к бесплатному спину 🎰',
     };
   }
 
   return {
     title: 'Ты в шаге от награды!',
-    subtitle:
-      'Ещё один день — и фри-спин у тебя в кармане. Так держать 💪',
+    subtitle: 'Ещё один день — и фри-спин у тебя в кармане. Так держать 💪',
   };
 }
 
@@ -127,9 +126,7 @@ export const LoginStreakModal: FC<Props> = ({
         <h2 id="streak-modal-title" className="streak-modal__header">
           {headerTitle}
         </h2>
-        <p className="streak-modal__series-label">
-          Серия: {currentStreak} дн.
-        </p>
+        <p className="streak-modal__series-label">Серия: {currentStreak} дн.</p>
 
         <div className="streak-modal__track">
           <StreakDayTrack

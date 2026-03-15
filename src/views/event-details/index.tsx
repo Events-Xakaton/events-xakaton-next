@@ -13,16 +13,15 @@ import {
 
 import { PeopleList } from '@/widgets/people-list';
 
+import { useCanJoin } from '@/features/join-event';
+
 import { useEventAuthoringClubsQuery } from '@/entities/club/api';
 import {
   useEventDetailsQuery,
   useEventParticipantsQuery,
 } from '@/entities/event/api';
 
-import { useCanJoin } from '@/features/join-event';
-
 import { Button, ButtonSize, ButtonVariant } from '@/shared/components/button';
-import { MinLevelBadge } from '@/shared/components/min-level-badge';
 import { ConfirmDialog } from '@/shared/components/confirm-dialog';
 import {
   AboutSection,
@@ -30,6 +29,7 @@ import {
   StickyActionsPanel,
 } from '@/shared/components/detail-shared';
 import { ErrorState } from '@/shared/components/error-state';
+import { MinLevelBadge } from '@/shared/components/min-level-badge';
 import { PreviewCard } from '@/shared/components/preview-card';
 import { formatDateTimeDisplay } from '@/shared/lib/date-format';
 import { useTelegramBackButton } from '@/shared/lib/telegram/useTelegramButtons';
@@ -60,7 +60,12 @@ export type EventDetailsProps = {
   fromLuckyWheel?: boolean;
 };
 
-export function EventDetails({ id, onBack, onOpenClub, fromLuckyWheel = false }: EventDetailsProps) {
+export function EventDetails({
+  id,
+  onBack,
+  onOpenClub,
+  fromLuckyWheel = false,
+}: EventDetailsProps) {
   const details = useEventDetailsQuery({ eventId: id });
   const participants = useEventParticipantsQuery({ eventId: id });
   const eventAuthoringClubs = useEventAuthoringClubsQuery();
@@ -81,7 +86,7 @@ export function EventDetails({ id, onBack, onOpenClub, fromLuckyWheel = false }:
   );
 
   // Хук должен вызываться до любых early return — используем безопасные дефолты пока event не загружен
-  const joined = (actions.joinedOverride ?? event?.joinedByMe) ?? false;
+  const joined = actions.joinedOverride ?? event?.joinedByMe ?? false;
   const canJoinResult = useCanJoin(
     {
       minLevel: event?.minLevel ?? null,
@@ -296,8 +301,11 @@ export function EventDetails({ id, onBack, onOpenClub, fromLuckyWheel = false }:
           />
 
           {/* Панель посещаемости — только организатор на прошедшем событии */}
-          {event.canManage && archived && event.status === 'past' && (
-            participants.data && participants.data.some((p) => p.attendanceConfirmed) ? (
+          {event.canManage &&
+            archived &&
+            event.status === 'past' &&
+            (participants.data &&
+            participants.data.some((p) => p.attendanceConfirmed) ? (
               <AttendanceAlreadyDone />
             ) : participants.data && participants.data.length > 0 ? (
               <AttendancePanel
@@ -305,8 +313,7 @@ export function EventDetails({ id, onBack, onOpenClub, fromLuckyWheel = false }:
                 participants={participants.data}
                 onDone={() => void participants.refetch()}
               />
-            ) : null
-          )}
+            ) : null)}
 
           {actions.hint && (
             <div

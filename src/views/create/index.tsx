@@ -14,9 +14,9 @@ import { useEffect, useRef, useState } from 'react';
 import { AppHeader, UserRankHeader } from '@/widgets/app-header';
 
 import { Button, ButtonSize } from '@/shared/components/button';
-import { LevelSelect } from '@/shared/components/level-select';
 import { DescriptionSection } from '@/shared/components/description-section';
 import { InlineTitleEditor } from '@/shared/components/inline-title-editor';
+import { LevelSelect } from '@/shared/components/level-select';
 import { PreviewCard } from '@/shared/components/preview-card';
 import { formatDateTimeDisplay } from '@/shared/lib/date-format';
 import { useViewportMode } from '@/shared/lib/telegram/useViewportMode';

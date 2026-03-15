@@ -9,7 +9,7 @@
   }
 
   &--active {
-    @apply border-primary-400 bg-white text-primary-600;
+    @apply border-primary-400 text-primary-600 bg-white;
     animation: streak-pulse 1.8s ease-in-out infinite;
   }
 
@@ -35,7 +35,7 @@
   }
 
   &__label {
-    @apply flex flex-col items-center gap-0.5 text-center text-[11px] font-medium leading-tight;
+    @apply flex flex-col items-center gap-0.5 text-center text-[11px] leading-tight font-medium;
   }
 
   &__reward-tag {
@@ -44,7 +44,8 @@
 }
 
 @keyframes streak-pulse {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 0 0 0 theme('colors.primary.400 / 40%');
   }
   50% {

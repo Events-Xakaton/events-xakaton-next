@@ -9,7 +9,6 @@ import { PeopleList } from '@/widgets/people-list';
 import { useClubDetailsQuery, useClubMembersQuery } from '@/entities/club/api';
 
 import { Button, ButtonSize, ButtonVariant } from '@/shared/components/button';
-import { MinLevelBadge } from '@/shared/components/min-level-badge';
 import { ConfirmDialog } from '@/shared/components/confirm-dialog';
 import {
   AboutSection,
@@ -19,6 +18,7 @@ import {
   StickyActionsPanel,
 } from '@/shared/components/detail-shared';
 import { ErrorState } from '@/shared/components/error-state';
+import { MinLevelBadge } from '@/shared/components/min-level-badge';
 import { PreviewCard } from '@/shared/components/preview-card';
 import { buildGradient } from '@/shared/lib/gradient';
 import { useTelegramBackButton } from '@/shared/lib/telegram/useTelegramButtons';

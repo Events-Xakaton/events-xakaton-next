@@ -1,6 +1,5 @@
-import type { RankInfo } from '@/shared/types/rank';
-
 import { ApiTag } from '@/shared/redux';
+import type { RankInfo } from '@/shared/types/rank';
 
 import { apiBase } from './base-api';
 
@@ -62,13 +61,30 @@ export const gamificationApi = apiBase.injectEndpoints({
       // Бэкенд возвращает поле `position`, фронтенд ожидает `rank`
       transformResponse: (raw: {
         period: 'weekly' | 'monthly';
-        top: Array<{ position: number; userId: string; fullName: string; points: number; rankInfo?: RankInfo }>;
-        currentUser: { position: number; userId: string; fullName: string; points: number; rankInfo?: RankInfo } | null;
+        top: Array<{
+          position: number;
+          userId: string;
+          fullName: string;
+          points: number;
+          rankInfo?: RankInfo;
+        }>;
+        currentUser: {
+          position: number;
+          userId: string;
+          fullName: string;
+          points: number;
+          rankInfo?: RankInfo;
+        } | null;
       }) => ({
         period: raw.period,
-        top: raw.top.map(({ position, ...rest }) => ({ rank: position, ...rest })),
+        top: raw.top.map(({ position, ...rest }) => ({
+          rank: position,
+          ...rest,
+        })),
         currentUser: raw.currentUser
-          ? (({ position, ...rest }) => ({ rank: position, ...rest }))(raw.currentUser)
+          ? (({ position, ...rest }) => ({ rank: position, ...rest }))(
+              raw.currentUser,
+            )
           : null,
       }),
       providesTags: [ApiTag.PROFILE],

@@ -3,9 +3,8 @@
 import type { FC } from 'react';
 import { useState } from 'react';
 
-import type { PersonRow } from '@/entities/user';
-
 import { useConfirmAttendanceMutation } from '@/entities/event/api';
+import type { PersonRow } from '@/entities/user';
 
 import { Button, ButtonSize, ButtonVariant } from '@/shared/components/button';
 import { StarRating } from '@/shared/components/star-rating';
@@ -21,7 +20,11 @@ type Props = {
   onDone: () => void;
 };
 
-export const AttendancePanel: FC<Props> = ({ eventId, participants, onDone }) => {
+export const AttendancePanel: FC<Props> = ({
+  eventId,
+  participants,
+  onDone,
+}) => {
   const [confirmAttendance, { isLoading }] = useConfirmAttendanceMutation();
 
   const [presence, setPresence] = useState<Record<string, Presence>>(() =>
@@ -32,7 +35,9 @@ export const AttendancePanel: FC<Props> = ({ eventId, participants, onDone }) =>
   );
   const [error, setError] = useState<string | null>(null);
 
-  const presentCount = Object.values(presence).filter((v) => v === 'present').length;
+  const presentCount = Object.values(presence).filter(
+    (v) => v === 'present',
+  ).length;
 
   async function handleSubmit(): Promise<void> {
     setError(null);
@@ -41,7 +46,9 @@ export const AttendancePanel: FC<Props> = ({ eventId, participants, onDone }) =>
       .filter((p) => presence[p.telegramUserId] === 'present')
       .map((p) => ({
         userId: p.userId ?? p.telegramUserId,
-        ...(ratings[p.telegramUserId] !== null ? { rating: ratings[p.telegramUserId] as number } : {}),
+        ...(ratings[p.telegramUserId] !== null
+          ? { rating: ratings[p.telegramUserId] as number }
+          : {}),
       }));
 
     try {
@@ -95,10 +102,16 @@ export const AttendancePanel: FC<Props> = ({ eventId, participants, onDone }) =>
 
                 <div className="attendance-panel__row-bottom">
                   <StarRating
-                    value={isPresent ? ratings[p.telegramUserId] ?? null : null}
+                    value={
+                      isPresent ? (ratings[p.telegramUserId] ?? null) : null
+                    }
                     onChange={
                       isPresent
-                        ? (v) => setRatings((prev) => ({ ...prev, [p.telegramUserId]: v }))
+                        ? (v) =>
+                            setRatings((prev) => ({
+                              ...prev,
+                              [p.telegramUserId]: v,
+                            }))
                         : undefined
                     }
                     size="md"
@@ -109,7 +122,10 @@ export const AttendancePanel: FC<Props> = ({ eventId, participants, onDone }) =>
                       type="button"
                       className={`attendance-panel__toggle-btn ${isPresent ? 'attendance-panel__toggle-btn--active' : 'attendance-panel__toggle-btn--inactive'}`}
                       onClick={() =>
-                        setPresence((prev) => ({ ...prev, [p.telegramUserId]: 'present' }))
+                        setPresence((prev) => ({
+                          ...prev,
+                          [p.telegramUserId]: 'present',
+                        }))
                       }
                     >
                       Был
@@ -118,7 +134,10 @@ export const AttendancePanel: FC<Props> = ({ eventId, participants, onDone }) =>
                       type="button"
                       className={`attendance-panel__toggle-btn ${!isPresent ? 'attendance-panel__toggle-btn--active' : 'attendance-panel__toggle-btn--inactive'}`}
                       onClick={() =>
-                        setPresence((prev) => ({ ...prev, [p.telegramUserId]: 'absent' }))
+                        setPresence((prev) => ({
+                          ...prev,
+                          [p.telegramUserId]: 'absent',
+                        }))
                       }
                     >
                       Не был

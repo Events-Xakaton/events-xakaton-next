@@ -11,19 +11,23 @@
 ## Поведение
 
 ### Появление
+
 - Условие: `isLuckyTriggered === true` И текущий таб Home === `'events'`
 - Кнопка появляется с анимацией fade-in + scale-in (300 мс)
 
 ### Жизненный цикл
+
 - Кнопка **исчезает навсегда** после клика (триггер сбрасывается через `resetLucky()`)
 - Если пользователь уходит на другой таб и возвращается — `resetLucky()` вызывается при смене таба (уже реализовано в `HomeScreen`), яйцо исчезает
 - Кнопки dismiss/закрытия нет — исчезает только по клику
 
 ### Слой отображения
+
 - Только на экране Home (`HomeScreen`)
 - Не отображается поверх detail-view, колеса, других табов
 
 ### Позиционирование
+
 - `position: fixed`, правый нижний угол
 - `right: 16px`
 - `bottom`: над BottomNav, не перекрывая его — `calc(env(safe-area-inset-bottom, 0px) + 72px)`
@@ -34,12 +38,14 @@
 ## Анимация
 
 ### Появление (`egg-enter`)
+
 ```
 opacity: 0, scale: 0.5  →  opacity: 1, scale: 1
 duration: 300ms, ease-out
 ```
 
 ### Покачивание (`egg-wobble`)
+
 Паттерн привлечения внимания: покачивание → пауза → покачивание → пауза → ...
 
 ```
@@ -63,6 +69,7 @@ transform-origin: center bottom
 ```
 
 ### Нажатие
+
 `active`: scale 0.88, duration 100ms
 
 ---
@@ -90,6 +97,7 @@ type Props = {
 ## Изменения в существующих файлах
 
 ### `src/views/home/index.tsx`
+
 - Удалить блок «Секретная кнопка `Мне повезёт`» (строки 379–394)
 - Добавить в конце JSX:
   ```tsx
@@ -107,11 +115,11 @@ type Props = {
 
 ## Файлы к созданию / изменению
 
-| Файл | Действие |
-|---|---|
-| `src/views/home/ui/easter-egg-button.tsx` | создать |
-| `src/views/home/ui/styles/easter-egg-button.css` | создать |
-| `src/views/home/index.tsx` | изменить |
+| Файл                                             | Действие |
+| ------------------------------------------------ | -------- |
+| `src/views/home/ui/easter-egg-button.tsx`        | создать  |
+| `src/views/home/ui/styles/easter-egg-button.css` | создать  |
+| `src/views/home/index.tsx`                       | изменить |
 
 ---
 

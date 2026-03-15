@@ -1,7 +1,7 @@
 'use client';
 
-import type { FC } from 'react';
 import { Check, Lock } from 'lucide-react';
+import type { FC } from 'react';
 
 import { cn } from '@/shared/lib/utils';
 
@@ -22,12 +22,7 @@ type Props = {
 
 export const StreakDayCell: FC<Props> = ({ day, state, isRewardDay }) => {
   return (
-    <div
-      className={cn(
-        'streak-day-cell',
-        `streak-day-cell--${state}`,
-      )}
-    >
+    <div className={cn('streak-day-cell', `streak-day-cell--${state}`)}>
       <div className="streak-day-cell__icon">
         {state === StreakDayCellState.DONE && (
           <Check className="h-4 w-4" aria-hidden="true" />
@@ -39,7 +34,11 @@ export const StreakDayCell: FC<Props> = ({ day, state, isRewardDay }) => {
           <Lock className="h-3.5 w-3.5" aria-hidden="true" />
         )}
         {state === StreakDayCellState.REWARD_DONE && (
-          <span className="text-lg leading-none" role="img" aria-label="Награда">
+          <span
+            className="text-lg leading-none"
+            role="img"
+            aria-label="Награда"
+          >
             🎉
           </span>
         )}

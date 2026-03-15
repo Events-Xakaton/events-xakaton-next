@@ -36,7 +36,8 @@
       "Bash(cd \"C:/Users/tahir/Проекты/Хакатон/events-xakaton-next\" && npm run build 2>&1 | grep -E \"^Error|^✓|^Failed|Compiled|CssSyntax|error TS\" | head -20)",
       "Bash(cd:*)",
       "Bash(find:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(mkdir:*)"
     ]
   }
 }

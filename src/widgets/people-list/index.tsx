@@ -76,7 +76,9 @@ export function PeopleList({
                     {row.attendanceConfirmed && row.rating !== null ? (
                       <StarRating value={row.rating} size="sm" />
                     ) : row.attendanceConfirmed ? (
-                      <span className="text-xs text-green-600 font-medium">✓</span>
+                      <span className="text-xs text-green-600 font-medium">
+                        ✓
+                      </span>
                     ) : null}
                   </div>
                   {isSelf ? (

@@ -5,7 +5,11 @@
 
   &__fill {
     @apply h-full rounded-full;
-    background: linear-gradient(to right, var(--color-primary-500), var(--color-accent-400));
+    background: linear-gradient(
+      to right,
+      var(--color-primary-500),
+      var(--color-accent-400)
+    );
     @apply transition-all duration-500 ease-out;
   }
 

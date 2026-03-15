@@ -15,6 +15,7 @@ export function BottomNav({
   hasNewNotifications,
   luckyWheelUnlocked = false,
   isNewLuckyWheel = false,
+  isLuckyWheelOpen = false,
   onOpenLuckyWheel,
 }: {
   tab: MainTab;
@@ -22,6 +23,7 @@ export function BottomNav({
   hasNewNotifications: boolean;
   luckyWheelUnlocked?: boolean;
   isNewLuckyWheel?: boolean;
+  isLuckyWheelOpen?: boolean;
   onOpenLuckyWheel?: () => void;
 }): ReactElement {
   const items: Array<{ id: MainTab; label: string; Icon: typeof Home }> = [
@@ -47,7 +49,7 @@ export function BottomNav({
           )}
         >
           {items.map((item) => {
-            const active = tab === item.id;
+            const active = !isLuckyWheelOpen && tab === item.id;
             const Icon = item.Icon;
 
             return (
@@ -82,9 +84,15 @@ export function BottomNav({
               type="button"
               onClick={onOpenLuckyWheel}
               aria-label="Lucky Wheel"
+              aria-current={isLuckyWheelOpen ? 'page' : undefined}
               className={cn(
-                'bottom-nav__item bottom-nav__item--lucky',
-                isNewLuckyWheel && 'bottom-nav__item--lucky-new',
+                'bottom-nav__item',
+                isLuckyWheelOpen
+                  ? 'bottom-nav__item--active'
+                  : cn(
+                      'bottom-nav__item--lucky',
+                      isNewLuckyWheel && 'bottom-nav__item--lucky-new',
+                    ),
               )}
             >
               <Dices className="bottom-nav__icon" aria-hidden="true" />

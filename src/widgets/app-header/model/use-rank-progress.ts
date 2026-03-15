@@ -25,13 +25,29 @@ export function useRankProgress(): RankProgressResult {
 
   // Защита от некорректного уровня в ответе API
   if (!currentRank) {
-    return { isLoading: false, isError: true, progress: 0, label: '', detail: '', level: 1 };
+    return {
+      isLoading: false,
+      isError: true,
+      progress: 0,
+      label: '',
+      detail: '',
+      level: 1,
+    };
   }
 
   const pointsInLevel = lifetime - currentRank.minPoints;
-  const rangeOfLevel = nextRank ? nextRank.minPoints - currentRank.minPoints : 1;
+  const rangeOfLevel = nextRank
+    ? nextRank.minPoints - currentRank.minPoints
+    : 1;
   const progress = nextRank ? pointsInLevel / rangeOfLevel : 1;
   const detail = nextRank ? `${pointsInLevel} / ${rangeOfLevel} очков` : 'MAX';
 
-  return { isLoading: false, isError: false, progress, label: rank.label, detail, level: rank.level };
+  return {
+    isLoading: false,
+    isError: false,
+    progress,
+    label: rank.label,
+    detail,
+    level: rank.level,
+  };
 }

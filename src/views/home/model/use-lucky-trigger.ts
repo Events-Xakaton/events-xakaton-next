@@ -43,33 +43,30 @@ export function useLuckyTrigger(
   const ioRef = useRef<IntersectionObserver | null>(null);
   const moRef = useRef<MutationObserver | null>(null);
 
-  const onIntersection = useCallback(
-    (entries: IntersectionObserverEntry[]) => {
-      if (triggeredRef.current) return;
+  const onIntersection = useCallback((entries: IntersectionObserverEntry[]) => {
+    if (triggeredRef.current) return;
 
-      const now = Date.now();
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
-        const eventId = (entry.target as HTMLElement).dataset['eventId'];
-        if (!eventId) continue;
-        viewRecords.current.push({ eventId, ts: now });
-      }
+    const now = Date.now();
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      const eventId = (entry.target as HTMLElement).dataset['eventId'];
+      if (!eventId) continue;
+      viewRecords.current.push({ eventId, ts: now });
+    }
 
-      // Отсекаем записи за пределами временного окна
-      const cutoff = now - LUCKY_TRIGGER_WINDOW_MS;
-      viewRecords.current = viewRecords.current.filter((r) => r.ts >= cutoff);
+    // Отсекаем записи за пределами временного окна
+    const cutoff = now - LUCKY_TRIGGER_WINDOW_MS;
+    viewRecords.current = viewRecords.current.filter((r) => r.ts >= cutoff);
 
-      const uniqueIds = new Set(viewRecords.current.map((r) => r.eventId));
-      if (uniqueIds.size >= LUCKY_MIN_VIEWED_EVENTS) {
-        triggeredRef.current = true;
-        setIsTriggered(true);
-        // Отключаем наблюдатели сразу после срабатывания — больше не нужны
-        ioRef.current?.disconnect();
-        moRef.current?.disconnect();
-      }
-    },
-    [],
-  );
+    const uniqueIds = new Set(viewRecords.current.map((r) => r.eventId));
+    if (uniqueIds.size >= LUCKY_MIN_VIEWED_EVENTS) {
+      triggeredRef.current = true;
+      setIsTriggered(true);
+      // Отключаем наблюдатели сразу после срабатывания — больше не нужны
+      ioRef.current?.disconnect();
+      moRef.current?.disconnect();
+    }
+  }, []);
 
   const setupObservers = useCallback(
     (container: HTMLDivElement) => {

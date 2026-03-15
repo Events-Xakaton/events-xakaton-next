@@ -5,8 +5,8 @@
 
   &__avatar {
     @apply relative h-11 w-11 shrink-0 overflow-hidden rounded-full;
-    @apply bg-gradient-to-br from-primary-400 to-primary-600;
-    @apply shadow-sm ring-2 ring-primary-300/40;
+    @apply from-primary-400 to-primary-600 bg-gradient-to-br;
+    @apply ring-primary-300/40 shadow-sm ring-2;
   }
 
   &__avatar-emoji {
@@ -18,6 +18,6 @@
   }
 
   &__name {
-    @apply truncate text-[15px] font-semibold leading-tight text-neutral-900;
+    @apply truncate text-[15px] leading-tight font-semibold text-neutral-900;
   }
 }

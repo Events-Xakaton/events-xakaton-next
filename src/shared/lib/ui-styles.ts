@@ -371,7 +371,10 @@ export function getHomeFeedLayout(mode: 'fullscreen' | 'compact'): {
 
   if (mode === 'compact') {
     const compactTopOffsetPx =
-      COMPACT_HEADER_HEIGHT + 12 + FEED_TOP_CONTROLS_HEIGHT + USER_RANK_SUBROW_HEIGHT;
+      COMPACT_HEADER_HEIGHT +
+      12 +
+      FEED_TOP_CONTROLS_HEIGHT +
+      USER_RANK_SUBROW_HEIGHT;
     const compactTopOffset = `${compactTopOffsetPx}px`;
     const compactBottomReserve = getBottomPadding('feed');
     const feedScrollHeight = `calc(${ADAPTIVE_VIEWPORT_HEIGHT} - ${compactTopOffset} - ${compactBottomReserve})`;
