@@ -38,6 +38,8 @@ import { ClubSelector } from './ui/club-selector';
 const SECTION_CARD = APP_SECTION_CARD_CLASS;
 const DETAIL_LABEL_WIDTH = 'w-[58%] min-w-[176px] pr-2';
 const SECTION_TITLE_CLASS = 'text-lg font-semibold text-neutral-900';
+const REQUIRED_MARK_CLASS = 'ml-1 text-primary-600';
+const REQUIRED_HINT_CLASS = 'text-xs text-neutral-500';
 
 export function CreateScreen({
   initialTab = 'event',
@@ -198,41 +200,47 @@ export function CreateScreen({
           style={{ paddingTop: `calc(${SAFE_AREA_TOP} + 148px)` }}
           onSubmit={handleSubmit}
         >
-          <PreviewCard
-            background={eventForm.coverBackground}
-            title={eventTitleForPreview}
-            isTitlePlaceholder={isEventTitlePlaceholder}
-            onChangeBackground={eventForm.changeCoverSeed}
-            titleEditing={eventForm.showTitleEditor}
-            onTitleClick={() => eventForm.setShowTitleEditor(true)}
-            showEditIndicator
-            topLeftExtra={
-              <BannerUpload
-                coverUrl={eventForm.coverUrl}
-                onChange={eventForm.setCoverUrl}
-              />
-            }
-            titleEditor={
-              eventForm.showTitleEditor ? (
-                <InlineTitleEditor
-                  value={eventForm.title}
-                  onChange={eventForm.setTitle}
-                  onCommit={(v) => {
-                    eventForm.setTitle(v);
-                    eventForm.setShowTitleEditor(false);
-                  }}
-                  maxLength={60}
+          <div className="space-y-2">
+            <h3 className={SECTION_TITLE_CLASS}>
+              Название
+              <span className={REQUIRED_MARK_CLASS}>*</span>
+            </h3>
+            <PreviewCard
+              background={eventForm.coverBackground}
+              title={eventTitleForPreview}
+              isTitlePlaceholder={isEventTitlePlaceholder}
+              onChangeBackground={eventForm.changeCoverSeed}
+              titleEditing={eventForm.showTitleEditor}
+              onTitleClick={() => eventForm.setShowTitleEditor(true)}
+              showEditIndicator
+              topLeftExtra={
+                <BannerUpload
+                  coverUrl={eventForm.coverUrl}
+                  onChange={eventForm.setCoverUrl}
                 />
-              ) : undefined
-            }
-            titleHint={
-              eventForm.showTitleEditor && 60 - eventForm.title.length <= 10 ? (
-                <p className="mt-2 text-xs text-white/70">
-                  Осталось символов: {60 - eventForm.title.length}
-                </p>
-              ) : null
-            }
-          />
+              }
+              titleEditor={
+                eventForm.showTitleEditor ? (
+                  <InlineTitleEditor
+                    value={eventForm.title}
+                    onChange={eventForm.setTitle}
+                    onCommit={(v) => {
+                      eventForm.setTitle(v);
+                      eventForm.setShowTitleEditor(false);
+                    }}
+                    maxLength={60}
+                  />
+                ) : undefined
+              }
+              titleHint={
+                eventForm.showTitleEditor && 60 - eventForm.title.length <= 10 ? (
+                  <p className="mt-2 text-xs text-white/70">
+                    Осталось символов: {60 - eventForm.title.length}
+                  </p>
+                ) : null
+              }
+            />
+          </div>
 
           <DescriptionSection
             value={eventForm.description}
@@ -240,6 +248,7 @@ export function CreateScreen({
             placeholder="Опишите план встречи: чем будете заниматься, где пройдет ивент и что участникам важно знать заранее."
             rows={3}
             textareaRef={eventForm.descriptionRef}
+            required
           />
 
           {/* Детали */}
@@ -254,6 +263,7 @@ export function CreateScreen({
                 />
                 <span className="text-sm font-medium text-neutral-900 flex-shrink-0 w-[90px]">
                   Локация
+                  <span className={REQUIRED_MARK_CLASS}>*</span>
                 </span>
                 <div className={cn('ml-auto', DETAIL_LABEL_WIDTH)}>
                   <input
@@ -287,6 +297,7 @@ export function CreateScreen({
                 />
                 <span className="text-sm font-medium text-neutral-900 flex-shrink-0 w-[90px]">
                   Начало
+                  <span className={REQUIRED_MARK_CLASS}>*</span>
                 </span>
                 <label
                   className={cn(
@@ -319,6 +330,7 @@ export function CreateScreen({
                 />
                 <span className="text-sm font-medium text-neutral-900 flex-shrink-0 w-[90px]">
                   Окончание
+                  <span className={REQUIRED_MARK_CLASS}>*</span>
                 </span>
                 <label
                   className={cn(
@@ -478,6 +490,8 @@ export function CreateScreen({
             />
           </div>
 
+          <p className={REQUIRED_HINT_CLASS}>* Обязательные поля</p>
+
           {eventForm.hint && (
             <div className="rounded-2xl bg-red-100 p-4">
               <p className="text-sm font-medium text-red-700">
@@ -503,42 +517,48 @@ export function CreateScreen({
           style={{ paddingTop: `calc(${SAFE_AREA_TOP} + 148px)` }}
           onSubmit={handleSubmit}
         >
-          <PreviewCard
-            background={clubForm.coverBackground}
-            title={clubTitleForPreview}
-            isTitlePlaceholder={isClubTitlePlaceholder}
-            subtitle={clubForm.description.trim() || undefined}
-            onChangeBackground={clubForm.changeCoverSeed}
-            titleEditing={clubForm.showTitleEditor}
-            onTitleClick={() => clubForm.setShowTitleEditor(true)}
-            showEditIndicator
-            topLeftExtra={
-              <BannerUpload
-                coverUrl={clubForm.coverUrl}
-                onChange={clubForm.setCoverUrl}
-              />
-            }
-            titleEditor={
-              clubForm.showTitleEditor ? (
-                <InlineTitleEditor
-                  value={clubForm.title}
-                  onChange={clubForm.setTitle}
-                  onCommit={(v) => {
-                    clubForm.setTitle(v);
-                    clubForm.setShowTitleEditor(false);
-                  }}
-                  maxLength={60}
+          <div className="space-y-2">
+            <h3 className={SECTION_TITLE_CLASS}>
+              Название
+              <span className={REQUIRED_MARK_CLASS}>*</span>
+            </h3>
+            <PreviewCard
+              background={clubForm.coverBackground}
+              title={clubTitleForPreview}
+              isTitlePlaceholder={isClubTitlePlaceholder}
+              subtitle={clubForm.description.trim() || undefined}
+              onChangeBackground={clubForm.changeCoverSeed}
+              titleEditing={clubForm.showTitleEditor}
+              onTitleClick={() => clubForm.setShowTitleEditor(true)}
+              showEditIndicator
+              topLeftExtra={
+                <BannerUpload
+                  coverUrl={clubForm.coverUrl}
+                  onChange={clubForm.setCoverUrl}
                 />
-              ) : undefined
-            }
-            titleHint={
-              clubForm.showTitleEditor && 60 - clubForm.title.length <= 10 ? (
-                <p className="mt-2 text-xs text-white/70">
-                  Осталось символов: {60 - clubForm.title.length}
-                </p>
-              ) : null
-            }
-          />
+              }
+              titleEditor={
+                clubForm.showTitleEditor ? (
+                  <InlineTitleEditor
+                    value={clubForm.title}
+                    onChange={clubForm.setTitle}
+                    onCommit={(v) => {
+                      clubForm.setTitle(v);
+                      clubForm.setShowTitleEditor(false);
+                    }}
+                    maxLength={60}
+                  />
+                ) : undefined
+              }
+              titleHint={
+                clubForm.showTitleEditor && 60 - clubForm.title.length <= 10 ? (
+                  <p className="mt-2 text-xs text-white/70">
+                    Осталось символов: {60 - clubForm.title.length}
+                  </p>
+                ) : null
+              }
+            />
+          </div>
 
           <DescriptionSection
             value={clubForm.description}
@@ -546,7 +566,10 @@ export function CreateScreen({
             placeholder="Кратко опишите цель клуба и чем участники будут заниматься."
             rows={3}
             textareaRef={clubForm.descriptionRef}
+            required
           />
+
+          <p className={REQUIRED_HINT_CLASS}>* Обязательные поля</p>
 
           {clubForm.hint && (
             <div className="rounded-2xl bg-red-100 p-4">

@@ -12,6 +12,7 @@ type Props = {
   rows?: number;
   textareaRef?: RefObject<HTMLTextAreaElement | null>;
   maxLength?: number;
+  required?: boolean;
 };
 
 export const DescriptionSection: FC<Props> = ({
@@ -21,10 +22,14 @@ export const DescriptionSection: FC<Props> = ({
   rows = 3,
   textareaRef,
   maxLength = 1000,
+  required = false,
 }) => {
   return (
     <div className="space-y-2">
-      <h3 className="text-lg font-semibold text-neutral-900">Описание</h3>
+      <h3 className="text-lg font-semibold text-neutral-900">
+        Описание
+        {required ? <span className="ml-1 text-primary-600">*</span> : null}
+      </h3>
       <textarea
         ref={textareaRef}
         value={value}
