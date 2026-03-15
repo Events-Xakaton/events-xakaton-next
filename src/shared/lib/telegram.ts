@@ -117,8 +117,7 @@ export function getTelegramProfileFallback(): TelegramProfile {
   const telegramUserId = String(user.id);
   const firstName = (user.first_name ?? '').trim();
   const lastName = (user.last_name ?? '').trim();
-  const fallbackName = (user.username ?? '').trim();
-  const fullName = `${firstName} ${lastName}`.trim() || fallbackName || 'Вы';
+  const fullName = `${firstName} ${lastName}`.trim() || 'Вы';
 
   return {
     telegramUserId,
