@@ -1,12 +1,17 @@
 'use client';
 
-import { Clock, Plus, Users } from 'lucide-react';
+import { Plus, Users } from 'lucide-react';
 import type { ReactElement } from 'react';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 import { PeopleList } from '@/widgets/people-list';
 
 import { useClubDetailsQuery, useClubMembersQuery } from '@/entities/club/api';
+import {
+  type EventCard,
+  useEventsQuery,
+  useJoinEventMutation,
+} from '@/entities/event/api';
 
 import { Button, ButtonSize, ButtonVariant } from '@/shared/components/button';
 import { ConfirmDialog } from '@/shared/components/confirm-dialog';
@@ -18,7 +23,6 @@ import {
   StickyActionsPanel,
 } from '@/shared/components/detail-shared';
 import { ErrorState } from '@/shared/components/error-state';
-import { MinLevelBadge } from '@/shared/components/min-level-badge';
 import { PreviewCard } from '@/shared/components/preview-card';
 import { buildGradient } from '@/shared/lib/gradient';
 import { useTelegramBackButton } from '@/shared/lib/telegram/useTelegramButtons';
@@ -30,20 +34,11 @@ import {
   getBottomPadding,
 } from '@/shared/lib/ui-styles';
 import { useCompactHeader } from '@/shared/lib/useCompactHeader';
-import { cn } from '@/shared/lib/utils';
+import { appErrorText, cn } from '@/shared/lib/utils';
 
 import { useClubActions } from './model/use-club-actions';
 import { useEventsCache } from './model/use-events-cache';
-
-function formatEventTime(value: string): string {
-  return new Date(value).toLocaleString('ru-RU', {
-    day: '2-digit',
-    month: 'short',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-  });
-}
+import { ClubEventsSection } from './ui/club-events-section';
 
 const SECTION_CARD = APP_SECTION_CARD_CLASS;
 const SECTION_TITLE_CLASS = 'text-lg font-semibold text-neutral-900';
@@ -61,12 +56,38 @@ export function ClubDetails({
 }: ClubDetailsProps): ReactElement {
   const details = useClubDetailsQuery({ clubId: id });
   const members = useClubMembersQuery({ clubId: id });
+  const events = useEventsQuery();
+  const [joinEvent] = useJoinEventMutation();
 
   const clubActions = useClubActions();
   const eventsCache = useEventsCache(id);
+  const [joinedEventIds, setJoinedEventIds] = useState<Record<string, boolean>>(
+    {},
+  );
+  const [joiningEventId, setJoiningEventId] = useState<string | null>(null);
+  const [eventHint, setEventHint] = useState('');
   const showCompactHeader = useCompactHeader(170);
 
   useTelegramBackButton({ onClick: onBack, visible: true });
+
+  function handleJoinEvent(eventId: string): void {
+    if (joiningEventId) return;
+
+    setEventHint('');
+    setJoiningEventId(eventId);
+
+    void joinEvent({ eventId })
+      .unwrap()
+      .then(() => {
+        setJoinedEventIds((prev) => ({ ...prev, [eventId]: true }));
+        void events.refetch();
+        eventsCache.refetchEvents();
+      })
+      .catch((error) =>
+        setEventHint(appErrorText(error, 'Не удалось присоединиться к ивенту')),
+      )
+      .finally(() => setJoiningEventId(null));
+  }
 
   const coverSeed = details.data?.coverSeed ?? details.data?.id ?? 'fallback';
   const heroBackground = useMemo(() => {
@@ -75,6 +96,21 @@ export function ClubDetails({
     }
     return buildGradient(coverSeed, 'club');
   }, [details.data?.coverUrl, coverSeed]);
+  const eventMetaById = useMemo<
+    Record<string, Pick<EventCard, 'coverSeed' | 'joinedByMe'>>
+  >(() => {
+    const map: Record<
+      string,
+      Pick<EventCard, 'coverSeed' | 'joinedByMe'>
+    > = {};
+    for (const event of events.data ?? []) {
+      map[event.id] = {
+        coverSeed: event.coverSeed,
+        joinedByMe: event.joinedByMe,
+      };
+    }
+    return map;
+  }, [events.data]);
 
   if (details.isLoading) {
     return (
@@ -229,101 +265,22 @@ export function ClubDetails({
             </div>
           </div>
 
-          {/* Ивенты клуба */}
-          <div className="space-y-2">
-            <h3 className={SECTION_TITLE_CLASS}>Ивенты клуба</h3>
-            <div className={SECTION_CARD}>
-              <div className="grid grid-cols-3 gap-2">
-                {(
-                  [
-                    { value: 'upcoming', label: 'Будущие' },
-                    { value: 'ongoing', label: 'Текущие' },
-                    { value: 'past', label: 'Прошедшие' },
-                  ] as const
-                ).map((tab) => (
-                  <Button
-                    key={tab.value}
-                    variant={
-                      eventsCache.eventsBucket === tab.value
-                        ? ButtonVariant.PRIMARY
-                        : ButtonVariant.SECONDARY
-                    }
-                    size={ButtonSize.SM}
-                    onClick={() => eventsCache.setEventsBucket(tab.value)}
-                    className="rounded-xl text-xs"
-                  >
-                    {tab.label}
-                  </Button>
-                ))}
-              </div>
+          <ClubEventsSection
+            eventsCache={eventsCache}
+            eventMetaById={eventMetaById}
+            joinedEventIds={joinedEventIds}
+            joiningEventId={joiningEventId}
+            onJoinEvent={handleJoinEvent}
+            onOpenEvent={onOpenEvent}
+          />
 
-              {eventsCache.isFirstPageLoading ? (
-                <p className="text-sm text-neutral-500 py-4">
-                  Загрузка мероприятий...
-                </p>
-              ) : null}
-
-              {eventsCache.isError ? (
-                <ErrorState
-                  title="Не удалось загрузить мероприятия клуба"
-                  onRetry={eventsCache.refetchEvents}
-                />
-              ) : null}
-
-              {!eventsCache.isLoading &&
-              !eventsCache.isError &&
-              eventsCache.eventsCache[eventsCache.eventsBucket].length === 0 ? (
-                <p className="text-sm text-neutral-500 py-4">
-                  В этой секции пока нет мероприятий.
-                </p>
-              ) : null}
-
-              {eventsCache.eventsCache[eventsCache.eventsBucket].length > 0 && (
-                <div className="space-y-2 mt-3">
-                  {eventsCache.eventsCache[eventsCache.eventsBucket].map(
-                    (event) => (
-                      <button
-                        key={event.id}
-                        type="button"
-                        className="w-full rounded-2xl border border-neutral-200 bg-white p-3 text-left hover:bg-neutral-50 transition min-h-[64px]"
-                        onClick={() => onOpenEvent?.(event.id)}
-                      >
-                        <p className="font-semibold text-neutral-900 text-[15px]">
-                          {event.title}
-                        </p>
-                        <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-neutral-500">
-                          <span className="event-time-chip event-time-chip--on-light">
-                            <Clock className="h-3.5 w-3.5" />
-                            {formatEventTime(event.startsAtUtc)}
-                          </span>
-                          <span>•</span>
-                          <span>{event.participantsCount} участников</span>
-                          {event.minLevel !== null && (
-                            <MinLevelBadge minLevel={event.minLevel} />
-                          )}
-                        </div>
-                      </button>
-                    ),
-                  )}
-                </div>
-              )}
-
-              {eventsCache.hasMore && (
-                <Button
-                  variant={ButtonVariant.SECONDARY}
-                  size={ButtonSize.MD}
-                  fullWidth
-                  onClick={eventsCache.loadNextPage}
-                  isLoading={
-                    eventsCache.isLoading && !eventsCache.isFirstPageLoading
-                  }
-                  className="mt-3 rounded-full"
-                >
-                  Показать еще
-                </Button>
-              )}
+          {eventHint && (
+            <div className="rounded-2xl border border-red-200 bg-red-100 p-4">
+              <p className="text-sm font-medium text-red-700" role="status">
+                {eventHint}
+              </p>
             </div>
-          </div>
+          )}
 
           <div className="space-y-2">
             <h3 className={SECTION_TITLE_CLASS}>Описание</h3>

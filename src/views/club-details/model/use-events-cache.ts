@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import {
   type ClubEventBucket,
@@ -8,79 +8,82 @@ import {
   useClubEventsQuery,
 } from '@/entities/club/api';
 
-const EVENTS_PAGE_SIZE = 6;
+const EVENTS_PAGE_SIZE = 30;
 
-type UseEventsCacheResult = {
+export type UseEventsCacheResult = {
   eventsBucket: ClubEventBucket;
   setEventsBucket: (bucket: ClubEventBucket) => void;
   eventsCache: Record<ClubEventBucket, ClubEventListItem[]>;
-  hasMore: boolean;
+  eventsTotals: Record<ClubEventBucket, number>;
   isLoading: boolean;
   isError: boolean;
   isFirstPageLoading: boolean;
-  loadNextPage: () => void;
   refetchEvents: () => void;
 };
 
 export function useEventsCache(clubId: string): UseEventsCacheResult {
   const [eventsBucket, setEventsBucketState] =
     useState<ClubEventBucket>('upcoming');
-  const [eventsPage, setEventsPage] = useState<Record<ClubEventBucket, number>>(
-    { upcoming: 1, ongoing: 1, past: 1 },
-  );
-  const [eventsCache, setEventsCache] = useState<
-    Record<ClubEventBucket, ClubEventListItem[]>
-  >({ upcoming: [], ongoing: [], past: [] });
 
-  const clubEvents = useClubEventsQuery({
+  const upcomingEvents = useClubEventsQuery({
     clubId,
-    bucket: eventsBucket,
-    page: eventsPage[eventsBucket],
+    bucket: 'upcoming',
+    page: 1,
+    limit: EVENTS_PAGE_SIZE,
+  });
+  const ongoingEvents = useClubEventsQuery({
+    clubId,
+    bucket: 'ongoing',
+    page: 1,
+    limit: EVENTS_PAGE_SIZE,
+  });
+  const pastEvents = useClubEventsQuery({
+    clubId,
+    bucket: 'past',
+    page: 1,
     limit: EVENTS_PAGE_SIZE,
   });
 
-  // Сбрасываем кэш при смене таба и накапливаем при пагинации
-  useEffect(() => {
-    const eventsData = clubEvents.data;
-    if (!eventsData) return;
-    setEventsCache((prev) => {
-      const current = prev[eventsBucket];
-      const nextItems =
-        eventsPage[eventsBucket] === 1
-          ? eventsData.items
-          : [
-              ...current,
-              ...eventsData.items.filter(
-                (item: ClubEventListItem) =>
-                  !current.some((existing) => existing.id === item.id),
-              ),
-            ];
-      return { ...prev, [eventsBucket]: nextItems };
-    });
-  }, [clubEvents.data, eventsBucket, eventsPage]);
+  const queryByBucket = useMemo(
+    () => ({
+      upcoming: upcomingEvents,
+      ongoing: ongoingEvents,
+      past: pastEvents,
+    }),
+    [ongoingEvents, pastEvents, upcomingEvents],
+  );
+  const activeQuery = queryByBucket[eventsBucket];
+
+  const eventsCache = useMemo<Record<ClubEventBucket, ClubEventListItem[]>>(
+    () => ({
+      upcoming: upcomingEvents.data?.items ?? [],
+      ongoing: ongoingEvents.data?.items ?? [],
+      past: pastEvents.data?.items ?? [],
+    }),
+    [ongoingEvents.data, pastEvents.data, upcomingEvents.data],
+  );
+
+  const eventsTotals = useMemo<Record<ClubEventBucket, number>>(
+    () => ({
+      upcoming: upcomingEvents.data?.total ?? 0,
+      ongoing: ongoingEvents.data?.total ?? 0,
+      past: pastEvents.data?.total ?? 0,
+    }),
+    [ongoingEvents.data, pastEvents.data, upcomingEvents.data],
+  );
 
   function setEventsBucket(bucket: ClubEventBucket): void {
     setEventsBucketState(bucket);
-    // Сброс на первую страницу при смене таба
-    setEventsPage((prev) => ({ ...prev, [bucket]: 1 }));
-  }
-
-  function loadNextPage(): void {
-    setEventsPage((prev) => ({
-      ...prev,
-      [eventsBucket]: prev[eventsBucket] + 1,
-    }));
   }
 
   return {
     eventsBucket,
     setEventsBucket,
     eventsCache,
-    hasMore: clubEvents.data?.hasMore ?? false,
-    isLoading: clubEvents.isLoading,
-    isError: clubEvents.isError,
-    isFirstPageLoading: clubEvents.isLoading && eventsPage[eventsBucket] === 1,
-    loadNextPage,
-    refetchEvents: () => void clubEvents.refetch(),
+    eventsTotals,
+    isLoading: activeQuery.isLoading,
+    isError: activeQuery.isError,
+    isFirstPageLoading: activeQuery.isLoading && !activeQuery.data,
+    refetchEvents: () => void activeQuery.refetch(),
   };
 }
