@@ -8,7 +8,7 @@ import {
   useClubEventsQuery,
 } from '@/entities/club/api';
 
-const EVENTS_PAGE_SIZE = 30;
+const EVENTS_PAGE_SIZE = 20;
 
 export type UseEventsCacheResult = {
   eventsBucket: ClubEventBucket;
