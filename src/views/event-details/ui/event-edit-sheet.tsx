@@ -402,10 +402,10 @@ export const EventEditSheet: FC<Props> = ({
 
             <Button
               type="button"
-              variant={ButtonVariant.SECONDARY}
+              variant={ButtonVariant.DESTRUCTIVE}
               size={ButtonSize.LG}
               fullWidth
-              className="rounded-full text-lg font-bold !bg-red-600 !text-white !shadow-none hover:!bg-red-700 border-0"
+              className="rounded-full"
               onClick={onCancelEvent}
             >
               Отменить ивент

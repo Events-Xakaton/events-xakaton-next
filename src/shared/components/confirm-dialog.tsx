@@ -60,19 +60,19 @@ export const ConfirmDialog: FC<Props> = ({
       <Card
         variant={CardVariant.ELEVATED}
         padding={CardPadding.LG}
-        className="w-full max-w-sm"
+        className="w-full max-w-sm !bg-white !border-neutral-200 !shadow-xl"
       >
-        <CardTitle id="confirm-dialog-title" className="text-base">
+        <CardTitle id="confirm-dialog-title" className="text-base !text-neutral-900">
           {title}
         </CardTitle>
         {description && (
-          <CardDescription id="confirm-dialog-description" className="mt-2">
+          <CardDescription id="confirm-dialog-description" className="mt-2 !text-neutral-500">
             {description}
           </CardDescription>
         )}
         <div className="confirm-dialog__actions">
           <Button
-            className="flex-1"
+            className="flex-1 !bg-neutral-100 !border-neutral-200 !text-neutral-900 hover:!bg-neutral-200"
             variant={ButtonVariant.SECONDARY}
             onClick={onCancel}
             disabled={loading}

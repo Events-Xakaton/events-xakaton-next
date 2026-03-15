@@ -30,6 +30,7 @@ import { MinLevelBadge } from '@/shared/components/min-level-badge';
 import { PreviewCard } from '@/shared/components/preview-card';
 import { formatDateTimeDisplay } from '@/shared/lib/date-format';
 import { openLocationLink, parseLocationLink } from '@/shared/lib/location-link';
+import { getTelegramProfileFallback } from '@/shared/lib/telegram';
 import { useTelegramBackButton } from '@/shared/lib/telegram/useTelegramButtons';
 import {
   ADAPTIVE_VIEWPORT_HEIGHT,
@@ -86,6 +87,9 @@ export function EventDetails({
   );
 
   // Хук должен вызываться до любых early return — используем безопасные дефолты пока event не загружен
+  const currentUser = getTelegramProfileFallback();
+  const isCreator =
+    !!event && event.creatorTelegramUserId === currentUser.telegramUserId;
   const joined = actions.joinedOverride ?? event?.joinedByMe ?? false;
   const canJoinResult = useCanJoin(
     {
@@ -368,6 +372,14 @@ export function EventDetails({
                       ? 'Событие отменено'
                       : 'Событие прошло'}
                   </Button>
+                ) : isCreator ? (
+                  // Создатель не может покинуть событие — показываем статус без кнопок
+                  <div className="flex w-full items-center justify-center gap-2 rounded-full border border-primary-200 bg-primary-50 px-6 py-3">
+                    <Check className="h-4 w-4 text-primary-600" aria-hidden="true" />
+                    <span className="text-sm font-semibold text-primary-700">
+                      Вы организатор
+                    </span>
+                  </div>
                 ) : joined ? (
                   <Button
                     variant={ButtonVariant.SECONDARY}
