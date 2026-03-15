@@ -20,7 +20,6 @@ import { InlineTitleEditor } from '@/shared/components/inline-title-editor';
 import { LevelSelect } from '@/shared/components/level-select';
 import { PreviewCard } from '@/shared/components/preview-card';
 import { formatDateTimeDisplay } from '@/shared/lib/date-format';
-import { useViewportMode } from '@/shared/lib/telegram/useViewportMode';
 import {
   ADAPTIVE_VIEWPORT_HEIGHT,
   APP_PANEL_SHADOW_CLASS,
@@ -40,9 +39,12 @@ const SECTION_CARD = APP_SECTION_CARD_CLASS;
 const DETAIL_LABEL_WIDTH = 'w-[58%] min-w-[176px] pr-2';
 const SECTION_TITLE_CLASS = 'text-lg font-semibold text-neutral-900';
 
-export function CreateScreen() {
-  const mode = useViewportMode();
-  const [tab, setTab] = useState<CreateTab>('event');
+export function CreateScreen({
+  initialTab = 'event',
+}: {
+  initialTab?: CreateTab;
+}) {
+  const [tab, setTab] = useState<CreateTab>(initialTab);
   const [isCreateTypeOpen, setIsCreateTypeOpen] = useState(false);
   const createTypeRef = useRef<HTMLDivElement>(null);
 
@@ -78,6 +80,10 @@ export function CreateScreen() {
     return () => document.removeEventListener('mousedown', onClickOutside);
   }, []);
 
+  useEffect(() => {
+    setTab(initialTab);
+  }, [initialTab]);
+
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
     if (tab === 'event') {
@@ -87,7 +93,17 @@ export function CreateScreen() {
     }
   }
 
-  const titleForPreview = eventForm.title.trim() || 'Настолки в офисе';
+  const eventTitleValue = eventForm.title.trim();
+  const isEventTitlePlaceholder = eventTitleValue.length === 0;
+  const eventTitleForPreview = isEventTitlePlaceholder
+    ? 'Название ивента'
+    : eventTitleValue;
+
+  const clubTitleValue = clubForm.title.trim();
+  const isClubTitlePlaceholder = clubTitleValue.length === 0;
+  const clubTitleForPreview = isClubTitlePlaceholder
+    ? 'Название клуба'
+    : clubTitleValue;
 
   return (
     <div
@@ -180,7 +196,8 @@ export function CreateScreen() {
         >
           <PreviewCard
             background={eventForm.coverBackground}
-            title={titleForPreview}
+            title={eventTitleForPreview}
+            isTitlePlaceholder={isEventTitlePlaceholder}
             onChangeBackground={eventForm.changeCoverSeed}
             titleEditing={eventForm.showTitleEditor}
             onTitleClick={() => eventForm.setShowTitleEditor(true)}
@@ -431,7 +448,8 @@ export function CreateScreen() {
         >
           <PreviewCard
             background={clubForm.coverBackground}
-            title={clubForm.title.trim() || 'Новый клуб'}
+            title={clubTitleForPreview}
+            isTitlePlaceholder={isClubTitlePlaceholder}
             subtitle={clubForm.description.trim() || undefined}
             onChangeBackground={clubForm.changeCoverSeed}
             titleEditing={clubForm.showTitleEditor}
