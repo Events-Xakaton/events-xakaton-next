@@ -31,7 +31,6 @@ import { EasterEggButton } from './ui/easter-egg-button';
 
 const FEED_CARD_HORIZONTAL_PADDING_PX = 8;
 const CARD_CONTENT_HORIZONTAL_PADDING_PX = 20;
-const CARD_CONTENT_VERTICAL_PADDING_TOP_PX = 24;
 
 export function HomeScreen({
   isUnlocked,
@@ -188,7 +187,7 @@ export function HomeScreen({
         <div
           className="fixed z-fixed pointer-events-none"
           style={{
-            top: `calc(${feedLayout.feedTopOffset} + ${CARD_CONTENT_VERTICAL_PADDING_TOP_PX}px)`,
+            top: `calc(${feedLayout.feedTopOffset} + ${CARD_CONTENT_HORIZONTAL_PADDING_PX}px)`,
             right: `${FEED_CARD_HORIZONTAL_PADDING_PX + CARD_CONTENT_HORIZONTAL_PADDING_PX}px`,
           }}
         >
@@ -197,7 +196,7 @@ export function HomeScreen({
               type="button"
               onClick={() => setFilterOpen((v) => !v)}
               className={cn(
-                'inline-flex min-h-[44px] items-center gap-1.5 rounded-full border border-neutral-300 bg-white/95 backdrop-blur-sm px-3! text-xs font-semibold text-neutral-900 focus-visible:outline-none focus-visible:ring-0',
+                'inline-flex min-h-[44px] items-center gap-1.5 rounded-full border border-neutral-300 bg-white! px-3! text-xs font-semibold text-neutral-900 focus-visible:outline-none focus-visible:ring-0',
                 APP_FLOAT_SHADOW_CLASS,
               )}
               aria-label="Фильтр по дате"

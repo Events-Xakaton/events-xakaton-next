@@ -5,10 +5,24 @@ import { useEffect, useState } from 'react';
 import { useLuckyWheelStreakQuery } from '@/entities/event/api';
 import type { LuckyWheelStreakRes } from '@/entities/event/api';
 
-// В Telegram Mini App localStorage не сохраняется между открытиями приложения,
-// поэтому используем sessionStorage — он живёт ровно одну сессию (одно открытие WebView).
-// Показываем модалку один раз за сессию, что и есть «один раз за открытие приложения».
-const SESSION_KEY = 'streak_modal_shown';
+const STORAGE_KEY = 'streak_modal_shown_date';
+
+type TgCloudStorage = {
+  getItem: (key: string, callback: (err: unknown, value: string) => void) => void;
+  setItem: (key: string, value: string, callback?: () => void) => void;
+};
+
+function getTgCloudStorage(): TgCloudStorage | undefined {
+  return (
+    window as Window & {
+      Telegram?: { WebApp?: { CloudStorage?: TgCloudStorage } };
+    }
+  ).Telegram?.WebApp?.CloudStorage;
+}
+
+function getTodayDateString(): string {
+  return new Date().toISOString().slice(0, 10); // 'YYYY-MM-DD'
+}
 
 type UseLoginStreakModalResult = {
   open: boolean;
@@ -17,12 +31,10 @@ type UseLoginStreakModalResult = {
 };
 
 export function useLoginStreakModal(): UseLoginStreakModalResult {
-  const [alreadyShown] = useState<boolean>(() => {
-    if (typeof window === 'undefined') return true;
-    return sessionStorage.getItem(SESSION_KEY) === '1';
-  });
+  // Пока проверяем CloudStorage — держим запрос на паузе
+  const [checking, setChecking] = useState(true);
+  const [alreadyShown, setAlreadyShown] = useState(false);
 
-  // Показываем только если пасхалка активирована
   const [isLuckyUnlocked] = useState<boolean>(() => {
     if (typeof window === 'undefined') return false;
     return localStorage.getItem('lucky_wheel_unlocked') === '1';
@@ -30,14 +42,43 @@ export function useLoginStreakModal(): UseLoginStreakModalResult {
 
   const [open, setOpen] = useState(false);
 
+  useEffect(() => {
+    const today = getTodayDateString();
+
+    // localStorage — быстрая синхронная проверка (персистится на большинстве устройств)
+    if (localStorage.getItem(STORAGE_KEY) === today) {
+      setAlreadyShown(true);
+      setChecking(false);
+      return;
+    }
+
+    // CloudStorage — кросс-девайс fallback
+    const cloudStorage = getTgCloudStorage();
+    if (!cloudStorage) {
+      setChecking(false);
+      return;
+    }
+
+    cloudStorage.getItem(STORAGE_KEY, (err, value) => {
+      if (!err && value === today) {
+        localStorage.setItem(STORAGE_KEY, today);
+        setAlreadyShown(true);
+      }
+      setChecking(false);
+    });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   const { data, isSuccess } = useLuckyWheelStreakQuery(undefined, {
-    skip: alreadyShown || !isLuckyUnlocked,
+    skip: checking || alreadyShown || !isLuckyUnlocked,
   });
 
   useEffect(() => {
     if (isSuccess && data && !alreadyShown) {
       setOpen(true);
-      sessionStorage.setItem(SESSION_KEY, '1');
+      // Записываем сегодняшнюю дату в оба хранилища
+      const today = getTodayDateString();
+      localStorage.setItem(STORAGE_KEY, today);
+      getTgCloudStorage()?.setItem(STORAGE_KEY, today);
     }
   }, [isSuccess, data, alreadyShown]);
 

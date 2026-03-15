@@ -46,15 +46,17 @@ h6 {
 }
 
 /* Remove default button styles */
-button {
-  font-family: inherit;
-  font-size: inherit;
-  line-height: inherit;
-  color: inherit;
-  background: transparent;
-  border: none;
-  padding: 0;
-  cursor: pointer;
+@layer base {
+  button {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    color: inherit;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+  }
 }
 
 /* Hide scrollbars globally while preserving scroll behavior */
@@ -93,6 +95,19 @@ button {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* Z-index утилиты (не входят в Tailwind v4 по умолчанию) */
+@utility z-dropdown {
+  z-index: 1000;
+}
+
+@utility z-fixed {
+  z-index: 1030;
+}
+
+@utility z-popover {
+  z-index: 1060;
 }
 
 /* Utility Classes */

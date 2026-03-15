@@ -8,6 +8,6 @@ export const WHEEL_COLORS = {
   pointer: { start: '#FFFFFF', end: '#EAE0FF' },
   // Светлый центр
   centralPoint: '#F0EAFF',
-  // Чередование: средний и светлый фиолетовый — читаемо, не мрачно
-  segments: ['#7048C8', '#C4B0F0', '#8B5EC4', '#DDD0FF'],
+  // 8 уникальных цветов — циклически применяются к 12 сегментам
+  segments: ['#E07070', '#5B6FD4', '#F4A261', '#C970B0', '#5BC4D4', '#7B52C1', '#5BD4A0', '#A78BDA'],
 } as const;

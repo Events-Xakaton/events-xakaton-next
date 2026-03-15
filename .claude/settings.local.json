@@ -37,7 +37,8 @@
       "Bash(cd:*)",
       "Bash(find:*)",
       "Bash(node:*)",
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Bash(grep:*)"
     ]
   }
 }
