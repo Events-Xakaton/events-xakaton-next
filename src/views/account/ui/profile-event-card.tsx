@@ -7,9 +7,6 @@ import { useMemo } from 'react';
 import { type EventCard } from '@/entities/event/api';
 
 import {
-  Badge,
-  BadgeSize,
-  BadgeVariant,
   Button,
   ButtonSize,
   ButtonVariant,
@@ -44,17 +41,13 @@ export const ProfileEventCard: FC<Props> = ({ event, onOpenEvent }) => {
       <div className={cn('absolute inset-0', APP_FEED_SCRIM_CLASS)} />
 
       <div className="relative flex h-full flex-col p-5 pb-6">
-        <Badge
-          variant={BadgeVariant.OUTLINE}
-          size={BadgeSize.SM}
-          className="self-start bg-white/95 border-white/30 text-zinc-900 backdrop-blur-sm shadow-sm gap-1.5"
-        >
+        <span className="event-time-chip self-start">
           <Clock className="h-3.5 w-3.5" />
           {formatLocalDateTime(event.startsAtUtc)}
-        </Badge>
+        </span>
 
         <div className="mt-auto">
-          <h2 className="font-display text-4xl leading-[0.98] tracking-tight text-white drop-shadow-lg line-clamp-2">
+          <h2 className="profile-card-title font-display text-4xl leading-[0.98] tracking-tight text-white drop-shadow-lg">
             {event.title}
           </h2>
           <p className="mt-2 flex items-center gap-2 text-sm text-white/90 drop-shadow">
@@ -76,10 +69,10 @@ export const ProfileEventCard: FC<Props> = ({ event, onOpenEvent }) => {
             variant={ButtonVariant.SECONDARY}
             size={ButtonSize.MD}
             onClick={() => onOpenEvent(event.id)}
-            className="ml-auto rounded-full border-white/25 bg-white/90 p-3 text-zinc-900 shadow-md hover:bg-white"
+            className="ml-auto rounded-full border-white/25 bg-white! p-3 text-zinc-900! shadow-md"
             aria-label={`Посмотреть детали ивента ${event.title}`}
           >
-            <ChevronRight className="h-5 w-5" />
+            <ChevronRight className="h-5 w-5" aria-hidden="true" />
           </Button>
         </div>
       </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import { CalendarDays, Plus, Users } from 'lucide-react';
+import { Clock, Plus, Users } from 'lucide-react';
 import type { ReactElement } from 'react';
 import { useMemo } from 'react';
 
@@ -292,8 +292,10 @@ export function ClubDetails({
                           {event.title}
                         </p>
                         <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-neutral-500">
-                          <CalendarDays className="h-4 w-4" />
-                          <span>{formatEventTime(event.startsAtUtc)}</span>
+                          <span className="event-time-chip event-time-chip--on-light">
+                            <Clock className="h-3.5 w-3.5" />
+                            {formatEventTime(event.startsAtUtc)}
+                          </span>
                           <span>•</span>
                           <span>{event.participantsCount} участников</span>
                           {event.minLevel !== null && (
