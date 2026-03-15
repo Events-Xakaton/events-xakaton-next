@@ -49,6 +49,8 @@ import { EventEditSheet } from './ui/event-edit-sheet';
 
 const SECTION_CARD = APP_SECTION_CARD_CLASS;
 const SECTION_TITLE_CLASS = 'text-lg font-semibold text-neutral-900';
+const HERO_ACTION_BUTTON_CLASS =
+  'inline-flex h-7 items-center gap-1.5 rounded-full border border-white/45 bg-white/20 px-3 text-[11px] font-semibold tracking-[0.02em] text-white backdrop-blur-sm transition hover:bg-white/30 disabled:cursor-not-allowed disabled:opacity-70';
 
 export type EventDetailsProps = {
   id: string;
@@ -188,29 +190,31 @@ export function EventDetails({
             showChangeBackgroundButton={false}
             extraActions={
               showHeroJoinButton || canEdit ? (
-                <div className="inline-flex items-center gap-2">
+                <div className="inline-flex flex-col items-end gap-2">
                   {showHeroJoinButton ? (
                     joined ? (
-                      <Button
-                        variant={ButtonVariant.SECONDARY}
-                        size={ButtonSize.MD}
+                      <button
+                        type="button"
                         disabled
-                        className="h-11 w-11 min-h-[44px] min-w-[44px] rounded-full !border-emerald-300/30 !bg-emerald-500/75 px-0! py-0! !text-white disabled:opacity-100"
+                        className={HERO_ACTION_BUTTON_CLASS}
                         aria-label={`Вы участвуете в ивенте ${event.title}`}
                       >
                         <Check className="h-4 w-4" aria-hidden="true" />
-                      </Button>
+                        Вы участвуете
+                      </button>
                     ) : (
-                      <Button
-                        variant={ButtonVariant.PRIMARY}
-                        size={ButtonSize.MD}
+                      <button
+                        type="button"
                         onClick={() => actions.handleJoin(fromLuckyWheel)}
-                        isLoading={actions.joinState.isLoading}
-                        className="h-11 w-11 min-h-[44px] min-w-[44px] rounded-full px-0! py-0!"
+                        disabled={actions.joinState.isLoading}
+                        className={HERO_ACTION_BUTTON_CLASS}
                         aria-label={`Участвовать в ивенте ${event.title}`}
                       >
                         <Plus className="h-5 w-5" aria-hidden="true" />
-                      </Button>
+                        {actions.joinState.isLoading
+                          ? 'Участвую...'
+                          : 'Участвовать'}
+                      </button>
                     )
                   ) : null}
 
@@ -218,7 +222,7 @@ export function EventDetails({
                     <button
                       type="button"
                       onClick={editSheet.open}
-                      className="inline-flex h-7 items-center gap-1.5 rounded-full border border-white/45 bg-white/20 px-3 text-[11px] font-semibold tracking-[0.02em] text-white backdrop-blur-sm transition hover:bg-white/30"
+                      className={HERO_ACTION_BUTTON_CLASS}
                     >
                       <Pencil className="h-3.5 w-3.5" aria-hidden="true" />
                       Редактировать ивент
