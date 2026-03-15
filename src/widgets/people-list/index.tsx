@@ -30,8 +30,9 @@ export function PeopleList({
   previewCount?: number;
 }) {
   const [expanded, setExpanded] = useState(false);
-  const [follow, followState] = useFollowMutation();
-  const [unfollow, unfollowState] = useUnfollowMutation();
+  const [loadingUserId, setLoadingUserId] = useState<string | null>(null);
+  const [follow] = useFollowMutation();
+  const [unfollow] = useUnfollowMutation();
   const currentUser = getTelegramProfileFallback();
   const visibleRows = useMemo(() => {
     if (!previewCount || expanded) return rows;
@@ -88,18 +89,14 @@ export function PeopleList({
                           : ButtonVariant.PRIMARY
                       }
                       size={ButtonSize.SM}
-                      disabled={
-                        followState.isLoading || unfollowState.isLoading
-                      }
-                      isLoading={
-                        followState.isLoading || unfollowState.isLoading
-                      }
+                      disabled={loadingUserId === row.telegramUserId}
+                      isLoading={loadingUserId === row.telegramUserId}
                       onClick={() => {
-                        if (row.followedByMe) {
-                          void unfollow({ telegramUserId: row.telegramUserId });
-                        } else {
-                          void follow({ telegramUserId: row.telegramUserId });
-                        }
+                        setLoadingUserId(row.telegramUserId);
+                        const mutation = row.followedByMe
+                          ? unfollow({ telegramUserId: row.telegramUserId })
+                          : follow({ telegramUserId: row.telegramUserId });
+                        void mutation.finally(() => setLoadingUserId(null));
                       }}
                       className="rounded-full"
                     >

@@ -10,6 +10,8 @@ import { ClubFeedCard } from '@/entities/club/ui/club-feed-card';
 import { useEventsQuery } from '@/entities/event/api';
 import { EventFeedCard } from '@/entities/event/ui/event-feed-card';
 
+import { useBalanceQuery } from '@/shared/api/gamification-api';
+
 import { Button, ButtonVariant } from '@/shared/components/button';
 import { ErrorState } from '@/shared/components/error-state';
 import { useViewportMode } from '@/shared/lib/telegram/useViewportMode';
@@ -61,6 +63,8 @@ export function HomeScreen({
 
   const events = useEventsQuery();
   const clubs = useClubsQuery();
+  const { data: balance } = useBalanceQuery();
+  const userLevel = balance?.rank?.level ?? 1;
 
   const filter = useEventFilter(events.data);
   const feedActions = useFeedActions(() => void clubs.refetch());
@@ -270,6 +274,7 @@ export function HomeScreen({
                     onJoin={feedActions.handleJoinEvent}
                     onOpenEvent={onOpenEvent}
                     cardStyle={FEED_CARD_STYLE}
+                    userLevel={userLevel}
                   />
                 ))
               : clubsItems.map((club) => (

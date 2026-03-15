@@ -47,6 +47,12 @@ export function EventFeedCard({
     return { background: getEventGradient(event.id) };
   }, [event.coverSeed, event.id]);
 
+  const levelBlocked =
+    !joined &&
+    event.minLevel !== null &&
+    userLevel !== undefined &&
+    userLevel < event.minLevel;
+
   return (
     <article
       className={cn('event-feed-card', !noShadow && APP_ELEVATED_CARD_CLASS)}
@@ -91,7 +97,7 @@ export function EventFeedCard({
         </div>
 
         <div className="event-feed-card__actions">
-          {!hideJoinButton && (
+          {!hideJoinButton && !levelBlocked && (
             <>
               {joined ? (
                 <Button
