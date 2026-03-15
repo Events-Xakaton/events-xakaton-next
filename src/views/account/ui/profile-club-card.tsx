@@ -1,7 +1,7 @@
 'use client';
 
 import { ChevronRight, Users } from 'lucide-react';
-import type { FC } from 'react';
+import type { FC, MouseEvent } from 'react';
 import { useMemo } from 'react';
 
 import { type ClubCard } from '@/entities/club/api';
@@ -29,13 +29,30 @@ export const ProfileClubCard: FC<Props> = ({ club, onOpenClub }) => {
     return { background: getClubGradient(club.id) };
   }, [club.coverSeed, club.id]);
 
+  const handleOpenDetails = () => {
+    onOpenClub(club.id);
+  };
+
+  const handleCardClick = (clickEvent: MouseEvent<HTMLElement>) => {
+    const target = clickEvent.target as HTMLElement | null;
+    if (
+      target?.closest(
+        'button, a, input, textarea, select, [role="button"], [role="link"]',
+      )
+    ) {
+      return;
+    }
+    handleOpenDetails();
+  };
+
   return (
     <article
-      className="relative h-[240px] overflow-hidden rounded-[30px] border border-neutral-200"
+      className="relative h-[240px] cursor-pointer overflow-hidden rounded-[30px] border border-neutral-200"
       style={cardBackgroundStyle}
       role="article"
       aria-label={`Клуб: ${club.title}`}
       data-feed-card="club"
+      onClick={handleCardClick}
     >
       <div className={cn('absolute inset-0', APP_FEED_SCRIM_CLASS)} />
 
@@ -62,7 +79,7 @@ export const ProfileClubCard: FC<Props> = ({ club, onOpenClub }) => {
         <Button
           variant={ButtonVariant.SECONDARY}
           size={ButtonSize.MD}
-          onClick={() => onOpenClub(club.id)}
+          onClick={handleOpenDetails}
           className="absolute right-5 bottom-6 rounded-full border-white/25 bg-white! p-3 text-zinc-900! shadow-md"
           aria-label={`Посмотреть детали клуба ${club.title}`}
         >

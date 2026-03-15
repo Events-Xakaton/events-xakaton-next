@@ -1,7 +1,7 @@
 'use client';
 
 import { Check, ChevronRight, Plus } from 'lucide-react';
-import type { ReactElement } from 'react';
+import type { MouseEvent, ReactElement } from 'react';
 import { useMemo } from 'react';
 
 import { Button, ButtonSize, ButtonVariant } from '@/shared/components/button';
@@ -52,6 +52,22 @@ export function ClubFeedCard({
     return { background: getClubGradient(club.id) };
   }, [club.coverUrl, club.coverSeed, club.id]);
 
+  const handleOpenDetails = () => {
+    onOpenClub(club.id);
+  };
+
+  const handleCardClick = (clickEvent: MouseEvent<HTMLElement>) => {
+    const target = clickEvent.target as HTMLElement | null;
+    if (
+      target?.closest(
+        'button, a, input, textarea, select, [role="button"], [role="link"]',
+      )
+    ) {
+      return;
+    }
+    handleOpenDetails();
+  };
+
   return (
     <article
       className={cn('club-feed-card', !noShadow && APP_ELEVATED_CARD_CLASS)}
@@ -59,6 +75,7 @@ export function ClubFeedCard({
       role="article"
       aria-label={`Клуб: ${club.title}`}
       data-feed-card="club"
+      onClick={handleCardClick}
     >
       <div className={cn('club-feed-card__scrim', APP_FEED_SCRIM_CLASS)} />
 
@@ -116,7 +133,7 @@ export function ClubFeedCard({
           <Button
             variant={ButtonVariant.SECONDARY}
             size={ButtonSize.MD}
-            onClick={() => onOpenClub(club.id)}
+            onClick={handleOpenDetails}
             className="ml-auto rounded-full border-white/25 bg-white! px-5! py-2.5! text-[15px]! font-semibold text-zinc-900! shadow-md"
             aria-label={`Посмотреть детали клуба ${club.title}`}
           >

@@ -1,7 +1,7 @@
 'use client';
 
 import { ChevronRight, Clock, Users } from 'lucide-react';
-import type { FC } from 'react';
+import type { FC, MouseEvent } from 'react';
 import { useMemo } from 'react';
 
 import { type EventCard } from '@/entities/event/api';
@@ -30,13 +30,30 @@ export const ProfileEventCard: FC<Props> = ({ event, onOpenEvent }) => {
     return { background: getEventGradient(event.id) };
   }, [event.coverSeed, event.id]);
 
+  const handleOpenDetails = () => {
+    onOpenEvent(event.id);
+  };
+
+  const handleCardClick = (clickEvent: MouseEvent<HTMLElement>) => {
+    const target = clickEvent.target as HTMLElement | null;
+    if (
+      target?.closest(
+        'button, a, input, textarea, select, [role="button"], [role="link"]',
+      )
+    ) {
+      return;
+    }
+    handleOpenDetails();
+  };
+
   return (
     <article
-      className="relative h-[240px] overflow-hidden rounded-[30px] border border-neutral-200"
+      className="relative h-[240px] cursor-pointer overflow-hidden rounded-[30px] border border-neutral-200"
       style={cardBackgroundStyle}
       role="article"
       aria-label={`Событие: ${event.title}`}
       data-feed-card="event"
+      onClick={handleCardClick}
     >
       <div className={cn('absolute inset-0', APP_FEED_SCRIM_CLASS)} />
 
@@ -67,7 +84,7 @@ export const ProfileEventCard: FC<Props> = ({ event, onOpenEvent }) => {
         <Button
           variant={ButtonVariant.SECONDARY}
           size={ButtonSize.MD}
-          onClick={() => onOpenEvent(event.id)}
+          onClick={handleOpenDetails}
           className="absolute right-5 bottom-6 rounded-full border-white/25 bg-white! p-3 text-zinc-900! shadow-md"
           aria-label={`Посмотреть детали ивента ${event.title}`}
         >
