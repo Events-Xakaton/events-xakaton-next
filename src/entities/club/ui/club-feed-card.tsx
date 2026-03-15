@@ -39,11 +39,18 @@ export function ClubFeedCard({
     typeof joinedOverride === 'boolean' ? joinedOverride : club.joinedByMe;
 
   const cardBackgroundStyle = useMemo(() => {
+    if (club.coverUrl) {
+      return {
+        backgroundImage: `url('${club.coverUrl}')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      };
+    }
     if (club.coverSeed) {
       return { background: buildGradient(club.coverSeed, 'club') };
     }
     return { background: getClubGradient(club.id) };
-  }, [club.coverSeed, club.id]);
+  }, [club.coverUrl, club.coverSeed, club.id]);
 
   return (
     <article

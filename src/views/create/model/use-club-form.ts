@@ -13,6 +13,7 @@ export function useClubForm() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [coverSeed, setCoverSeed] = useState(() => newSeed('club'));
+  const [coverUrl, setCoverUrl] = useState<string | null>(null);
   const [showTitleEditor, setShowTitleEditor] = useState(false);
   const [hint, setHint] = useState('');
 
@@ -24,10 +25,10 @@ export function useClubForm() {
     descriptionRef.current.style.height = `${descriptionRef.current.scrollHeight}px`;
   }, [description]);
 
-  const coverBackground = useMemo(
-    () => buildGradient(coverSeed, 'club'),
-    [coverSeed],
-  );
+  const coverBackground = useMemo(() => {
+    if (coverUrl) return `url('${coverUrl}') center / cover no-repeat`;
+    return buildGradient(coverSeed, 'club');
+  }, [coverUrl, coverSeed]);
 
   const canPublish = title.trim().length > 0 && description.trim().length > 0;
 
@@ -38,10 +39,11 @@ export function useClubForm() {
         title: title.trim(),
         description: description.trim(),
         categoryCode: 'general',
-        coverUrl: undefined,
+        coverUrl: coverUrl ?? undefined,
         coverSeed,
       }).unwrap();
       setHint(`Клуб создан: ${result.id}`);
+      setCoverUrl(null);
       setShowTitleEditor(false);
     } catch (error) {
       setHint(appErrorText(error, 'Не удалось создать клуб.'));
@@ -55,6 +57,8 @@ export function useClubForm() {
     setDescription,
     coverSeed,
     changeCoverSeed: () => setCoverSeed(newSeed('club')),
+    coverUrl,
+    setCoverUrl,
     showTitleEditor,
     setShowTitleEditor,
     hint,

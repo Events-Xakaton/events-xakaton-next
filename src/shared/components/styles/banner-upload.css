@@ -1,0 +1,34 @@
+@import '../../lib/styles/theme.css';
+
+.banner-upload {
+  @apply flex flex-col gap-3;
+
+  &__preview {
+    @apply relative w-full overflow-hidden rounded-2xl bg-neutral-100;
+    aspect-ratio: 16 / 9;
+  }
+
+  &__preview-img {
+    @apply h-full w-full object-cover;
+  }
+
+  &__empty {
+    @apply flex h-full w-full flex-col items-center justify-center gap-2 text-neutral-400;
+  }
+
+  &__empty-label {
+    @apply text-sm font-medium;
+  }
+
+  &__actions {
+    @apply flex items-center gap-2;
+  }
+
+  &__upload-btn {
+    @apply flex-1;
+  }
+
+  &__remove-btn {
+    @apply flex-1;
+  }
+}

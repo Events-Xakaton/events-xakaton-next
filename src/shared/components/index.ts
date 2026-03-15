@@ -50,6 +50,7 @@ export { MinLevelBadge, MinLevelBadgeSkeleton } from './min-level-badge';
 export { LevelSelect } from './level-select';
 
 export { PreviewCard } from './preview-card';
+export { BannerUpload } from './banner-upload';
 export { InlineTitleEditor } from './inline-title-editor';
 export { DescriptionSection } from './description-section';
 

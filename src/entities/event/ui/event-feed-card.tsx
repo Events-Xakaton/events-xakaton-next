@@ -38,13 +38,18 @@ export function EventFeedCard({
   userLevel?: number;
 }) {
   const cardBackgroundStyle = useMemo(() => {
-    // Если есть coverSeed — используем его
+    if (event.coverUrl) {
+      return {
+        backgroundImage: `url('${event.coverUrl}')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      };
+    }
     if (event.coverSeed) {
       return { background: buildGradient(event.coverSeed, 'event') };
     }
-    // Fallback для старых записей
     return { background: getEventGradient(event.id) };
-  }, [event.coverSeed, event.id]);
+  }, [event.coverUrl, event.coverSeed, event.id]);
 
   const levelBlocked =
     !joined &&

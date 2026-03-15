@@ -84,6 +84,9 @@ export function useEventActions(eventId: string) {
           ? { minLevel: fields.minLevel }
           : {}),
         coverSeed: fields.coverSeed,
+        ...(fields.coverUrl !== originalData?.coverUrl
+          ? { coverUrl: fields.coverUrl }
+          : {}),
         ...(fields.selectedClubId !== originalData?.clubId
           ? { clubId: fields.selectedClubId || null }
           : {}),

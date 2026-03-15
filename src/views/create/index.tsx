@@ -13,6 +13,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import { AppHeader, UserRankHeader } from '@/widgets/app-header';
 
+import { BannerUpload } from '@/shared/components/banner-upload';
 import { Button, ButtonSize } from '@/shared/components/button';
 import { DescriptionSection } from '@/shared/components/description-section';
 import { InlineTitleEditor } from '@/shared/components/inline-title-editor';
@@ -184,6 +185,12 @@ export function CreateScreen() {
             titleEditing={eventForm.showTitleEditor}
             onTitleClick={() => eventForm.setShowTitleEditor(true)}
             showEditIndicator
+            extraActions={
+              <BannerUpload
+                coverUrl={eventForm.coverUrl}
+                onChange={eventForm.setCoverUrl}
+              />
+            }
             titleEditor={
               eventForm.showTitleEditor ? (
                 <InlineTitleEditor
@@ -430,6 +437,12 @@ export function CreateScreen() {
             titleEditing={clubForm.showTitleEditor}
             onTitleClick={() => clubForm.setShowTitleEditor(true)}
             showEditIndicator
+            extraActions={
+              <BannerUpload
+                coverUrl={clubForm.coverUrl}
+                onChange={clubForm.setCoverUrl}
+              />
+            }
             titleEditor={
               clubForm.showTitleEditor ? (
                 <InlineTitleEditor

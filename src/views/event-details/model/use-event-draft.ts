@@ -19,6 +19,7 @@ export type UseEventDraftResult = {
   setStartsAt: (v: string) => void;
   setEndsAt: (v: string) => void;
   setMaxParticipants: (v: string) => void;
+  setCoverUrl: (v: string | null) => void;
   setCoverSeed: (v: string) => void;
   setMinLevel: (v: number | null) => void;
   setSelectedClubId: (v: string) => void;
@@ -44,6 +45,7 @@ export function useEventDraft(
   const [endsAt, setEndsAt] = useState('');
   const [maxParticipants, setMaxParticipants] = useState('');
   const [minLevel, setMinLevel] = useState<number | null>(null);
+  const [coverUrl, setCoverUrl] = useState<string | null>(null);
   const [coverSeed, setCoverSeed] = useState('');
   const [selectedClubId, setSelectedClubId] = useState('');
 
@@ -72,6 +74,7 @@ export function useEventDraft(
     setEndsAt(endsAtLocal);
     setMaxParticipants(maxPart);
     setMinLevel(event.minLevel);
+    setCoverUrl(event.coverUrl ?? null);
     setCoverSeed(seed);
     setSelectedClubId(event.clubId ?? '');
 
@@ -83,6 +86,7 @@ export function useEventDraft(
       endsAt: endsAtLocal,
       maxParticipants: maxPart,
       minLevel: event.minLevel,
+      coverUrl: event.coverUrl ?? null,
       coverSeed: seed,
       clubId: event.clubId ?? '',
     });
@@ -102,6 +106,7 @@ export function useEventDraft(
       endsAt !== originalData.endsAt ||
       norm(maxParticipants) !== norm(originalData.maxParticipants) ||
       minLevel !== originalData.minLevel ||
+      coverUrl !== originalData.coverUrl ||
       coverSeed !== originalData.coverSeed ||
       selectedClubId !== originalData.clubId;
 
@@ -114,6 +119,7 @@ export function useEventDraft(
     endsAt,
     maxParticipants,
     minLevel,
+    coverUrl,
     coverSeed,
     selectedClubId,
     originalData,
@@ -141,10 +147,10 @@ export function useEventDraft(
     return '';
   }, [startsAt, endsAt]);
 
-  const coverBackground = useMemo(
-    () => buildGradient(coverSeed, 'event'),
-    [coverSeed],
-  );
+  const coverBackground = useMemo(() => {
+    if (coverUrl) return `url('${coverUrl}') center / cover no-repeat`;
+    return buildGradient(coverSeed, 'event');
+  }, [coverUrl, coverSeed]);
 
   const hasRequiredFields =
     title.trim().length > 0 &&
@@ -164,6 +170,7 @@ export function useEventDraft(
       endsAt,
       maxParticipants,
       minLevel,
+      coverUrl,
       coverSeed,
       selectedClubId,
     },
@@ -174,6 +181,7 @@ export function useEventDraft(
     setEndsAt,
     setMaxParticipants,
     setMinLevel,
+    setCoverUrl,
     setCoverSeed,
     setSelectedClubId,
     originalData,

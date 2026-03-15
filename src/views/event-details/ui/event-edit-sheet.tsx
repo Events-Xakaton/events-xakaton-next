@@ -11,6 +11,7 @@ import type { CSSProperties, FC, RefObject } from 'react';
 
 import { type ClubEventAuthoring } from '@/entities/club/api';
 
+import { BannerUpload } from '@/shared/components/banner-upload';
 import { Button, ButtonSize, ButtonVariant } from '@/shared/components/button';
 import { DescriptionSection } from '@/shared/components/description-section';
 import { InlineTitleEditor } from '@/shared/components/inline-title-editor';
@@ -41,6 +42,7 @@ type Props = {
   setEndsAt: (v: string) => void;
   setMaxParticipants: (v: string) => void;
   setMinLevel: (v: number | null) => void;
+  setCoverUrl: (v: string | null) => void;
   setCoverSeed: (v: string) => void;
   setSelectedClubId: (v: string) => void;
   onShowTitleEditor: () => void;
@@ -68,6 +70,7 @@ export const EventEditSheet: FC<Props> = ({
   setEndsAt,
   setMaxParticipants,
   setMinLevel,
+  setCoverUrl,
   setCoverSeed,
   setSelectedClubId,
   onShowTitleEditor,
@@ -154,6 +157,12 @@ export const EventEditSheet: FC<Props> = ({
               onTitleClick={onShowTitleEditor}
               showEditIndicator
               showChangeBackgroundButton
+              extraActions={
+                <BannerUpload
+                  coverUrl={fields.coverUrl}
+                  onChange={setCoverUrl}
+                />
+              }
               titleEditor={
                 showTitleEditor ? (
                   <InlineTitleEditor

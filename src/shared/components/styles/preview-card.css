@@ -16,7 +16,7 @@
   }
 
   &__top-right {
-    @apply absolute top-4 right-4 z-10;
+    @apply absolute top-4 right-4 z-10 flex items-center gap-2;
   }
 
   &__change-bg-button {

@@ -10,6 +10,7 @@ export type EventCard = {
   participantsCount: number;
   freeSpots: number | null;
   minLevel: number | null;
+  coverUrl: string | null;
   coverSeed?: string | null;
   joinedByMe: boolean;
   isOrganizer: boolean;
@@ -32,6 +33,7 @@ export type EventDetails = {
   clubTitle: string | null;
   tags: string[];
   minLevel: number | null;
+  coverUrl: string | null;
   coverSeed: string | null;
   joinedByMe: boolean;
   canManage: boolean;

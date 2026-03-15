@@ -56,20 +56,20 @@ export const PreviewCard: FC<Props> = ({
             </button>
           </div>
         )}
-        {showEditIndicator && onTitleClick ? (
+        {(extraActions || (showEditIndicator && onTitleClick)) ? (
           <div className="preview-card__top-right">
-            <button
-              type="button"
-              onClick={onTitleClick}
-              className="preview-card__edit-button"
-              aria-label="Редактировать заголовок"
-            >
-              <Pencil className="h-3.5 w-3.5" aria-hidden="true" />
-            </button>
+            {extraActions}
+            {showEditIndicator && onTitleClick ? (
+              <button
+                type="button"
+                onClick={onTitleClick}
+                className="preview-card__edit-button"
+                aria-label="Редактировать заголовок"
+              >
+                <Pencil className="h-3.5 w-3.5" aria-hidden="true" />
+              </button>
+            ) : null}
           </div>
-        ) : null}
-        {extraActions ? (
-          <div className="preview-card__top-right">{extraActions}</div>
         ) : null}
         <div className="preview-card__content">
           <div className="preview-card__title-wrapper">

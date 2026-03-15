@@ -44,6 +44,7 @@ export function useEventForm() {
   const maxParticipants = watch('maxParticipants') ?? '';
 
   const [coverSeed, setCoverSeed] = useState(() => newSeed('event'));
+  const [coverUrl, setCoverUrl] = useState<string | null>(null);
   const [minLevel, setMinLevel] = useState<number | null>(null);
   const [selectedClubId, setSelectedClubId] = useState('');
   const [createFromClub, setCreateFromClub] = useState(false);
@@ -59,10 +60,10 @@ export function useEventForm() {
     descriptionRef.current.style.height = `${descriptionRef.current.scrollHeight}px`;
   }, [description]);
 
-  const coverBackground = useMemo(
-    () => buildGradient(coverSeed, 'event'),
-    [coverSeed],
-  );
+  const coverBackground = useMemo(() => {
+    if (coverUrl) return `url('${coverUrl}') center / cover no-repeat`;
+    return buildGradient(coverSeed, 'event');
+  }, [coverUrl, coverSeed]);
 
   // Ошибка времени из Zod-валидации cross-field refine
   const timeError = formState.errors.endsAt?.message ?? '';
@@ -97,6 +98,7 @@ export function useEventForm() {
         ...(minLevel !== null ? { minLevel } : {}),
         categoryCode: 'general',
         coverSeed,
+        ...(coverUrl !== null ? { coverUrl } : {}),
       }).unwrap();
 
       if (result.unlockedAchievements.length > 0) {
@@ -113,6 +115,7 @@ export function useEventForm() {
         maxParticipants: '',
       });
       setMinLevel(null);
+      setCoverUrl(null);
       setSelectedClubId('');
       setCreateFromClub(false);
       setShowTitleEditor(false);
@@ -145,6 +148,8 @@ export function useEventForm() {
     setMinLevel,
     coverSeed,
     changeCoverSeed: () => setCoverSeed(newSeed('event')),
+    coverUrl,
+    setCoverUrl,
     showTitleEditor,
     setShowTitleEditor,
     showAllClubs,

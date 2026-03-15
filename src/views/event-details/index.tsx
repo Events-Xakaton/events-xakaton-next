@@ -413,6 +413,7 @@ export function EventDetails({
           setEndsAt={draft.setEndsAt}
           setMaxParticipants={draft.setMaxParticipants}
           setMinLevel={draft.setMinLevel}
+          setCoverUrl={draft.setCoverUrl}
           setCoverSeed={draft.setCoverSeed}
           setSelectedClubId={draft.setSelectedClubId}
           onShowTitleEditor={() => draft.setShowTitleEditor(true)}
