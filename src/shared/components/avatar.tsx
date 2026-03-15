@@ -50,6 +50,7 @@ export const Avatar: FC<Props> = ({
           fill
           className="avatar__image"
           sizes="64px"
+          unoptimized
         />
       ) : (
         <span className="avatar__fallback" aria-label={alt}>

@@ -7,8 +7,9 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: 'https', hostname: 't.me' },
       { protocol: 'https', hostname: '*.telegram.org' },
-      // Wildcard для иконок достижений с внешних хостов (достаточно для хакатона)
+      // Иконки достижений — разрешаем любой хост (http и https, для хакатона)
       { protocol: 'https', hostname: '**' },
+      { protocol: 'http', hostname: '**' },
     ],
   },
 };

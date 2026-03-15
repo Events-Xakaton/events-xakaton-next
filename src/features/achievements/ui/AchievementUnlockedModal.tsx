@@ -45,6 +45,7 @@ export const AchievementUnlockedModal: FC<Props> = ({
             fill
             sizes="96px"
             className="object-cover"
+            unoptimized
           />
         </div>
         <p className="achievement-modal__name">{achievement.name}</p>

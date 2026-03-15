@@ -30,6 +30,7 @@ export const AchievementCard: FC<Props> = ({
           fill
           sizes="64px"
           className="object-cover"
+          unoptimized
         />
       </div>
       <p className="achievement-card__name">{achievement.name}</p>
