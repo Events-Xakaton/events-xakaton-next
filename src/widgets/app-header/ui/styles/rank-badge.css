@@ -1,0 +1,21 @@
+@import '../../../../shared/lib/styles/theme.css';
+
+.rank-badge {
+  @apply flex w-full flex-col gap-1;
+
+  &__label {
+    @apply text-[11px] font-medium leading-none text-primary-600;
+  }
+
+  &__label--skeleton {
+    @apply h-3 w-24 animate-pulse rounded bg-neutral-200;
+  }
+
+  &__detail {
+    @apply shrink-0 whitespace-nowrap text-[11px] text-neutral-400;
+  }
+
+  &__row {
+    @apply flex items-center gap-2;
+  }
+}

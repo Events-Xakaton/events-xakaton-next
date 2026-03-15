@@ -1,0 +1,16 @@
+@import '../../lib/styles/theme.css';
+
+.rank-info-badge {
+  @apply inline-flex items-center gap-1 rounded-full px-2 py-0.5;
+  @apply bg-primary-500/10 text-primary-600;
+  @apply text-[11px] font-medium leading-none;
+
+  &__star {
+    @apply text-[10px] leading-none;
+  }
+
+  &--skeleton {
+    @apply h-4 w-20 animate-pulse bg-neutral-200;
+    color: transparent;
+  }
+}

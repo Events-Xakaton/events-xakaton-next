@@ -1,9 +1,22 @@
+import type { RankInfo } from '@/shared/types/rank';
+
 import { ApiTag } from '@/shared/redux';
 
 import { apiBase } from './base-api';
 
+export type FollowingItem = {
+  telegramUserId: string;
+  fullName: string;
+  followedAt: string; // ISO 8601
+  rankInfo: RankInfo;
+};
+
 export const connectionsApi = apiBase.injectEndpoints({
   endpoints: (builder) => ({
+    following: builder.query<FollowingItem[], void>({
+      query: () => '/connections',
+      providesTags: [ApiTag.PROFILE],
+    }),
     follow: builder.mutation<{ status: string }, { telegramUserId: string }>({
       query: ({ telegramUserId }) => ({
         url: `/connections/${telegramUserId}/follow`,
@@ -27,4 +40,8 @@ export const connectionsApi = apiBase.injectEndpoints({
   }),
 });
 
-export const { useFollowMutation, useUnfollowMutation } = connectionsApi;
+export const {
+  useFollowingQuery,
+  useFollowMutation,
+  useUnfollowMutation,
+} = connectionsApi;

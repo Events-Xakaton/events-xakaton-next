@@ -3,7 +3,7 @@
 import { ChevronRight, SlidersHorizontal } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { AppHeader } from '@/widgets/app-header';
+import { AppHeader, UserRankHeader } from '@/widgets/app-header';
 
 import { useClubsQuery } from '@/entities/club/api';
 import { ClubFeedCard } from '@/entities/club/ui/club-feed-card';
@@ -131,6 +131,7 @@ export function HomeScreen({
         showTopGap={false}
         rootStyle={{ paddingTop: feedLayout.headerTopPadding }}
         headerClassName="h-auto px-3 pb-2"
+        subRow={<UserRankHeader />}
         center={
           <div className="inline-flex min-h-[44px] items-center rounded-full border border-neutral-300 bg-white p-1! shadow-sm">
             <button

@@ -3,7 +3,7 @@
 import { BellOff } from 'lucide-react';
 import type { ReactElement } from 'react';
 
-import { AppHeader } from '@/widgets/app-header';
+import { AppHeader, UserRankHeader } from '@/widgets/app-header';
 
 import { Button, ButtonVariant } from '@/shared/components/button';
 import { formatLocalDateTime } from '@/shared/lib/time';
@@ -29,7 +29,7 @@ export function NotificationsScreen(): ReactElement {
       className="relative bg-[#f2f2f5]"
       style={{
         minHeight: ADAPTIVE_VIEWPORT_HEIGHT,
-        paddingTop: `calc(${SAFE_AREA_TOP} + 88px)`,
+        paddingTop: `calc(${SAFE_AREA_TOP} + 148px)`,
         paddingBottom: getBottomPadding('list'),
       }}
     >
@@ -39,6 +39,7 @@ export function NotificationsScreen(): ReactElement {
         useSafeArea={false}
         showTopGap={false}
         rootStyle={{ paddingTop: `calc(${SAFE_AREA_TOP} + 16px)` }}
+        subRow={<UserRankHeader />}
         title="Уведомления"
       />
 

@@ -44,6 +44,8 @@ export { ListSkeleton } from './list-skeleton';
 export { OverflowMenu } from './overflow-menu';
 export { ConfirmDialog } from './confirm-dialog';
 
+export { RankBadge, RankBadgeSkeleton } from './rank-badge';
+
 export { PreviewCard } from './preview-card';
 export { InlineTitleEditor } from './inline-title-editor';
 export { DescriptionSection } from './description-section';

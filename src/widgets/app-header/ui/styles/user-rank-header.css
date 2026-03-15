@@ -1,0 +1,23 @@
+@import '../../../../shared/lib/styles/theme.css';
+
+.user-rank-header {
+  @apply flex w-full items-center gap-3;
+
+  &__avatar {
+    @apply relative h-11 w-11 shrink-0 overflow-hidden rounded-full;
+    @apply bg-gradient-to-br from-primary-400 to-primary-600;
+    @apply shadow-sm ring-2 ring-primary-300/40;
+  }
+
+  &__avatar-emoji {
+    @apply flex h-full w-full items-center justify-center text-xl leading-none;
+  }
+
+  &__info {
+    @apply flex min-w-0 flex-1 flex-col gap-1;
+  }
+
+  &__name {
+    @apply truncate text-[15px] font-semibold leading-tight text-neutral-900;
+  }
+}

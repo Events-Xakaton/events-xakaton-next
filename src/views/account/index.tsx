@@ -1,6 +1,6 @@
 'use client';
 
-import { AppHeader } from '@/widgets/app-header';
+import { AppHeader, UserRankHeader } from '@/widgets/app-header';
 
 import { getTelegramProfileFallback } from '@/shared/lib/telegram';
 import {
@@ -11,6 +11,7 @@ import {
 } from '@/shared/lib/ui-styles';
 
 import { ProfileClubsSection } from './profile-clubs-section';
+import { ProfileConnectionsSection } from './profile-connections-section';
 import { ProfileEventsSection } from './profile-events-section';
 
 const SECTION_CARD = APP_SECTION_CARD_CLASS;
@@ -42,7 +43,7 @@ export function AccountScreen({
       className="relative bg-[#f2f2f5]"
       style={{
         minHeight: ADAPTIVE_VIEWPORT_HEIGHT,
-        paddingTop: `calc(${SAFE_AREA_TOP} + 88px)`,
+        paddingTop: `calc(${SAFE_AREA_TOP} + 148px)`,
         paddingBottom: getBottomPadding('list'),
       }}
     >
@@ -52,6 +53,7 @@ export function AccountScreen({
         useSafeArea={false}
         showTopGap={false}
         rootStyle={{ paddingTop: `calc(${SAFE_AREA_TOP} + 16px)` }}
+        subRow={<UserRankHeader />}
         title="Профиль"
       />
 
@@ -88,6 +90,8 @@ export function AccountScreen({
           onOpenClub={onOpenClub}
           onNavigateToCreate={() => onNavigateToCreate('club')}
         />
+
+        <ProfileConnectionsSection />
 
         <div className="h-2" aria-hidden />
       </div>

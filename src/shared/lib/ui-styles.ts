@@ -193,6 +193,12 @@ export const FEED_SCROLL_PADDING_TOP = 16; // px
 export const FEED_TOP_OFFSET = FEED_TOP_CONTROLS_HEIGHT; // 72px
 
 /**
+ * Высота subRow с UserRankHeader (аватар + имя + прогресс-бар ранга)
+ * Добавляется к feedTopOffset в HomeScreen и к paddingTop контента на остальных экранах
+ */
+export const USER_RANK_SUBROW_HEIGHT = 60; // px
+
+/**
  * Standard screens padding-bottom (Notifications, Account)
  * Резервирует место для BottomNav + 16px breathing room
  *
@@ -365,7 +371,7 @@ export function getHomeFeedLayout(mode: 'fullscreen' | 'compact'): {
 
   if (mode === 'compact') {
     const compactTopOffsetPx =
-      COMPACT_HEADER_HEIGHT + 12 + FEED_TOP_CONTROLS_HEIGHT;
+      COMPACT_HEADER_HEIGHT + 12 + FEED_TOP_CONTROLS_HEIGHT + USER_RANK_SUBROW_HEIGHT;
     const compactTopOffset = `${compactTopOffsetPx}px`;
     const compactBottomReserve = getBottomPadding('feed');
     const feedScrollHeight = `calc(${ADAPTIVE_VIEWPORT_HEIGHT} - ${compactTopOffset} - ${compactBottomReserve})`;
@@ -383,7 +389,7 @@ export function getHomeFeedLayout(mode: 'fullscreen' | 'compact'): {
     };
   }
 
-  const fullscreenTopOffset = `calc(env(safe-area-inset-top, 0px) + ${FULLSCREEN_TOP_BREATHING_ROOM + FEED_TOP_CONTROLS_HEIGHT}px)`;
+  const fullscreenTopOffset = `calc(env(safe-area-inset-top, 0px) + ${FULLSCREEN_TOP_BREATHING_ROOM + FEED_TOP_CONTROLS_HEIGHT + USER_RANK_SUBROW_HEIGHT}px)`;
   const feedScrollHeight = `calc(${ADAPTIVE_VIEWPORT_HEIGHT} - ${fullscreenTopOffset} - ${fullscreenBottomReserve})`;
   const cardHeight = `max(200px, calc(${feedScrollHeight} - ${cardGapPx}px))`;
 

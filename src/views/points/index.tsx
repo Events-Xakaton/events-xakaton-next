@@ -10,7 +10,10 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 
-import { AppHeader } from '@/widgets/app-header';
+import { AppHeader, UserRankHeader } from '@/widgets/app-header';
+
+import { RankBadge } from '@/shared/components/rank-badge';
+import { RANK_EMOJIS } from '@/shared/constants/ranks';
 
 import {
   useBalanceQuery,
@@ -123,7 +126,7 @@ export function PointsScreen() {
       className="relative bg-[#f2f2f5]"
       style={{
         minHeight: ADAPTIVE_VIEWPORT_HEIGHT,
-        paddingTop: `calc(${SAFE_AREA_TOP} + 88px)`,
+        paddingTop: `calc(${SAFE_AREA_TOP} + 148px)`,
         paddingBottom: getBottomPadding('list'),
       }}
     >
@@ -133,6 +136,7 @@ export function PointsScreen() {
         useSafeArea={false}
         showTopGap={false}
         rootStyle={{ paddingTop: `calc(${SAFE_AREA_TOP} + 16px)` }}
+        subRow={<UserRankHeader />}
         title="Очки"
       />
 
@@ -252,29 +256,32 @@ export function PointsScreen() {
                         >
                           {rankBadge(row.rank)}
                         </span>
-                        <p className="truncate text-sm font-medium text-zinc-900">
-                          {displayName}
-                        </p>
-                        {row.rank === 1 ? (
-                          <Trophy
-                            className="h-4 w-4 shrink-0 text-amber-600"
-                            aria-hidden="true"
-                          />
-                        ) : null}
-                        {row.rank === 2 ? (
-                          <Award
-                            className="h-4 w-4 shrink-0 text-slate-600"
-                            aria-hidden="true"
-                          />
-                        ) : null}
-                        {row.rank === 3 ? (
-                          <Medal
-                            className="h-4 w-4 shrink-0 text-orange-600"
-                            aria-hidden="true"
-                          />
-                        ) : null}
+                        <div className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-gradient-to-br from-primary-400 to-primary-600">
+                          <span className="text-base leading-none" aria-hidden>
+                            {RANK_EMOJIS[row.rankInfo?.level ?? 1] ?? '🐣'}
+                          </span>
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-1">
+                            <p className="truncate text-sm font-medium text-zinc-900">
+                              {displayName}
+                            </p>
+                            {row.rank === 1 ? (
+                              <Trophy className="h-4 w-4 shrink-0 text-amber-600" aria-hidden="true" />
+                            ) : null}
+                            {row.rank === 2 ? (
+                              <Award className="h-4 w-4 shrink-0 text-slate-600" aria-hidden="true" />
+                            ) : null}
+                            {row.rank === 3 ? (
+                              <Medal className="h-4 w-4 shrink-0 text-orange-600" aria-hidden="true" />
+                            ) : null}
+                          </div>
+                          {row.rankInfo ? (
+                            <RankBadge rankInfo={row.rankInfo} className="mt-0.5" />
+                          ) : null}
+                        </div>
                       </div>
-                      <p className="text-sm font-bold text-zinc-900">
+                      <p className="shrink-0 text-sm font-bold text-zinc-900">
                         {row.points}
                       </p>
                     </div>
@@ -294,11 +301,21 @@ export function PointsScreen() {
                         >
                           {rankBadge(current.rank)}
                         </span>
-                        <p className="truncate text-sm font-medium text-zinc-900">
-                          {profile.fullName}
-                        </p>
+                        <div className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-gradient-to-br from-primary-400 to-primary-600">
+                          <span className="text-base leading-none" aria-hidden>
+                            {RANK_EMOJIS[current.rankInfo?.level ?? 1] ?? '🐣'}
+                          </span>
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate text-sm font-medium text-zinc-900">
+                            {profile.fullName}
+                          </p>
+                          {current.rankInfo ? (
+                            <RankBadge rankInfo={current.rankInfo} className="mt-0.5" />
+                          ) : null}
+                        </div>
                       </div>
-                      <p className="text-sm font-bold text-zinc-900">
+                      <p className="shrink-0 text-sm font-bold text-zinc-900">
                         {current.points}
                       </p>
                     </div>

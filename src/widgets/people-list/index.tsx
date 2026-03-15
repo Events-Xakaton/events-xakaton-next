@@ -10,6 +10,7 @@ import {
 } from '@/shared/api/connections-api';
 import { Button, ButtonSize, ButtonVariant } from '@/shared/components/button';
 import { EmptyState } from '@/shared/components/empty-state';
+import { RankBadge } from '@/shared/components/rank-badge';
 import { getTelegramProfileFallback } from '@/shared/lib/telegram';
 import { APP_SECTION_CARD_CLASS } from '@/shared/lib/ui-styles';
 import { getInitials } from '@/shared/lib/utils';
@@ -65,7 +66,12 @@ export function PeopleList({
                       {getInitials(row.fullName) || 'U'}
                     </div>
                   )}
-                  <p className="people-list__name">{row.fullName}</p>
+                  <div className="people-list__info">
+                    <p className="people-list__name">{row.fullName}</p>
+                    {row.rankInfo ? (
+                      <RankBadge rankInfo={row.rankInfo} />
+                    ) : null}
+                  </div>
                   {isSelf ? (
                     <span className="people-list__self-label">Вы</span>
                   ) : (

@@ -1,11 +1,23 @@
+import type { RankInfo } from '@/shared/types/rank';
+
 import { ApiTag } from '@/shared/redux';
 
 import { apiBase } from './base-api';
+
+export type { RankInfo };
+
+export type BalanceRank = {
+  level: number;
+  title: string;
+  label: string;
+  pointsToNextLevel: number | null;
+};
 
 export type Balance = {
   lifetime: number;
   weekly: number;
   monthly: number;
+  rank: BalanceRank;
 };
 
 export type PointsRule = {
@@ -34,17 +46,31 @@ export const gamificationApi = apiBase.injectEndpoints({
           userId: string;
           fullName: string;
           points: number;
+          rankInfo?: RankInfo;
         }>;
         currentUser: {
           rank: number;
           userId: string;
           fullName: string;
           points: number;
+          rankInfo?: RankInfo;
         } | null;
       },
       { period: 'weekly' | 'monthly' }
     >({
       query: ({ period }) => `/leaderboard?period=${period}`,
+      // Бэкенд возвращает поле `position`, фронтенд ожидает `rank`
+      transformResponse: (raw: {
+        period: 'weekly' | 'monthly';
+        top: Array<{ position: number; userId: string; fullName: string; points: number; rankInfo?: RankInfo }>;
+        currentUser: { position: number; userId: string; fullName: string; points: number; rankInfo?: RankInfo } | null;
+      }) => ({
+        period: raw.period,
+        top: raw.top.map(({ position, ...rest }) => ({ rank: position, ...rest })),
+        currentUser: raw.currentUser
+          ? (({ position, ...rest }) => ({ rank: position, ...rest }))(raw.currentUser)
+          : null,
+      }),
       providesTags: [ApiTag.PROFILE],
     }),
     pointsRules: builder.query<PointsRule[], void>({

@@ -1,0 +1,17 @@
+@import '../../../../shared/lib/styles/theme.css';
+
+.rank-progress-bar {
+  @apply h-1.5 w-full overflow-hidden rounded-full bg-neutral-200;
+
+  &__fill {
+    @apply h-full rounded-full;
+    background: linear-gradient(to right, var(--color-primary-500), var(--color-accent-400));
+    @apply transition-all duration-500 ease-out;
+  }
+
+  &--skeleton &__fill {
+    @apply animate-pulse bg-neutral-200;
+    background: none;
+    width: 100% !important;
+  }
+}

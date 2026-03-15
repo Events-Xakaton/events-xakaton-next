@@ -11,7 +11,7 @@ import {
 import type { FormEvent } from 'react';
 import { useEffect, useRef, useState } from 'react';
 
-import { AppHeader } from '@/widgets/app-header';
+import { AppHeader, UserRankHeader } from '@/widgets/app-header';
 
 import { Button, ButtonSize } from '@/shared/components/button';
 import { DescriptionSection } from '@/shared/components/description-section';
@@ -101,6 +101,7 @@ export function CreateScreen() {
         useSafeArea={false}
         showTopGap={false}
         rootStyle={{ paddingTop: `calc(${SAFE_AREA_TOP} + 16px)` }}
+        subRow={<UserRankHeader />}
         center={
           <div ref={createTypeRef} className="relative">
             <button
@@ -172,7 +173,7 @@ export function CreateScreen() {
       {tab === 'event' ? (
         <form
           className="space-y-4 px-4!"
-          style={{ paddingTop: `calc(${SAFE_AREA_TOP} + 88px)` }}
+          style={{ paddingTop: `calc(${SAFE_AREA_TOP} + 148px)` }}
           onSubmit={handleSubmit}
         >
           <PreviewCard
@@ -409,7 +410,7 @@ export function CreateScreen() {
       ) : (
         <form
           className="space-y-4 px-4!"
-          style={{ paddingTop: `calc(${SAFE_AREA_TOP} + 88px)` }}
+          style={{ paddingTop: `calc(${SAFE_AREA_TOP} + 148px)` }}
           onSubmit={handleSubmit}
         >
           <PreviewCard
