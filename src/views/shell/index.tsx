@@ -17,6 +17,7 @@ import { BottomNav } from '@/widgets/bottom-nav';
 import { setInitialized } from '@/features/auth/model/auth-slice';
 import { AuthScreen } from '@/features/auth/ui/auth-screen';
 import { LoginStreakModalProvider } from '@/features/login-streak';
+import { PointsBalanceProvider } from '@/features/points';
 
 import { loadAuthSession } from '@/shared/lib/auth-session';
 import { useNotificationBadge } from '@/shared/lib/useNotificationBadge';
@@ -139,6 +140,7 @@ export default function MiniAppShell() {
           />
         ) : null}
       </div>
+      <PointsBalanceProvider />
       <LoginStreakModalProvider onOpenLuckyWheel={() => setLuckyWheelOpen(true)} />
 
       {/* BottomNav показываем только на основных экранах (без detail и без lucky wheel) */}
