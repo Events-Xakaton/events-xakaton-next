@@ -24,11 +24,7 @@ import {
 
 import { Button, ButtonSize, ButtonVariant } from '@/shared/components/button';
 import { ConfirmDialog } from '@/shared/components/confirm-dialog';
-import {
-  AboutSection,
-  DetailRow,
-  StickyActionsPanel,
-} from '@/shared/components/detail-shared';
+import { AboutSection, DetailRow } from '@/shared/components/detail-shared';
 import { ErrorState } from '@/shared/components/error-state';
 import { MinLevelBadge } from '@/shared/components/min-level-badge';
 import { PreviewCard } from '@/shared/components/preview-card';
@@ -322,6 +318,66 @@ export function EventDetails({
                   }
                 />
               )}
+
+              <div className="pt-3">
+                {archived ? (
+                  <Button
+                    variant={ButtonVariant.SECONDARY}
+                    size={ButtonSize.LG}
+                    fullWidth
+                    className="rounded-full"
+                    disabled
+                  >
+                    {event.status === 'cancelled'
+                      ? 'Событие отменено'
+                      : 'Событие прошло'}
+                  </Button>
+                ) : joined ? (
+                  <Button
+                    variant={ButtonVariant.SECONDARY}
+                    size={ButtonSize.LG}
+                    fullWidth
+                    className="rounded-full"
+                    isLoading={actions.unjoinState.isLoading}
+                    onClick={actions.handleUnjoin}
+                  >
+                    Вы участвуете
+                  </Button>
+                ) : fromLuckyWheel ? (
+                  <Button
+                    variant={ButtonVariant.PRIMARY}
+                    size={ButtonSize.LG}
+                    fullWidth
+                    className="rounded-full"
+                    isLoading={actions.joinState.isLoading}
+                    onClick={() => actions.handleJoin(true)}
+                  >
+                    Участвовать
+                  </Button>
+                ) : canJoinResult.blockReason ? (
+                  <Button
+                    variant={ButtonVariant.SECONDARY}
+                    size={ButtonSize.LG}
+                    fullWidth
+                    className="rounded-full"
+                    disabled
+                    title={canJoinResult.levelTooltip ?? undefined}
+                  >
+                    {canJoinResult.blockReason}
+                  </Button>
+                ) : (
+                  <Button
+                    variant={ButtonVariant.PRIMARY}
+                    size={ButtonSize.LG}
+                    fullWidth
+                    className="rounded-full"
+                    isLoading={actions.joinState.isLoading}
+                    onClick={() => actions.handleJoin()}
+                  >
+                    Участвовать
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
 
@@ -371,65 +427,6 @@ export function EventDetails({
           )}
         </div>
 
-        <StickyActionsPanel
-          leftActions={null}
-          rightAction={
-            archived ? (
-              <Button
-                variant={ButtonVariant.SECONDARY}
-                size={ButtonSize.LG}
-                className="rounded-full px-6"
-                disabled
-              >
-                {event.status === 'cancelled'
-                  ? 'Событие отменено'
-                  : 'Событие прошло'}
-              </Button>
-            ) : joined ? (
-              <Button
-                variant={ButtonVariant.SECONDARY}
-                size={ButtonSize.LG}
-                className="rounded-full px-6"
-                isLoading={actions.unjoinState.isLoading}
-                onClick={actions.handleUnjoin}
-              >
-                Вы участвуете
-              </Button>
-            ) : fromLuckyWheel ? (
-              <Button
-                variant={ButtonVariant.PRIMARY}
-                size={ButtonSize.LG}
-                className="rounded-full px-7"
-                isLoading={actions.joinState.isLoading}
-                onClick={() => actions.handleJoin(true)}
-              >
-                <Plus className="mr-2 h-5 w-5" aria-hidden="true" />
-                Мне повезло, записаться
-              </Button>
-            ) : canJoinResult.blockReason ? (
-              <Button
-                variant={ButtonVariant.SECONDARY}
-                size={ButtonSize.LG}
-                className="rounded-full px-6"
-                disabled
-                title={canJoinResult.levelTooltip ?? undefined}
-              >
-                {canJoinResult.blockReason}
-              </Button>
-            ) : (
-              <Button
-                variant={ButtonVariant.PRIMARY}
-                size={ButtonSize.LG}
-                className="rounded-full px-7"
-                isLoading={actions.joinState.isLoading}
-                onClick={() => actions.handleJoin()}
-              >
-                <Plus className="mr-2 h-5 w-5" aria-hidden="true" />
-                Записаться
-              </Button>
-            )
-          }
-        />
       </div>
 
       {editSheet.isMounted ? (
