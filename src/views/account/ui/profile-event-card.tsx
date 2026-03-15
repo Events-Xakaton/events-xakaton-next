@@ -69,10 +69,11 @@ export const ProfileEventCard: FC<Props> = ({ event, onOpenEvent }) => {
             variant={ButtonVariant.SECONDARY}
             size={ButtonSize.MD}
             onClick={() => onOpenEvent(event.id)}
-            className="ml-auto rounded-full border-white/25 bg-white/90 p-3 text-zinc-900 shadow-md hover:bg-white"
+            className="ml-auto rounded-full border-white/25 bg-white! px-5! py-2.5! text-[15px]! font-semibold text-zinc-900! shadow-md"
             aria-label={`Посмотреть детали ивента ${event.title}`}
           >
-            <ChevronRight className="h-5 w-5" />
+            Детали
+            <ChevronRight className="h-4 w-4" aria-hidden="true" />
           </Button>
         </div>
       </div>
