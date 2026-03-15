@@ -84,7 +84,8 @@ export function useEventActions(eventId: string) {
           ? { minLevel: fields.minLevel }
           : {}),
         coverSeed: fields.coverSeed,
-        ...(fields.coverUrl !== originalData?.coverUrl
+        // Отправляем coverUrl только если это валидная строка (null не принимает бэк)
+        ...(fields.coverUrl && fields.coverUrl !== originalData?.coverUrl
           ? { coverUrl: fields.coverUrl }
           : {}),
         ...(fields.selectedClubId !== originalData?.clubId

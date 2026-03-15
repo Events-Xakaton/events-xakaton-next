@@ -53,7 +53,7 @@ export const BannerUpload: FC<Props> = ({ coverUrl, onChange, className }) => {
       <input
         ref={inputRef}
         type="file"
-        accept="image/*"
+        accept=".jpg,.jpeg,.png,.webp,.gif"
         className="hidden"
         onChange={handleFileChange}
       />
