@@ -21,8 +21,13 @@ export function useFeedActions(onClubJoined: () => void) {
   const [joinedClubIds, setJoinedClubIds] = useState<Record<string, boolean>>(
     {},
   );
+  // Храним ID конкретного элемента в загрузке, а не общий isLoading,
+  // чтобы спиннер показывался только на нажатой карточке
+  const [loadingEventId, setLoadingEventId] = useState<string | null>(null);
+  const [loadingClubId, setLoadingClubId] = useState<string | null>(null);
 
   function handleJoinEvent(eventId: string): void {
+    setLoadingEventId(eventId);
     void joinEvent({ eventId })
       .unwrap()
       .then((result) => {
@@ -33,10 +38,12 @@ export function useFeedActions(onClubJoined: () => void) {
       })
       .catch((error) =>
         setHint(appErrorText(error, 'Не удалось присоединиться к ивенту')),
-      );
+      )
+      .finally(() => setLoadingEventId(null));
   }
 
   function handleJoinClub(clubId: string): void {
+    setLoadingClubId(clubId);
     void joinClub({ clubId })
       .unwrap()
       .then(() => {
@@ -45,15 +52,16 @@ export function useFeedActions(onClubJoined: () => void) {
       })
       .catch((error) =>
         setHint(appErrorText(error, 'Не удалось вступить в клуб')),
-      );
+      )
+      .finally(() => setLoadingClubId(null));
   }
 
   return {
     hint,
     joinedEventIds,
     joinedClubIds,
-    joinEventLoading: joinEventState.isLoading,
-    joinClubLoading: joinClubState.isLoading,
+    loadingEventId,
+    loadingClubId,
     handleJoinEvent,
     handleJoinClub,
   };

@@ -7,11 +7,14 @@ import { useMemo, useState } from 'react';
 import { type ClubCard, useClubsQuery } from '@/entities/club/api';
 
 import { IconButton } from '@/shared/components';
-import { EmptyState } from '@/shared/components/empty-state';
 import { ErrorState } from '@/shared/components/error-state';
 import { PillTabs } from '@/shared/components/pill-tabs';
 
-import { CreatedClubsPlaceholderCard, ProfileClubCard } from './ui';
+import {
+  AllClubsPlaceholderCard,
+  CreatedClubsPlaceholderCard,
+  ProfileClubCard,
+} from './ui';
 
 // ============================================================================
 // Constants
@@ -20,20 +23,6 @@ import { CreatedClubsPlaceholderCard, ProfileClubCard } from './ui';
 const SECTION_TITLE_CLASS = 'text-lg font-semibold text-neutral-900';
 
 type ClubCategory = 'all' | 'created';
-
-const EMPTY_MESSAGES: Record<
-  ClubCategory,
-  { title: string; description: string }
-> = {
-  all: {
-    title: 'Нет клубов',
-    description: 'Вы не вступили ни в один клуб',
-  },
-  created: {
-    title: 'Нет созданных клубов',
-    description: 'Вы ещё не создали ни одного клуба',
-  },
-};
 
 // ============================================================================
 // ProfileClubsSection Component
@@ -116,27 +105,15 @@ export function ProfileClubsSection({
           onRetry={() => clubsQuery.refetch()}
         />
       ) : filteredClubs.length === 0 ? (
-        activeTab === 'created' ? (
-          <div className="overflow-x-auto -mx-4 snap-x snap-mandatory scroll-pl-4">
-            <div className="flex gap-3 px-4!">
+        <div className="overflow-x-auto -mx-4 snap-x snap-mandatory scroll-pl-4">
+          <div className="flex gap-3 px-4!">
+            {activeTab === 'created' ? (
               <CreatedClubsPlaceholderCard />
-            </div>
+            ) : (
+              <AllClubsPlaceholderCard />
+            )}
           </div>
-        ) : (
-          <EmptyState
-            title={EMPTY_MESSAGES[activeTab].title}
-            description={EMPTY_MESSAGES[activeTab].description}
-            action={
-              <button
-                onClick={onNavigateToCreate}
-                className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary-600 px-6! py-2.5 text-sm font-semibold text-white hover:bg-primary-700 transition-colors"
-              >
-                <Plus className="h-4 w-4" />
-                Создать клуб
-              </button>
-            }
-          />
-        )
+        </div>
       ) : (
         <div className="overflow-x-auto -mx-4 snap-x snap-mandatory scroll-pl-4">
           <div className="flex gap-3 px-4!">

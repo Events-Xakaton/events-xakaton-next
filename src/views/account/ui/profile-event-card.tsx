@@ -24,11 +24,18 @@ type Props = {
 
 export const ProfileEventCard: FC<Props> = ({ event, onOpenEvent }) => {
   const cardBackgroundStyle = useMemo(() => {
+    if (event.coverUrl) {
+      return {
+        backgroundImage: `url('${event.coverUrl}')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      };
+    }
     if (event.coverSeed) {
       return { background: buildGradient(event.coverSeed, 'event') };
     }
     return { background: getEventGradient(event.id) };
-  }, [event.coverSeed, event.id]);
+  }, [event.coverUrl, event.coverSeed, event.id]);
 
   const handleOpenDetails = () => {
     onOpenEvent(event.id);

@@ -7,7 +7,6 @@ import { useMemo, useState } from 'react';
 import { type EventCard, useEventsQuery } from '@/entities/event/api';
 
 import { IconButton } from '@/shared/components';
-import { EmptyState } from '@/shared/components/empty-state';
 import { ErrorState } from '@/shared/components/error-state';
 import { PillTabs } from '@/shared/components/pill-tabs';
 
@@ -15,6 +14,7 @@ import {
   CreateEventCard,
   PastEventsPlaceholderCard,
   ProfileEventCard,
+  UpcomingEventsPlaceholderCard,
 } from './ui';
 
 // ============================================================================
@@ -172,29 +172,15 @@ export function ProfileEventsSection({
           onRetry={() => eventsQuery.refetch()}
         />
       ) : filteredEvents.length === 0 ? (
-        activeTab === 'past' ? (
-          <div className="overflow-x-auto -mx-4 snap-x snap-mandatory scroll-pl-4">
-            <div className="flex gap-3 px-4!">
-              <PastEventsPlaceholderCard />
-            </div>
+        <div className="overflow-x-auto -mx-4 snap-x snap-mandatory scroll-pl-4">
+          <div className="flex gap-3 px-4!">
+            {activeTab === 'past' && <PastEventsPlaceholderCard />}
+            {activeTab === 'upcoming' && <UpcomingEventsPlaceholderCard />}
+            {activeTab === 'organizing' && (
+              <CreateEventCard onClick={onNavigateToCreate} />
+            )}
           </div>
-        ) : (
-          <EmptyState
-            title={EMPTY_MESSAGES[activeTab].title}
-            description={EMPTY_MESSAGES[activeTab].description}
-            action={
-              activeTab === 'organizing' && (
-                <button
-                  onClick={onNavigateToCreate}
-                  className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-primary-700 transition-colors"
-                >
-                  <Plus className="h-4 w-4" />
-                  Создать ивент
-                </button>
-              )
-            }
-          />
-        )
+        </div>
       ) : (
         <div className="overflow-x-auto -mx-4 snap-x snap-mandatory scroll-pl-4">
           <div className="flex gap-3 px-4!">

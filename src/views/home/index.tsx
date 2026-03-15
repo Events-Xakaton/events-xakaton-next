@@ -268,7 +268,7 @@ export function HomeScreen({
                     joined={
                       feedActions.joinedEventIds[event.id] ?? event.joinedByMe
                     }
-                    joinLoading={feedActions.joinEventLoading}
+                    joinLoading={feedActions.loadingEventId === event.id}
                     onJoin={feedActions.handleJoinEvent}
                     onOpenEvent={onOpenEvent}
                     cardStyle={FEED_CARD_STYLE}
@@ -281,7 +281,7 @@ export function HomeScreen({
                     club={club}
                     onOpenClub={onOpenClub}
                     onJoin={feedActions.handleJoinClub}
-                    joinLoading={feedActions.joinClubLoading}
+                    joinLoading={feedActions.loadingClubId === club.id}
                     joinedOverride={feedActions.joinedClubIds[club.id]}
                     cardStyle={FEED_CARD_STYLE}
                   />

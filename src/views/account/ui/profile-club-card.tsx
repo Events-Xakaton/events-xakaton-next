@@ -23,11 +23,18 @@ type Props = {
 
 export const ProfileClubCard: FC<Props> = ({ club, onOpenClub }) => {
   const cardBackgroundStyle = useMemo(() => {
+    if (club.coverUrl) {
+      return {
+        backgroundImage: `url('${club.coverUrl}')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      };
+    }
     if (club.coverSeed) {
       return { background: buildGradient(club.coverSeed, 'club') };
     }
     return { background: getClubGradient(club.id) };
-  }, [club.coverSeed, club.id]);
+  }, [club.coverUrl, club.coverSeed, club.id]);
 
   const handleOpenDetails = () => {
     onOpenClub(club.id);

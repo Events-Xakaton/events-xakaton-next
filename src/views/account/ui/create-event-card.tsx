@@ -14,7 +14,7 @@ export const CreateEventCard: FC<Props> = ({ onClick }) => {
     <button
       onClick={onClick}
       className={cn(
-        'snap-start snap-always w-[min(85vw,320px)] h-[240px] shrink-0',
+        'snap-start snap-always w-[min(85vw,416px)] h-[240px] shrink-0',
         'rounded-2xl border-2 border-dashed border-neutral-300',
         'bg-transparent hover:bg-white/10',
         'flex flex-col items-center justify-center gap-3',

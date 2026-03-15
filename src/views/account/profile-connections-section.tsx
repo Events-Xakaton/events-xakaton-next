@@ -3,11 +3,12 @@
 import type { ReactElement } from 'react';
 
 import { useFollowingQuery } from '@/shared/api/connections-api';
-import { EmptyState } from '@/shared/components/empty-state';
 import { ErrorState } from '@/shared/components/error-state';
 import { RankBadge } from '@/shared/components/rank-badge';
 import { RANK_EMOJIS } from '@/shared/constants/ranks';
 import { APP_SECTION_CARD_CLASS } from '@/shared/lib/ui-styles';
+
+import { ConnectionsPlaceholder } from './ui';
 
 const SECTION_CARD = APP_SECTION_CARD_CLASS;
 const SECTION_TITLE_CLASS = 'text-lg font-semibold text-neutral-900';
@@ -37,8 +38,8 @@ export function ProfileConnectionsSection(): ReactElement {
     <section className="space-y-2">
       <h3 className={SECTION_TITLE_CLASS}>Мои подписки</h3>
 
-      <div className={SECTION_CARD}>
-        {isLoading ? (
+      {isLoading ? (
+        <div className={SECTION_CARD}>
           <div className="space-y-3">
             {[1, 2, 3].map((i) => (
               <div key={i} className="flex items-center gap-3">
@@ -51,17 +52,18 @@ export function ProfileConnectionsSection(): ReactElement {
               </div>
             ))}
           </div>
-        ) : isError ? (
+        </div>
+      ) : isError ? (
+        <div className={SECTION_CARD}>
           <ErrorState
             title="Не удалось загрузить подписки"
             onRetry={() => void refetch()}
           />
-        ) : !data || data.length === 0 ? (
-          <EmptyState
-            title="Нет подписок"
-            description="Вы пока ни на кого не подписаны"
-          />
-        ) : (
+        </div>
+      ) : !data || data.length === 0 ? (
+        <ConnectionsPlaceholder />
+      ) : (
+        <div className={SECTION_CARD}>
           <div className="space-y-3">
             {data.map((item) => (
               <div
@@ -87,8 +89,8 @@ export function ProfileConnectionsSection(): ReactElement {
               </div>
             ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </section>
   );
 }
